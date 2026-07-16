@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
@@ -7,8 +6,6 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BUILDING_LIST } from "@/lib/buildings";
 import { formatMoney } from "@/lib/format";
-
-const HeroField = dynamic(() => import("@/components/HeroField"));
 
 export const metadata: Metadata = {
   title: "AI Startup House Lodging | New York",
@@ -21,7 +18,16 @@ export default function HomePage() {
     <main>
       {/* ---- Hero ---- */}
       <section className="relative isolate bg-sand text-ink min-h-[92svh] flex flex-col overflow-hidden border-b border-line">
-        <HeroField />
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          src="/videos/manhattan-bg.mp4"
+          poster="/videos/poster-manhattan.jpg"
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden
+        />
         {/* Text-protection scrim over the copy column only; the orbit scene
             on the right stays fully visible. */}
         <div
