@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@theme {
+  /* Palette: matched to the Entrepreneur AI Startup House site
+     (ai-startup-house-site.vercel.app): deep navy surfaces, cyan-to-blue
+     accents, steel-blue muted text. Token names kept from the original
+     cream theme; only the values changed, so read them semantically:
+     ink = primary text, paper = page background, sand = raised panel,
+     pine = primary accent, teal = secondary accent. */
+  --color-ink: #eef4ff;
+  --color-ink-soft: #c6d2e6;
+  --color-paper: #050d1a;
+  --color-paper-dim: #081426;
+  --color-sand: #0e1e3a;
+  --color-pine: #19b5ff;
+  --color-pine-deep: #0b5fff;
+  --color-teal: #19b5ff;
+  --color-teal-dim: #6ac1ff;
+  --color-line: #1d2d49;
+  --color-line-dark: #24375a;
+  --color-mist: #7e93b4;
+
+  --font-display: var(--font-exo2);
+  --font-body: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+/* Exo 2 headings read thin at its default weight; the organizer's site sets
+   its display type semibold. Unlayered so it wins over the utility layer. */
+.font-display {
+  font-weight: 600;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-teal);
+  color: var(--color-paper);
+}
+
+/* Native date inputs, restyled to sit inside the mono receipt aesthetic. */
+input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: var(--font-jetbrains-mono), monospace;
+}
+
+/* Visible focus for keyboard users, invisible for pointer users. */
+:focus-visible {
+  outline: 2px solid var(--color-teal);
+  outline-offset: 2px;
+}
+
+/* Hero term drift: slow rise and fade cycle. */
+@keyframes term-drift {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  12% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-22px);
+  }
+}
+
+.hero-term {
+  animation-name: term-drift;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-term {
+    animation: none;
+    opacity: 0.5;
+  }
+}
