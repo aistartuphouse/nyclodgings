@@ -19,10 +19,10 @@ export function SiteHeader() {
       <Link href="/" className="flex items-baseline gap-2.5">
         <span className="inline-block size-2.5 bg-teal" aria-hidden />
         <span className="font-mono text-[13px] font-medium tracking-[0.22em] uppercase">
-          Real AI Bootcamp
+          AI Startup House
         </span>
         <span className={`hidden sm:inline font-mono text-[11px] tracking-[0.18em] uppercase ${dim}`}>
-          Housing
+          Lodging
         </span>
       </Link>
       <nav className="flex items-center gap-5 sm:gap-8">

@@ -31,13 +31,13 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://realai-bootcamp-web.vercel.app",
   ),
   title: {
-    default: "Real AI Bootcamp Housing | AI Tech House, New York",
-    template: "%s | Real AI Bootcamp Housing",
+    default: "AI Startup House Lodging | New York",
+    template: "%s | AI Startup House Lodging",
   },
   description:
-    "Housing for AI Tech House Boot Camp participants. Two Manhattan buildings, weekly rates with utilities and Wi-Fi included, one upfront payment.",
+    "Housing for Entrepreneur AI Startup House participants. Two Manhattan buildings, weekly rates with utilities and Wi-Fi included, one upfront payment.",
   openGraph: {
-    siteName: "Real AI Bootcamp Housing",
+    siteName: "AI Startup House Lodging",
     type: "website",
     locale: "en_US",
   },

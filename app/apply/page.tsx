@@ -4,7 +4,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 
 export const metadata: Metadata = {
-  title: "Apply | Real AI Bootcamp Housing",
+  title: "Apply | AI Startup House Lodging",
   description:
     "Ask about upgraded rooms, suites, and apartments, or send your dates before booking. The housing team replies by email.",
 };

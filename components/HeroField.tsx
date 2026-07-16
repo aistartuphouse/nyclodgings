@@ -156,7 +156,7 @@ export default function HeroField() {
               {active.definition}
             </p>
             <div className="mt-2 font-mono text-[10px] tracking-[0.14em] uppercase text-ink/40">
-              Taught at the boot camp{pinned ? " · click anywhere to dismiss" : ""}
+              Taught at the residency{pinned ? " · click anywhere to dismiss" : ""}
             </div>
           </div>
         )}

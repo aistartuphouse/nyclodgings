@@ -9,12 +9,12 @@ export function SiteFooter() {
             <div className="flex items-baseline gap-2.5 text-ink">
               <span className="inline-block size-2.5 bg-teal" aria-hidden />
               <span className="font-mono text-[13px] font-medium tracking-[0.22em] uppercase">
-                Real AI Bootcamp
+                AI Startup House
               </span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-ink/60">
-              Housing for AI Tech House Boot Camp participants in New York
-              City. Organized with the boot camp team at Real AI Dynamics.
+              Housing for Entrepreneur AI Startup House participants in New York
+              City. Organized with the residency team at Real AI Dynamics.
             </p>
             <a
               href="https://realaidynamics.com"
@@ -53,7 +53,7 @@ export function SiteFooter() {
           </div>
         </div>
         <div className="mt-12 border-t border-line-dark pt-6 flex flex-wrap items-center justify-between gap-3 font-mono text-[11px] tracking-[0.14em] uppercase text-ink/35">
-          <span>AI Tech House Boot Camp · New York City</span>
+          <span>Entrepreneur AI Startup House · New York City</span>
           <span>Payments processed by Stripe</span>
         </div>
       </div>

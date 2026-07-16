@@ -4,7 +4,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 
 export const metadata: Metadata = {
-  title: "Book your stay | Real AI Bootcamp Housing",
+  title: "Book your stay | AI Startup House Lodging",
   description:
     "Pick a building and your dates, see the full cost with tax upfront, and pay once. Rooms are confirmed the moment payment completes.",
 };

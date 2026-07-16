@@ -11,9 +11,9 @@ import { formatMoney } from "@/lib/format";
 const HeroField = dynamic(() => import("@/components/HeroField"));
 
 export const metadata: Metadata = {
-  title: "Real AI Bootcamp Housing | AI Tech House, New York",
+  title: "AI Startup House Lodging | New York",
   description:
-    "Two Manhattan buildings for AI Tech House Boot Camp participants: Seton (studio-style rooms, program on site) and Stratford (dorm-style). Weekly rates, one upfront payment.",
+    "Two Manhattan buildings for Entrepreneur AI Startup House participants: Seton (studio-style rooms, program on site) and Stratford (dorm-style). Weekly rates, one upfront payment.",
 };
 
 export default function HomePage() {
@@ -31,7 +31,7 @@ export default function HomePage() {
         <SiteHeader />
         <div className="pointer-events-none relative z-10 mx-auto max-w-6xl w-full px-5 sm:px-10 mt-auto mb-auto pt-36 pb-28">
           <p className="font-mono text-[12px] tracking-[0.26em] uppercase text-pine">
-            AI Tech House Boot Camp · New York City
+            Entrepreneur AI Startup House · New York City
           </p>
           <h1 className="mt-6 font-display text-[clamp(2.6rem,7vw,5.4rem)] leading-[1.02] max-w-3xl">
             Stay where the
@@ -39,7 +39,7 @@ export default function HomePage() {
             program happens.
           </h1>
           <p className="mt-7 max-w-xl text-lg leading-relaxed text-ink/70">
-            Housing for boot camp participants at two Manhattan buildings.
+            Housing for residency participants at two Manhattan buildings.
             Weekly rates with utilities and Wi-Fi included. Pick your dates,
             pay once, done.
           </p>
@@ -282,7 +282,7 @@ export default function HomePage() {
               ],
               [
                 "Who runs this?",
-                "This site handles housing for the AI Tech House Boot Camp, organized with the team behind Real AI Dynamics. The program itself takes place at Seton, 144 East 40th Street.",
+                "This site handles housing for the Entrepreneur AI Startup House, organized with the team behind Real AI Dynamics. The program itself takes place at Seton, 144 East 40th Street.",
               ],
             ].map(([q, a]) => (
               <Reveal key={q}>

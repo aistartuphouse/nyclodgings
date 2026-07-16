@@ -4,7 +4,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 
 export const metadata: Metadata = {
-  title: "Checkout cancelled | Real AI Bootcamp Housing",
+  title: "Checkout cancelled | AI Startup House Lodging",
   robots: { index: false },
 };
 

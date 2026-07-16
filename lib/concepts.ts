@@ -1,4 +1,4 @@
-// The disciplines the boot camp teaches. Each gets a 3D glyph in the hero
+// The disciplines the residency teaches. Each gets a 3D glyph in the hero
 // orbit and a one-line, plain-language definition shown on hover/click.
 
 export type GlyphKind =

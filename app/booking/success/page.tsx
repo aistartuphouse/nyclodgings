@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SuccessContent } from "./SuccessContent";
 
 export const metadata: Metadata = {
-  title: "Booking confirmed | Real AI Bootcamp Housing",
+  title: "Booking confirmed | AI Startup House Lodging",
   robots: { index: false },
 };
 

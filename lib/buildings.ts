@@ -33,7 +33,7 @@ export const BUILDINGS: Record<"seton" | "stratford", BuildingContent> = {
     commute: "All main activities and presentations are held at Seton, so you stay in the building where the program happens. No commute at all.",
     commuteShort: "On site",
     description:
-      "Each guest has a private, hotel-style room, similar to a small studio apartment, with a private en-suite bathroom inside the room. The boot camp's main activities and presentations take place at Seton.",
+      "Each guest has a private, hotel-style room, similar to a small studio apartment, with a private en-suite bathroom inside the room. The residency's main activities and presentations take place at Seton.",
     included: [
       "Private hotel room (studio-style)",
       "Private en-suite bathroom inside the room",
