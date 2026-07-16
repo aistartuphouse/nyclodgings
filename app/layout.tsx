@@ -28,7 +28,7 @@ const jetbrainsMono = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://realai-bootcamp-web.vercel.app",
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://lodgings.aistartuphouse.com",
   ),
   title: {
     default: "AI Startup House Lodging | New York",
