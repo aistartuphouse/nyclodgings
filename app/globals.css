@@ -101,3 +101,30 @@ input[type="date"] {
     opacity: 0.5;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Rounded corners — match the main AI Startup House site (which is fully
+   rounded). This app was built square; these rules round the buttons, cards,
+   and form fields without touching every component.
+   --------------------------------------------------------------------------- */
+
+/* Pill buttons (filled CTAs + outline buttons) */
+[class~="bg-pine"][class*="uppercase"],
+[class*="border-ink/25"][class*="uppercase"],
+[class*="border-ink/30"][class*="uppercase"],
+[class*="border-pine/35"] {
+  border-radius: 9999px;
+}
+
+/* Raised panels / cards / accent boxes */
+[class*="bg-sand"],
+[class*="bg-pine/5"] {
+  border-radius: 1.75rem;
+}
+
+/* Form fields */
+input,
+select,
+textarea {
+  border-radius: 0.75rem;
+}
