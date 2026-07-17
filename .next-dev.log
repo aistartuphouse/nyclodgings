@@ -1,0 +1,18 @@
+
+> web@0.1.0 dev
+> next dev -p 3010
+
+▲ Next.js 16.2.10 (Turbopack)
+- Local:         http://localhost:3010
+- Network:       http://192.168.0.13:3010
+- Environments: .env.local
+✓ Ready in 585ms
+Creating turbopack project {
+  dir: 'C:\\Users\\oaklu\\OneDrive\\Desktop\\Coding\\WKZ\\EdTech\\RAID\\nyclodgings',
+  testMode: true
+}
+
+○ Compiling / ...
+ GET / 200 in 8.1s (next.js: 6.9s, application-code: 1162ms)
+ GET / 200 in 224ms (next.js: 20ms, application-code: 204ms)
+ GET / 200 in 107ms (next.js: 5ms, application-code: 102ms)
