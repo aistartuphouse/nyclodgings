@@ -8,7 +8,7 @@ import Link from "next/link";
 const MAIN = "https://ai-startup-house-site.vercel.app";
 
 const LINKS = [
-  { href: `${MAIN}/#features`, label: "The House" },
+  { href: "/", label: "The House" },
   { href: `${MAIN}/#philosophy`, label: "Manifesto" },
   { href: `${MAIN}/#protocol`, label: "How It Works" },
   { href: `${MAIN}/#founder`, label: "Founder" },
