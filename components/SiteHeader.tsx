@@ -4,8 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 // The lodging page shares the main site's menu so the two feel like one site.
-// TODO: swap MAIN to https://aistartuphouse.com once the domain is pointed.
-const MAIN = "https://ai-startup-house-site.vercel.app";
+const MAIN = "https://aistartuphouse.com";
 
 const LINKS = [
   { href: "/", label: "The House" },
