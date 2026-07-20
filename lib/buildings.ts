@@ -16,6 +16,7 @@ export interface BuildingContent {
   roomsLabel: string;
   roomTypeShort: string;
   bathroomShort: string;
+  minStay: string;
   commute: string;
   commuteShort: string;
   description: string;
@@ -38,10 +39,11 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     roomsLabel: "Studio-style rooms",
     roomTypeShort: "Studio-style",
     bathroomShort: "En-suite bathroom",
-    commute: "All main activities and presentations are held at Seton, so you stay in the building where the program happens. No commute at all.",
+    minStay: "One-month minimum stay",
+    commute: "Programming takes place at both Seton and Mansfield. Sessions at Seton happen in your building; Mansfield is about a 15-minute walk.",
     commuteShort: "On site",
     description:
-      "Each guest has a private, hotel-style room, similar to a small studio apartment, with a private en-suite bathroom inside the room. The residency's main activities and presentations take place at Seton.",
+      "Each guest has a private, hotel-style room, similar to a small studio apartment, with a private en-suite bathroom inside the room. The residency's activities and presentations take place at Seton and Mansfield.",
     included: [
       "Private hotel room (studio-style)",
       "Private en-suite bathroom inside the room",
@@ -74,7 +76,8 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     roomsLabel: "Dorm-style rooms",
     roomTypeShort: "Dorm-style",
     bathroomShort: "Shared",
-    commute: "Main activities and presentations are held at Seton (144 E 40th St). From Stratford that is roughly two miles, about 20 minutes by subway.",
+    minStay: "One-month minimum stay",
+    commute: "Activities and presentations are held at Seton and Mansfield, both in Midtown. From Stratford that is roughly 20 minutes by subway.",
     commuteShort: "~20 min by subway",
     description:
       "Stratford is the lower-cost option. Rooms are basic and dorm-style, with shared bathrooms, shared common spaces, and a courtyard on the Upper West Side.",
@@ -104,19 +107,20 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     address: "12 West 44th Street",
     neighborhood: "Midtown Manhattan",
     weeklyRateCents: 65000,
-    tagline: "Semi-private room, heart of Midtown",
-    style: "Semi-private room in a boutique hotel building",
-    bathroom: "Bathroom shared between two adjacent rooms",
-    roomsLabel: "Semi-private rooms",
-    roomTypeShort: "Semi-private",
-    bathroomShort: "Shared with one room",
-    commute: "Main activities and presentations are held at Seton (144 E 40th St). From Mansfield that is under a mile, about a 15-minute walk through Midtown.",
-    commuteShort: "~15 min walk",
+    tagline: "Hotel living, heart of Midtown",
+    style: "Hotel living: single and shared rooms",
+    bathroom: "Private and shared bathroom options, varies by room",
+    roomsLabel: "Hotel living",
+    roomTypeShort: "Single or shared",
+    bathroomShort: "Varies by room",
+    minStay: "Short-term stays on request",
+    commute: "Programming takes place at both Seton and Mansfield, so many sessions happen right in the building. Seton is under a mile away, about a 15-minute walk.",
+    commuteShort: "On site",
     description:
-      "Each guest has a furnished room in The Mansfield, a historic boutique hotel building on West 44th Street. Rooms come with a queen bed, study desk, Smart TV, and a mini-fridge and microwave. Every room pairs with one adjacent room and the two share a bathroom, so it feels private at a lower price than a studio. Times Square and Grand Central are a five-minute walk.",
+      "The Mansfield is a historic boutique hotel building on West 44th Street offering hotel living with both single and shared room options, including short-term stays on request. Rooms come furnished with a queen bed, study desk, Smart TV, and a mini-fridge and microwave. Programming takes place at both Seton and Mansfield, and Times Square and Grand Central are a five-minute walk.",
     included: [
-      "Semi-private room with queen bed",
-      "Bathroom shared with one adjacent room",
+      "Single and shared room options",
+      "Short-term stays on request",
       "All utilities",
       "Furniture and furnishings",
       "High-speed Wi-Fi",

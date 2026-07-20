@@ -10,7 +10,7 @@ import { formatMoney } from "@/lib/format";
 export const metadata: Metadata = {
   title: "AI Startup House Lodging | New York",
   description:
-    "Three Manhattan buildings for Entrepreneur AI Startup House participants: Seton (studio-style rooms, program on site), Stratford (dorm-style) and Mansfield (semi-private, Midtown). Weekly rates, one upfront payment.",
+    "Three Manhattan buildings for Entrepreneur AI Startup House participants: Seton (studio-style rooms, program on site), Stratford (dorm-style) and Mansfield (hotel living, Midtown). Weekly rates, one upfront payment.",
 };
 
 export default function HomePage() {
@@ -71,7 +71,7 @@ export default function HomePage() {
               Three buildings, one decision
             </p>
             <h2 className="mt-4 font-display text-[clamp(1.9rem,4vw,3rem)] leading-tight max-w-2xl">
-              Studio-style at Seton, dorm-style at Stratford, or semi-private at Mansfield.
+              Studio-style at Seton, dorm-style at Stratford, or hotel living at Mansfield.
             </h2>
           </Reveal>
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -104,6 +104,7 @@ export default function HomePage() {
                     <ul className="space-y-1.5 text-[15px] text-ink/80">
                       <li>{b.style}</li>
                       <li>{b.bathroom}</li>
+                      <li>{b.minStay}</li>
                       <li>Program venue: {b.commuteShort}</li>
                     </ul>
                     <div className="mt-auto flex gap-3 pt-2">
@@ -133,15 +134,14 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-5 sm:px-10 py-16 sm:py-20 grid gap-10 md:grid-cols-[1.2fr_1fr] items-center">
           <Reveal>
             <h2 className="font-display text-[clamp(1.6rem,3vw,2.4rem)] leading-snug">
-              The program takes place at Seton, 144 East 40th Street.
+              The program takes place at both Seton and Mansfield.
             </h2>
             <p className="mt-5 text-ink/75 leading-relaxed max-w-xl">
-              All main activities and presentations are held at Seton, so
-              participants staying there live in the same building as the
-              program. From Stratford it is roughly two miles, about 20 minutes
-              by subway; from Mansfield in Midtown it is under a mile, about a
-              15-minute walk. All three buildings are furnished, with utilities
-              and Wi-Fi included in the weekly rate.
+              Activities and presentations are held at Seton in Murray Hill
+              and Mansfield in Midtown, so participants staying at either
+              building live where the sessions happen. From Stratford it is
+              roughly 20 minutes by subway. All three buildings are furnished,
+              with utilities and Wi-Fi included in the weekly rate.
             </p>
           </Reveal>
           <Reveal delay={0.15}>
@@ -184,12 +184,13 @@ export default function HomePage() {
                 <tbody>
                   {[
                     ["Weekly rate", "$650", "$450", "$650"],
-                    ["Style", "Studio-style hotel room", "Dorm-style room", "Semi-private hotel room"],
-                    ["Bathroom", "Private en-suite bathroom", "Shared bathrooms", "Shared with one adjacent room"],
+                    ["Style", "Studio-style hotel room", "Dorm-style room", "Hotel living, single or shared"],
+                    ["Bathroom", "Private en-suite bathroom", "Shared bathrooms", "Varies by room"],
+                    ["Minimum stay", "One month", "One month", "Short stays on request"],
                     ["Furniture and furnishings", "Included", "Included", "Included"],
                     ["Utilities", "Included", "Included", "Included"],
                     ["Wi-Fi", "Included", "Included", "Included"],
-                    ["Program venue", "On site, same building", "~2 mi, ~20 min by subway", "~1 mi, ~15 min walk"],
+                    ["Program venue", "On site, same building", "~20 min by subway", "On site, same building"],
                     ["Neighborhood", "Murray Hill", "Upper West Side", "Midtown"],
                   ].map(([k, seton, stratford, mansfield], i) => (
                     <tr key={k} className={i % 2 ? "bg-paper-dim/60" : "bg-sand/45"}>
@@ -275,7 +276,7 @@ export default function HomePage() {
             {[
               [
                 "What is included in the weekly rate?",
-                "Furniture, all utilities, and high-speed Wi-Fi at all three buildings. Seton rooms include a private en-suite bathroom; Stratford has shared bathrooms plus common spaces and a courtyard; at Mansfield each room shares a bathroom with one adjacent room and residents can use the lounge, fitness center and shared kitchen.",
+                "Furniture, all utilities, and high-speed Wi-Fi at all three buildings. Seton rooms include a private en-suite bathroom; Stratford has shared bathrooms plus common spaces and a courtyard; Mansfield offers hotel living with single and shared room options, plus a lounge, fitness center and shared kitchen.",
               ],
               [
                 "How does payment work?",
@@ -283,7 +284,7 @@ export default function HomePage() {
               ],
               [
                 "Can I choose any dates?",
-                "Move-out is open. Move-in can be any day up to and including September 10, 2026, with a 30-night minimum stay. Stays that are not whole weeks are prorated by the day.",
+                "Move-out is open. Move-in can be any day up to and including September 10, 2026. Online bookings have a one-month (30-night) minimum stay; shorter stays at Mansfield are available on request via the application form. Stays that are not whole weeks are prorated by the day.",
               ],
               [
                 "I want a larger room or a suite.",
@@ -291,7 +292,7 @@ export default function HomePage() {
               ],
               [
                 "Who runs this?",
-                "This site handles housing for the Entrepreneur AI Startup House, organized with the team behind Real AI Dynamics. The program itself takes place at Seton, 144 East 40th Street.",
+                "This site handles housing for the Entrepreneur AI Startup House, organized with the team behind Real AI Dynamics. The program itself takes place at both Seton and Mansfield.",
               ],
             ].map(([q, a]) => (
               <Reveal key={q}>

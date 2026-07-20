@@ -61,7 +61,7 @@ export function BuildingPage({
         <Reveal>
           <p className="text-lg leading-relaxed text-ink/80 max-w-2xl">{b.description}</p>
           <p className="mt-4 text-[15px] leading-relaxed text-ink/60 max-w-2xl">{b.commute}</p>
-          <dl className="mt-8 grid grid-cols-3 gap-6 border-t border-line pt-6 font-mono text-[13px] max-w-xl">
+          <dl className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-6 border-t border-line pt-6 font-mono text-[13px] max-w-2xl">
             <div>
               <dt className="text-ink/45 uppercase tracking-[0.18em] text-[11px]">Room type</dt>
               <dd className="mt-1.5">{b.roomTypeShort}</dd>
@@ -69,6 +69,10 @@ export function BuildingPage({
             <div>
               <dt className="text-ink/45 uppercase tracking-[0.18em] text-[11px]">Bathroom</dt>
               <dd className="mt-1.5">{b.bathroomShort}</dd>
+            </div>
+            <div>
+              <dt className="text-ink/45 uppercase tracking-[0.18em] text-[11px]">Minimum stay</dt>
+              <dd className="mt-1.5">{b.slug === "mansfield" ? "Short stays on request" : "One month"}</dd>
             </div>
             <div>
               <dt className="text-ink/45 uppercase tracking-[0.18em] text-[11px]">Commute</dt>

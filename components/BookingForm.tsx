@@ -167,8 +167,9 @@ export function BookingForm({
           </div>
         </div>
         <p className="font-mono text-[11px] tracking-wide text-ink/50 -mt-4">
-          Minimum stay 30 nights. Last possible move-in is September 10, 2026.
-          Move-out is up to you.
+          Online bookings have a one-month (30-night) minimum stay; shorter
+          stays at Mansfield are available on request. Last possible move-in is
+          September 10, 2026. Move-out is up to you.
         </p>
         {quoteError && (
           <p className="border border-pine/30 bg-pine/5 px-4 py-3 text-[14px] text-pine" role="alert">
