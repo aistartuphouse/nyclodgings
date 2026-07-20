@@ -4,17 +4,26 @@ import { Reveal } from "@/components/Reveal";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BookingForm } from "@/components/BookingForm";
-import { BUILDING_LIST, BUILDINGS, type BuildingSlug } from "@/lib/buildings";
+import {
+  BUILDING_LIST,
+  BUILDINGS,
+  hasStayPremium,
+  roomTypesFor,
+  type BuildingSlug,
+} from "@/lib/buildings";
 import { formatMoney } from "@/lib/format";
 
 export function BuildingPage({
   slug,
   source,
+  room,
 }: {
   slug: BuildingSlug;
   source?: string | null;
+  room?: string | null;
 }) {
   const b = BUILDINGS[slug];
+  const rooms = roomTypesFor(slug);
   const others = BUILDING_LIST.filter((x) => x.slug !== slug);
   const [lead, second, ...rest] = b.photos;
 
@@ -48,6 +57,7 @@ export function BuildingPage({
                 </p>
               </div>
               <p className="font-display text-4xl">
+                <span className="font-mono text-[13px] text-ink/60">from </span>
                 {formatMoney(b.weeklyRateCents)}
                 <span className="font-mono text-[13px] text-ink/60"> per week</span>
               </p>
@@ -97,6 +107,60 @@ export function BuildingPage({
         </Reveal>
       </section>
 
+      {/* Rooms and rates */}
+      <section className="mx-auto max-w-6xl px-5 sm:px-10 pb-16 sm:pb-20">
+        <Reveal>
+          <p className="font-mono text-[12px] tracking-[0.26em] uppercase text-pine">Rooms and rates</p>
+          <h2 className="mt-3 font-display text-[clamp(1.7rem,3.5vw,2.4rem)]">
+            {rooms.length} room type{rooms.length === 1 ? "" : "s"} at {b.name}
+          </h2>
+          {hasStayPremium(slug) && (
+            <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-ink/60">
+              Rates shown are for stays of 6 months or longer. Stays of 1 to 3
+              months are priced 25% higher and 3 to 6 months 15% higher; the
+              booking summary always shows the exact rate for your dates.
+            </p>
+          )}
+        </Reveal>
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {rooms.map((r, i) => (
+            <Reveal key={r.slug} delay={(i % 3) * 0.08}>
+              <article className="group border border-line bg-sand flex flex-col h-full">
+                <div className="relative aspect-[3/2] overflow-hidden">
+                  <Image
+                    src={r.photos[0]!.src}
+                    alt={r.photos[0]!.alt}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    style={r.photos[0]!.pos ? { objectPosition: r.photos[0]!.pos } : undefined}
+                  />
+                </div>
+                <div className="p-6 flex flex-col gap-4 grow">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <h3 className="font-display text-2xl">{r.name}</h3>
+                    <p className="font-mono text-[14px] whitespace-nowrap">
+                      {formatMoney(r.weeklyRateCents)}
+                      <span className="text-ink/45 text-[11px]"> /week</span>
+                    </p>
+                  </div>
+                  <p className="font-mono text-[12px] tracking-wide text-ink/50 -mt-2">
+                    {r.bed} · {r.bathroom}
+                  </p>
+                  <p className="text-[14px] leading-relaxed text-ink/70">{r.summary}</p>
+                  <Link
+                    href={`/${slug}?room=${r.slug}#book`}
+                    className="mt-auto bg-pine text-paper text-center font-mono text-[12px] tracking-[0.18em] uppercase px-5 py-3 transition-colors hover:bg-pine-deep"
+                  >
+                    Book this room
+                  </Link>
+                </div>
+              </article>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
       {/* Gallery */}
       <section className="mx-auto max-w-6xl px-5 sm:px-10 pb-16 sm:pb-20">
         <Reveal>
@@ -133,7 +197,15 @@ export function BuildingPage({
             </h2>
           </Reveal>
           <div className="mt-10">
-            <BookingForm initialBuilding={slug} source={source} lockBuilding />
+            <BookingForm
+              // Remount when a room card is clicked so the new selection
+              // takes over (soft navigation keeps the client state otherwise).
+              key={room ?? "default"}
+              initialBuilding={slug}
+              initialRoom={room}
+              source={source}
+              lockBuilding
+            />
           </div>
         </div>
       </section>
@@ -149,7 +221,7 @@ export function BuildingPage({
             <p className="font-mono text-[11px] tracking-[0.22em] uppercase text-ink/45">Also available</p>
             <p className="mt-2 font-display text-2xl">
               {other.name}
-              <span className="text-ink/40 text-lg"> · {formatMoney(other.weeklyRateCents)}/week</span>
+              <span className="text-ink/40 text-lg"> · from {formatMoney(other.weeklyRateCents)}/week</span>
             </p>
             <p className="mt-1 text-[14px] text-ink/60">{other.tagline}</p>
           </Link>

@@ -4,14 +4,14 @@ import { BuildingPage } from "@/components/BuildingPage";
 export const metadata: Metadata = {
   title: "Seton | AI Startup House Lodging",
   description:
-    "Private, hotel-style rooms with en-suite bathrooms at 144 E 40th St, Murray Hill. $650/week, utilities and Wi-Fi included. The residency program takes place on site.",
+    "Private, hotel-style rooms with en-suite bathrooms at 144 E 40th St, Murray Hill. Three room types from $525/week, utilities and Wi-Fi included. The residency program takes place on site.",
 };
 
 export default async function SetonPage({
   searchParams,
 }: {
-  searchParams: Promise<{ ref?: string }>;
+  searchParams: Promise<{ ref?: string; room?: string }>;
 }) {
-  const { ref } = await searchParams;
-  return <BuildingPage slug="seton" source={ref ?? null} />;
+  const { ref, room } = await searchParams;
+  return <BuildingPage slug="seton" source={ref ?? null} room={room ?? null} />;
 }

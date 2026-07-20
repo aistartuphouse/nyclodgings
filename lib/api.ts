@@ -5,7 +5,9 @@ export interface Quote {
   nights: number;
   weeks: number;
   extraDays: number;
-  weeklyRateCents: number;
+  weeklyRateCents: number; // effective rate charged (includes any stay premium)
+  baseWeeklyRateCents: number;
+  stayPremiumRate: number; // Mansfield only: 0.25 / 0.15 / 0
   rentCents: number;
   taxBand: "short" | "medium" | "exempt";
   taxRate: number;

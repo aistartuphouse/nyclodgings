@@ -67,9 +67,9 @@ export function ApplyForm({ source }: { source?: string | null }) {
         <label htmlFor="a-building" className={labelCls}>Preferred building</label>
         <select id="a-building" name="building" className={`${inputCls} mt-2`} defaultValue="">
           <option value="">No preference yet</option>
-          <option value="seton">Seton (private, $650/week)</option>
-          <option value="stratford">Stratford (dorm-style, $450/week)</option>
-          <option value="mansfield">Mansfield (hotel living, $650/week)</option>
+          <option value="mansfield">Mansfield (hotel living, from $575/week)</option>
+          <option value="seton">Seton (private, from $525/week)</option>
+          <option value="stratford">Stratford (dorm-style, from $400/week)</option>
         </select>
       </div>
       <div className="grid grid-cols-2 gap-3">

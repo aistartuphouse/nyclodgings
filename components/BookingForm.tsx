@@ -2,23 +2,36 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createBooking, fetchQuote, type PaymentMethod, type Quote } from "@/lib/api";
-import { BUILDINGS, type BuildingContent, type BuildingSlug } from "@/lib/buildings";
-import { addDays, MOVE_IN_DEADLINE, todayNY } from "@/lib/format";
+import {
+  BUILDINGS,
+  DEFAULT_ROOM,
+  hasStayPremium,
+  roomTypesFor,
+  type BuildingSlug,
+} from "@/lib/buildings";
+import { addDays, formatMoney, MOVE_IN_DEADLINE, todayNY } from "@/lib/format";
 import { QuoteReceipt } from "./QuoteReceipt";
 
 type Slug = BuildingSlug;
 
 export function BookingForm({
   initialBuilding,
+  initialRoom,
   source,
   lockBuilding = false,
 }: {
   initialBuilding: Slug;
+  initialRoom?: string | null;
   source?: string | null;
   lockBuilding?: boolean;
 }) {
   const [slug, setSlug] = useState<Slug>(initialBuilding);
-  const building: BuildingContent = BUILDINGS[slug];
+  const building = BUILDINGS[slug];
+  const rooms = roomTypesFor(slug);
+  const [roomSlug, setRoomSlug] = useState<string>(
+    rooms.some((r) => r.slug === initialRoom) ? initialRoom! : DEFAULT_ROOM[initialBuilding],
+  );
+  const room = rooms.find((r) => r.slug === roomSlug) ?? rooms[0]!;
 
   const today = useMemo(() => todayNY(), []);
   const [moveIn, setMoveIn] = useState("");
@@ -37,8 +50,13 @@ export function BookingForm({
 
   const requestSeq = useRef(0);
 
+  function pickBuilding(next: Slug) {
+    setSlug(next);
+    setRoomSlug(DEFAULT_ROOM[next]);
+  }
+
   const refreshQuote = useCallback(
-    async (b: Slug, mi: string, mo: string) => {
+    async (roomId: string, mi: string, mo: string) => {
       if (!mi || !mo) {
         setQuote(null);
         setQuoteError(null);
@@ -46,7 +64,7 @@ export function BookingForm({
       }
       const seq = ++requestSeq.current;
       setPending(true);
-      const result = await fetchQuote(b, mi, mo).catch(() => ({
+      const result = await fetchQuote(roomId, mi, mo).catch(() => ({
         error: { error: "network", message: "Could not reach the booking service. Try again." },
       }));
       if (seq !== requestSeq.current) return; // stale response
@@ -63,9 +81,9 @@ export function BookingForm({
   );
 
   useEffect(() => {
-    const t = setTimeout(() => refreshQuote(slug, moveIn, moveOut), 250);
+    const t = setTimeout(() => refreshQuote(room.slug, moveIn, moveOut), 250);
     return () => clearTimeout(t);
-  }, [slug, moveIn, moveOut, refreshQuote]);
+  }, [room.slug, moveIn, moveOut, refreshQuote]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -73,7 +91,7 @@ export function BookingForm({
     setSubmitting(true);
     setSubmitError(null);
     const result = await createBooking({
-      building: slug,
+      building: room.slug,
       moveIn,
       moveOut,
       name,
@@ -108,11 +126,11 @@ export function BookingForm({
           <fieldset>
             <legend className={labelCls}>Building</legend>
             <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {(["seton", "stratford", "mansfield"] as const).map((s) => (
+              {(["mansfield", "seton", "stratford"] as const).map((s) => (
                 <button
                   key={s}
                   type="button"
-                  onClick={() => setSlug(s)}
+                  onClick={() => pickBuilding(s)}
                   aria-pressed={slug === s}
                   className={`border px-4 py-3 text-left transition-colors ${
                     slug === s
@@ -129,6 +147,42 @@ export function BookingForm({
             </div>
           </fieldset>
         )}
+
+        <fieldset>
+          <legend className={labelCls}>Room type</legend>
+          <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {rooms.map((r) => (
+              <button
+                key={r.slug}
+                type="button"
+                onClick={() => setRoomSlug(r.slug)}
+                aria-pressed={room.slug === r.slug}
+                className={`border px-4 py-3 text-left transition-colors ${
+                  room.slug === r.slug
+                    ? "border-pine bg-pine text-paper"
+                    : "border-line bg-sand hover:border-pine/50"
+                }`}
+              >
+                <span className="flex items-baseline justify-between gap-3">
+                  <span className="block text-[15px] font-medium">{r.name}</span>
+                  <span className={`font-mono text-[12px] whitespace-nowrap ${room.slug === r.slug ? "text-paper/80" : "text-ink/60"}`}>
+                    {formatMoney(r.weeklyRateCents)}/wk
+                  </span>
+                </span>
+                <span className={`block text-[12px] leading-5 mt-0.5 ${room.slug === r.slug ? "text-paper/75" : "text-ink/55"}`}>
+                  {r.bed} · {r.bathroom}
+                </span>
+              </button>
+            ))}
+          </div>
+          {hasStayPremium(slug) && (
+            <p className="mt-2 font-mono text-[11px] tracking-wide text-ink/50">
+              Mansfield rates shown are for stays of 6 months or longer. Stays
+              of 1 to 3 months are priced 25% higher, and 3 to 6 months 15%
+              higher; the summary shows the exact rate for your dates.
+            </p>
+          )}
+        </fieldset>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
@@ -241,7 +295,7 @@ export function BookingForm({
           quote={quote}
           moveIn={moveIn}
           moveOut={moveOut}
-          buildingName={building.name}
+          buildingName={`${building.name} · ${room.name}`}
           pending={pending}
           paymentMethod={paymentMethod}
         />

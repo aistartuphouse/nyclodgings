@@ -10,7 +10,7 @@ import { formatMoney } from "@/lib/format";
 export const metadata: Metadata = {
   title: "AI Startup House Lodging | New York",
   description:
-    "Three Manhattan buildings for Entrepreneur AI Startup House participants: Seton (studio-style rooms, program on site), Stratford (dorm-style) and Mansfield (hotel living, Midtown). Weekly rates, one upfront payment.",
+    "Three Manhattan buildings for Entrepreneur AI Startup House participants: Mansfield (hotel living, Midtown), Seton (studio-style rooms, program on site) and Stratford (dorm-style). Several room types per building, weekly rates, one upfront payment.",
 };
 
 export default function HomePage() {
@@ -57,7 +57,7 @@ export default function HomePage() {
               Choose your building
             </a>
             <span className="font-mono text-[12px] tracking-wide text-ink/55">
-              From $450/week · book until Sep 10, 2026 move-in
+              From $400/week · book until Sep 10, 2026 move-in
             </span>
           </div>
         </div>
@@ -71,7 +71,7 @@ export default function HomePage() {
               Three buildings, one decision
             </p>
             <h2 className="mt-4 font-display text-[clamp(1.9rem,4vw,3rem)] leading-tight max-w-2xl">
-              Studio-style at Seton, dorm-style at Stratford, or hotel living at Mansfield.
+              Hotel living at Mansfield, studio-style at Seton, or dorm-style at Stratford.
             </h2>
           </Reveal>
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -94,6 +94,7 @@ export default function HomePage() {
                     <div className="flex items-baseline justify-between gap-4">
                       <h3 className="font-display text-3xl">{b.name}</h3>
                       <p className="font-mono text-[15px] whitespace-nowrap">
+                        <span className="text-ink/45 text-[12px]">from </span>
                         {formatMoney(b.weeklyRateCents)}
                         <span className="text-ink/45 text-[12px]"> /week</span>
                       </p>
@@ -176,33 +177,40 @@ export default function HomePage() {
                 <thead>
                   <tr className="bg-pine text-paper font-mono text-[11px] tracking-[0.18em] uppercase">
                     <th className="text-left font-medium px-5 py-3.5 w-[25%]"> </th>
+                    <th className="text-left font-medium px-5 py-3.5">Mansfield</th>
                     <th className="text-left font-medium px-5 py-3.5">Seton</th>
                     <th className="text-left font-medium px-5 py-3.5">Stratford</th>
-                    <th className="text-left font-medium px-5 py-3.5">Mansfield</th>
                   </tr>
                 </thead>
                 <tbody>
                   {[
-                    ["Weekly rate", "$650", "$450", "$650"],
-                    ["Style", "Studio-style hotel room", "Dorm-style room", "Hotel living, single or shared"],
-                    ["Bathroom", "Private en-suite bathroom", "Shared bathrooms", "Varies by room"],
-                    ["Minimum stay", "One month", "One month", "Short stays on request"],
+                    ["Weekly rate", "From $575", "From $525", "From $400"],
+                    ["Room types", "5, semi-private to Studio King", "3, Deluxe to King Studio", "2, private or Jack and Jill"],
+                    ["Style", "Hotel living, single or shared", "Studio-style hotel room", "Dorm-style room"],
+                    ["Bathroom", "Varies by room", "Private en-suite bathroom", "Shared bathrooms"],
+                    ["Minimum stay", "Short stays on request", "One month", "One month"],
                     ["Furniture and furnishings", "Included", "Included", "Included"],
                     ["Utilities", "Included", "Included", "Included"],
                     ["Wi-Fi", "Included", "Included", "Included"],
-                    ["Program venue", "On site, same building", "~20 min by subway", "On site, same building"],
-                    ["Neighborhood", "Murray Hill", "Upper West Side", "Midtown"],
-                  ].map(([k, seton, stratford, mansfield], i) => (
+                    ["Program venue", "On site, same building", "On site, same building", "~20 min by subway"],
+                    ["Neighborhood", "Midtown", "Murray Hill", "Upper West Side"],
+                  ].map(([k, mansfield, seton, stratford], i) => (
                     <tr key={k} className={i % 2 ? "bg-paper-dim/60" : "bg-sand/45"}>
                       <th className="text-left font-medium px-5 py-3 border-b border-line">{k}</th>
+                      <td className="px-5 py-3 border-b border-line">{mansfield}</td>
                       <td className="px-5 py-3 border-b border-line">{seton}</td>
                       <td className="px-5 py-3 border-b border-line">{stratford}</td>
-                      <td className="px-5 py-3 border-b border-line">{mansfield}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
+            <p className="mt-3 font-mono text-[12px] tracking-wide text-ink/50">
+              Mansfield rates are for stays of 6 months or longer; 1 to 3 month
+              stays are priced 25% higher and 3 to 6 months 15% higher. Every
+              rate above is a starting price; each building has several room
+              types.
+            </p>
           </Reveal>
           <Reveal delay={0.15}>
             <div className="mt-8 bg-sand text-ink/80 p-6 sm:p-8 flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
@@ -276,7 +284,7 @@ export default function HomePage() {
             {[
               [
                 "What is included in the weekly rate?",
-                "Furniture, all utilities, and high-speed Wi-Fi at all three buildings. Seton rooms include a private en-suite bathroom; Stratford has shared bathrooms plus common spaces and a courtyard; Mansfield offers hotel living with single and shared room options, plus a lounge, fitness center and shared kitchen.",
+                "Furniture, all utilities, and high-speed Wi-Fi at all three buildings. Each building has several room types at different weekly rates: Mansfield from semi-private rooms to a Studio King, Seton from a Deluxe room to a King Studio, and Stratford dorm-style rooms with shared or semi-private bathrooms. Mansfield rates depend on stay length: listed prices apply from 6 months, with 1-3 month stays 25% higher and 3-6 months 15% higher.",
               ],
               [
                 "How does payment work?",

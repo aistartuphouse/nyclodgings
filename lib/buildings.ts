@@ -9,7 +9,7 @@ export interface BuildingContent {
   name: string;
   address: string;
   neighborhood: string;
-  weeklyRateCents: number;
+  weeklyRateCents: number; // lowest room-type rate, shown as "from $X/week"
   tagline: string;
   style: string;
   bathroom: string;
@@ -32,7 +32,7 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     name: "Seton",
     address: "144 East 40th Street",
     neighborhood: "Murray Hill, Manhattan",
-    weeklyRateCents: 65000,
+    weeklyRateCents: 52500,
     tagline: "Studio-style room, program on site",
     style: "Private hotel room (studio-style)",
     bathroom: "Private en-suite bathroom, inside the room",
@@ -69,7 +69,7 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     name: "Stratford",
     address: "117 West 70th Street",
     neighborhood: "Upper West Side",
-    weeklyRateCents: 45000,
+    weeklyRateCents: 40000,
     tagline: "Dorm-style, lower cost",
     style: "Basic, dorm-style room",
     bathroom: "Shared bathrooms",
@@ -106,7 +106,7 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     name: "Mansfield",
     address: "12 West 44th Street",
     neighborhood: "Midtown Manhattan",
-    weeklyRateCents: 65000,
+    weeklyRateCents: 57500,
     tagline: "Hotel living, heart of Midtown",
     style: "Hotel living: single and shared rooms",
     bathroom: "Private and shared bathroom options, varies by room",
@@ -140,4 +140,199 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
   },
 };
 
-export const BUILDING_LIST = [BUILDINGS.seton, BUILDINGS.stratford, BUILDINGS.mansfield];
+// Organizer request 2026-07-20: Mansfield first, then Seton, then Stratford.
+export const BUILDING_LIST = [BUILDINGS.mansfield, BUILDINGS.seton, BUILDINGS.stratford];
+
+// ---- Room types (sub-listings) ----
+// Each bookable room type has its own backend listing; the slug here IS the
+// backend building id the quote/booking API expects. Weekly rates mirror the
+// backend and are display copy only; Mansfield rates are the 6+ month base
+// prices (1-3 months +25%, 3-6 months +15%, applied by the backend quote).
+
+export interface RoomType {
+  slug: string; // backend listing id, e.g. "mansfield-studio-king"
+  building: BuildingSlug;
+  name: string; // short name shown on cards, e.g. "Studio King"
+  weeklyRateCents: number;
+  bed: string;
+  bathroom: string;
+  summary: string;
+  photos: { src: string; alt: string; pos?: string }[];
+}
+
+export const ROOM_TYPES: RoomType[] = [
+  {
+    slug: "mansfield-semi-basic",
+    building: "mansfield",
+    name: "Semi Private Basic",
+    weeklyRateCents: 57500,
+    bed: "Queen bed",
+    bathroom: "Shared with one adjacent room",
+    summary:
+      "Budget-friendly with a private-room feel: queen bed, study desk and nightstand; the bathroom is shared with one adjacent room.",
+    photos: [
+      { src: "/images/mansfield/1.webp", alt: "Mansfield semi-private room with queen bed, desk and floor lamp" },
+      { src: "/images/mansfield/2.webp", alt: "Mansfield semi-private room with bay windows, mini-fridge and microwave" },
+      { src: "/images/mansfield/3.webp", alt: "Mansfield semi-private room with wall-mounted TV" },
+    ],
+  },
+  {
+    slug: "mansfield-semi-plus",
+    building: "mansfield",
+    name: "Semi Private Plus",
+    weeklyRateCents: 59500,
+    bed: "Queen bed",
+    bathroom: "Shared with one adjacent room",
+    summary:
+      "A more spacious semi-private room: queen bed, study desk and extra floor space, with the bathroom shared with one adjacent room.",
+    photos: [
+      { src: "/images/mansfield/semi-plus-1.webp", alt: "Mansfield Semi Private Plus room with queen bed and desk" },
+      { src: "/images/mansfield/semi-plus-2.webp", alt: "Mansfield Semi Private Plus room, seating corner" },
+      { src: "/images/mansfield/semi-plus-3.webp", alt: "Mansfield Semi Private Plus room with window view" },
+    ],
+  },
+  {
+    slug: "mansfield-studio-basic",
+    building: "mansfield",
+    name: "Studio Basic",
+    weeklyRateCents: 69500,
+    bed: "Queen bed",
+    bathroom: "Private en-suite",
+    summary:
+      "A studio-style room with its own entrance from the hallway. Nothing is shared: private bathroom, own study desk, queen bed.",
+    photos: [
+      { src: "/images/mansfield/studio-basic-1.webp", alt: "Mansfield Studio Basic room with queen bed" },
+      { src: "/images/mansfield/studio-basic-2.webp", alt: "Mansfield Studio Basic room, desk and TV" },
+      { src: "/images/mansfield/studio-basic-3.webp", alt: "Mansfield Studio Basic private bathroom" },
+    ],
+  },
+  {
+    slug: "mansfield-studio-plus",
+    building: "mansfield",
+    name: "Studio Plus",
+    weeklyRateCents: 72500,
+    bed: "Queen bed",
+    bathroom: "Private en-suite",
+    summary:
+      "A brighter, larger studio-style room with its own entrance from the hallway, private bathroom, study desk and queen bed.",
+    photos: [
+      { src: "/images/mansfield/studio-plus-1.webp", alt: "Mansfield Studio Plus room with queen bed and bright windows" },
+      { src: "/images/mansfield/studio-plus-2.webp", alt: "Mansfield Studio Plus room, work desk" },
+      { src: "/images/mansfield/studio-plus-3.webp", alt: "Mansfield Studio Plus room interior" },
+    ],
+  },
+  {
+    slug: "mansfield-studio-king",
+    building: "mansfield",
+    name: "Studio King",
+    weeklyRateCents: 74500,
+    bed: "King bed",
+    bathroom: "Private en-suite",
+    summary:
+      "The largest room at the Mansfield: king bed, private entrance from the hallway, private bathroom and the most living space.",
+    photos: [
+      { src: "/images/mansfield/studio-king-1.webp", alt: "Mansfield Studio King room with king bed" },
+      { src: "/images/mansfield/studio-king-2.webp", alt: "Mansfield Studio King room, lounge corner" },
+      { src: "/images/mansfield/studio-king-3.webp", alt: "Mansfield Studio King room with desk and TV" },
+    ],
+  },
+  {
+    slug: "seton-deluxe",
+    building: "seton",
+    name: "Deluxe Room",
+    weeklyRateCents: 52500,
+    bed: "Full-size bed",
+    bathroom: "Private en-suite",
+    summary:
+      "A comfortable private room with a full-size bed, study desk, nightstand and flat TV, with a private en-suite bathroom.",
+    photos: [
+      { src: "/images/seton/deluxe-1.webp", alt: "Seton Deluxe room with full-size bed and desk" },
+      { src: "/images/seton/deluxe-2.webp", alt: "Seton Deluxe room interior" },
+      { src: "/images/seton/deluxe-3.webp", alt: "Seton Deluxe room with TV and nightstand" },
+    ],
+  },
+  {
+    slug: "seton-studio-basic",
+    building: "seton",
+    name: "Studio Basic",
+    weeklyRateCents: 65000,
+    bed: "Queen bed",
+    bathroom: "Private en-suite",
+    summary:
+      "A private, hotel-style room similar to a small studio apartment, with a private en-suite bathroom inside the room.",
+    photos: [
+      { src: "/images/seton/studio-basic-1.webp", alt: "Seton Studio Basic room with queen bed" },
+      { src: "/images/seton/studio-basic-2.webp", alt: "Seton Studio Basic room, desk and window" },
+      { src: "/images/seton/studio-basic-3.webp", alt: "Seton Studio Basic room interior" },
+    ],
+  },
+  {
+    slug: "seton-king-studio",
+    building: "seton",
+    name: "King Studio",
+    weeklyRateCents: 74500,
+    bed: "King bed",
+    bathroom: "Private en-suite",
+    summary:
+      "The largest room at Seton: king bed and the most living space, run like a studio with a private en-suite bathroom.",
+    photos: [
+      { src: "/images/seton/king-studio-1.webp", alt: "Seton King Studio room with king bed" },
+      { src: "/images/seton/king-studio-2.webp", alt: "Seton King Studio room, seating area" },
+      { src: "/images/seton/king-studio-3.webp", alt: "Seton King Studio room with desk" },
+    ],
+  },
+  {
+    slug: "stratford-private",
+    building: "stratford",
+    name: "Private Room",
+    weeklyRateCents: 40000,
+    bed: "Single bed",
+    bathroom: "Shared bathrooms on the floor",
+    summary:
+      "A basic, dorm-style private room at the lower-cost Stratford, with shared bathrooms on the floor and shared common spaces.",
+    photos: [
+      { src: "/images/stratford/s7.jpeg", alt: "Stratford dorm room with bed, desk and rug" },
+      { src: "/images/stratford/s6.jpeg", alt: "Stratford dorm room with single bed, nightstand and window", pos: "center 72%" },
+    ],
+  },
+  {
+    slug: "stratford-jack-jill",
+    building: "stratford",
+    name: "Jack and Jill",
+    weeklyRateCents: 45000,
+    bed: "Single bed",
+    bathroom: "Shared with one neighboring room",
+    summary:
+      "A dorm-style room where the bathroom is shared with just one neighboring room instead of the whole floor.",
+    photos: [
+      { src: "/images/stratford/s6.jpeg", alt: "Stratford dorm room with single bed, nightstand and window", pos: "center 72%" },
+      { src: "/images/stratford/s7.jpeg", alt: "Stratford dorm room with bed, desk and rug" },
+    ],
+  },
+];
+
+export function roomTypesFor(building: BuildingSlug): RoomType[] {
+  return ROOM_TYPES.filter((r) => r.building === building);
+}
+
+export function roomTypeBySlug(slug: string | undefined | null): RoomType | null {
+  return ROOM_TYPES.find((r) => r.slug === slug) ?? null;
+}
+
+// Lowest active room-type rate, for "from $X/week" copy.
+export function fromRateCents(building: BuildingSlug): number {
+  return Math.min(...roomTypesFor(building).map((r) => r.weeklyRateCents));
+}
+
+// Where old parent-building deep links land: the room type whose price the
+// site advertised before sub-listings existed.
+export const DEFAULT_ROOM: Record<BuildingSlug, string> = {
+  mansfield: "mansfield-semi-basic",
+  seton: "seton-studio-basic",
+  stratford: "stratford-private",
+};
+
+// Only Mansfield rooms carry the stay-length premium (base = 6+ month rate).
+export function hasStayPremium(building: BuildingSlug): boolean {
+  return building === "mansfield";
+}

@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { fetchBookingStatus, type BookingStatus } from "@/lib/api";
-import { BUILDINGS } from "@/lib/buildings";
+import { BUILDINGS, roomTypeBySlug } from "@/lib/buildings";
 import { formatDate, formatMoney } from "@/lib/format";
 
 const POLL_MS = 2500;
@@ -64,7 +64,12 @@ export function SuccessContent() {
     return <p className="font-mono text-[13px] text-ink/50">Checking your booking…</p>;
   }
 
-  const building = BUILDINGS[booking.building_id as keyof typeof BUILDINGS];
+  // building_id is a room-type slug (e.g. "mansfield-studio-king"); older
+  // bookings may still carry a bare building slug.
+  const room = roomTypeBySlug(booking.building_id);
+  const building = room
+    ? BUILDINGS[room.building]
+    : BUILDINGS[booking.building_id as keyof typeof BUILDINGS];
   const confirmed = booking.status === "confirmed";
   const processing = booking.status === "processing" || booking.status === "pending_payment";
 
@@ -85,6 +90,7 @@ export function SuccessContent() {
       <dl className="mt-8 bg-sand border border-line text-[14px] text-ink p-6 space-y-1.5 [font-variant-numeric:tabular-nums]">
         <Row k="Reference" v={booking.ref} highlight />
         <Row k="Building" v={`${building?.name ?? booking.building_id} · ${building?.address ?? ""}`} />
+        {room && <Row k="Room type" v={room.name} />}
         <Row k="Move-in" v={formatDate(booking.move_in)} />
         <Row k="Move-out" v={formatDate(booking.move_out)} />
         <Row k="Nights" v={String(booking.nights)} />
