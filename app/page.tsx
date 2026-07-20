@@ -10,7 +10,7 @@ import { formatMoney } from "@/lib/format";
 export const metadata: Metadata = {
   title: "AI Startup House Lodging | New York",
   description:
-    "Two Manhattan buildings for Entrepreneur AI Startup House participants: Seton (studio-style rooms, program on site) and Stratford (dorm-style). Weekly rates, one upfront payment.",
+    "Three Manhattan buildings for Entrepreneur AI Startup House participants: Seton (studio-style rooms, program on site), Stratford (dorm-style) and Mansfield (semi-private, Midtown). Weekly rates, one upfront payment.",
 };
 
 export default function HomePage() {
@@ -45,7 +45,7 @@ export default function HomePage() {
             program happens.
           </h1>
           <p className="mt-7 max-w-xl text-lg leading-relaxed text-ink/70">
-            Housing for residency participants at two Manhattan buildings.
+            Housing for residency participants at three Manhattan buildings.
             Weekly rates with utilities and Wi-Fi included. Pick your dates,
             pay once, done.
           </p>
@@ -68,13 +68,13 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-5 sm:px-10 py-20 sm:py-28">
           <Reveal>
             <p className="font-mono text-[12px] tracking-[0.26em] uppercase text-pine">
-              Two buildings, one decision
+              Three buildings, one decision
             </p>
             <h2 className="mt-4 font-display text-[clamp(1.9rem,4vw,3rem)] leading-tight max-w-2xl">
-              Studio-style room at Seton, or dorm-style at Stratford.
+              Studio-style at Seton, dorm-style at Stratford, or semi-private at Mansfield.
             </h2>
           </Reveal>
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
+          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {BUILDING_LIST.map((b, i) => (
               <Reveal key={b.slug} delay={i * 0.12}>
                 <article className="group border border-line bg-sand flex flex-col h-full">
@@ -87,7 +87,7 @@ export default function HomePage() {
                       className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                     />
                     <span className="absolute top-4 left-4 bg-paper/80 text-ink font-mono text-[11px] tracking-[0.18em] uppercase px-3 py-1.5">
-                      {b.slug === "seton" ? "Studio-style rooms" : "Dorm-style rooms"}
+                      {b.roomsLabel}
                     </span>
                   </Link>
                   <div className="p-6 sm:p-8 flex flex-col gap-5 grow">
@@ -139,8 +139,9 @@ export default function HomePage() {
               All main activities and presentations are held at Seton, so
               participants staying there live in the same building as the
               program. From Stratford it is roughly two miles, about 20 minutes
-              by subway. Both buildings are furnished, with utilities and
-              Wi-Fi included in the weekly rate.
+              by subway; from Mansfield in Midtown it is under a mile, about a
+              15-minute walk. All three buildings are furnished, with utilities
+              and Wi-Fi included in the weekly rate.
             </p>
           </Reveal>
           <Reveal delay={0.15}>
@@ -174,26 +175,28 @@ export default function HomePage() {
               <table className="w-full min-w-[560px] border-collapse text-[15px]">
                 <thead>
                   <tr className="bg-pine text-paper font-mono text-[11px] tracking-[0.18em] uppercase">
-                    <th className="text-left font-medium px-5 py-3.5 w-[34%]"> </th>
+                    <th className="text-left font-medium px-5 py-3.5 w-[25%]"> </th>
                     <th className="text-left font-medium px-5 py-3.5">Seton</th>
                     <th className="text-left font-medium px-5 py-3.5">Stratford</th>
+                    <th className="text-left font-medium px-5 py-3.5">Mansfield</th>
                   </tr>
                 </thead>
                 <tbody>
                   {[
-                    ["Weekly rate", "$650", "$450"],
-                    ["Style", "Studio-style hotel room", "Dorm-style room"],
-                    ["Bathroom", "Private en-suite bathroom", "Shared bathrooms"],
-                    ["Furniture and furnishings", "Included", "Included"],
-                    ["Utilities", "Included", "Included"],
-                    ["Wi-Fi", "Included", "Included"],
-                    ["Program venue", "On site, same building", "~2 mi, ~20 min by subway"],
-                    ["Neighborhood", "Murray Hill", "Upper West Side"],
-                  ].map(([k, seton, stratford], i) => (
+                    ["Weekly rate", "$650", "$450", "$650"],
+                    ["Style", "Studio-style hotel room", "Dorm-style room", "Semi-private hotel room"],
+                    ["Bathroom", "Private en-suite bathroom", "Shared bathrooms", "Shared with one adjacent room"],
+                    ["Furniture and furnishings", "Included", "Included", "Included"],
+                    ["Utilities", "Included", "Included", "Included"],
+                    ["Wi-Fi", "Included", "Included", "Included"],
+                    ["Program venue", "On site, same building", "~2 mi, ~20 min by subway", "~1 mi, ~15 min walk"],
+                    ["Neighborhood", "Murray Hill", "Upper West Side", "Midtown"],
+                  ].map(([k, seton, stratford, mansfield], i) => (
                     <tr key={k} className={i % 2 ? "bg-paper-dim/60" : "bg-sand/45"}>
                       <th className="text-left font-medium px-5 py-3 border-b border-line">{k}</th>
                       <td className="px-5 py-3 border-b border-line">{seton}</td>
                       <td className="px-5 py-3 border-b border-line">{stratford}</td>
+                      <td className="px-5 py-3 border-b border-line">{mansfield}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -205,7 +208,7 @@ export default function HomePage() {
               <div>
                 <h3 className="font-display text-xl text-ink">Upgraded rooms</h3>
                 <p className="mt-2 text-[14px] leading-relaxed max-w-xl">
-                  Both properties also have larger rooms, suites, and
+                  All three properties also have larger rooms, suites, and
                   apartments in limited numbers. These are requested
                   separately, not booked online.
                 </p>
@@ -272,7 +275,7 @@ export default function HomePage() {
             {[
               [
                 "What is included in the weekly rate?",
-                "Furniture, all utilities, and high-speed Wi-Fi at both buildings. Seton rooms include a private en-suite bathroom; Stratford has shared bathrooms plus common spaces and a courtyard.",
+                "Furniture, all utilities, and high-speed Wi-Fi at all three buildings. Seton rooms include a private en-suite bathroom; Stratford has shared bathrooms plus common spaces and a courtyard; at Mansfield each room shares a bathroom with one adjacent room and residents can use the lounge, fitness center and shared kitchen.",
               ],
               [
                 "How does payment work?",
@@ -284,7 +287,7 @@ export default function HomePage() {
               ],
               [
                 "I want a larger room or a suite.",
-                "Both buildings have a limited number of larger rooms, suites, and apartments. Send an application with your dates and we will come back to you with options.",
+                "All three buildings have a limited number of larger rooms, suites, and apartments. Send an application with your dates and we will come back to you with options.",
               ],
               [
                 "Who runs this?",

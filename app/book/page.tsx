@@ -15,7 +15,10 @@ export default async function BookPage({
   searchParams: Promise<{ building?: string; ref?: string }>;
 }) {
   const params = await searchParams;
-  const building = params.building === "stratford" ? "stratford" : "seton";
+  const building =
+    params.building === "stratford" || params.building === "mansfield"
+      ? params.building
+      : "seton";
   return (
     <main className="bg-paper min-h-svh flex flex-col">
       <div className="relative bg-sand text-ink border-b border-line">

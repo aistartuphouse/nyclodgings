@@ -35,6 +35,10 @@ export function SiteFooter() {
               <Link href="/stratford" className="hover:text-teal transition-colors">Stratford</Link>
               <span className="text-ink/40"> · 117 W 70th St, Upper West Side</span>
             </div>
+            <div>
+              <Link href="/mansfield" className="hover:text-teal transition-colors">Mansfield</Link>
+              <span className="text-ink/40"> · 12 W 44th St, Midtown</span>
+            </div>
             <div className="mt-4 text-ink/40 uppercase tracking-[0.18em] text-[11px] mb-3">Booking</div>
             <div><Link href="/book" className="hover:text-teal transition-colors">Book a room</Link></div>
             <div><Link href="/apply" className="hover:text-teal transition-colors">Apply / upgrade requests</Link></div>

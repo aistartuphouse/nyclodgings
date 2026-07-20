@@ -2,8 +2,10 @@
 // guide PDF). Rates are display copy here; the backend quote is the source
 // of truth for money.
 
+export type BuildingSlug = "seton" | "stratford" | "mansfield";
+
 export interface BuildingContent {
-  slug: "seton" | "stratford";
+  slug: BuildingSlug;
   name: string;
   address: string;
   neighborhood: string;
@@ -11,6 +13,9 @@ export interface BuildingContent {
   tagline: string;
   style: string;
   bathroom: string;
+  roomsLabel: string;
+  roomTypeShort: string;
+  bathroomShort: string;
   commute: string;
   commuteShort: string;
   description: string;
@@ -20,7 +25,7 @@ export interface BuildingContent {
   coverAlt: string;
 }
 
-export const BUILDINGS: Record<"seton" | "stratford", BuildingContent> = {
+export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
   seton: {
     slug: "seton",
     name: "Seton",
@@ -30,6 +35,9 @@ export const BUILDINGS: Record<"seton" | "stratford", BuildingContent> = {
     tagline: "Studio-style room, program on site",
     style: "Private hotel room (studio-style)",
     bathroom: "Private en-suite bathroom, inside the room",
+    roomsLabel: "Studio-style rooms",
+    roomTypeShort: "Studio-style",
+    bathroomShort: "En-suite bathroom",
     commute: "All main activities and presentations are held at Seton, so you stay in the building where the program happens. No commute at all.",
     commuteShort: "On site",
     description:
@@ -63,6 +71,9 @@ export const BUILDINGS: Record<"seton" | "stratford", BuildingContent> = {
     tagline: "Dorm-style, lower cost",
     style: "Basic, dorm-style room",
     bathroom: "Shared bathrooms",
+    roomsLabel: "Dorm-style rooms",
+    roomTypeShort: "Dorm-style",
+    bathroomShort: "Shared",
     commute: "Main activities and presentations are held at Seton (144 E 40th St). From Stratford that is roughly two miles, about 20 minutes by subway.",
     commuteShort: "~20 min by subway",
     description:
@@ -87,6 +98,42 @@ export const BUILDINGS: Record<"seton" | "stratford", BuildingContent> = {
     cover: "/images/stratford/facade.jpeg",
     coverAlt: "The Stratford building on West 70th Street, full facade",
   },
+  mansfield: {
+    slug: "mansfield",
+    name: "Mansfield",
+    address: "12 West 44th Street",
+    neighborhood: "Midtown Manhattan",
+    weeklyRateCents: 65000,
+    tagline: "Semi-private room, heart of Midtown",
+    style: "Semi-private room in a boutique hotel building",
+    bathroom: "Bathroom shared between two adjacent rooms",
+    roomsLabel: "Semi-private rooms",
+    roomTypeShort: "Semi-private",
+    bathroomShort: "Shared with one room",
+    commute: "Main activities and presentations are held at Seton (144 E 40th St). From Mansfield that is under a mile, about a 15-minute walk through Midtown.",
+    commuteShort: "~15 min walk",
+    description:
+      "Each guest has a furnished room in The Mansfield, a historic boutique hotel building on West 44th Street. Rooms come with a queen bed, study desk, Smart TV, and a mini-fridge and microwave. Every room pairs with one adjacent room and the two share a bathroom, so it feels private at a lower price than a studio. Times Square and Grand Central are a five-minute walk.",
+    included: [
+      "Semi-private room with queen bed",
+      "Bathroom shared with one adjacent room",
+      "All utilities",
+      "Furniture and furnishings",
+      "High-speed Wi-Fi",
+      "Fitness center, lounge and shared kitchen",
+    ],
+    photos: [
+      { src: "/images/mansfield/1.webp", alt: "Mansfield guest room with queen bed, desk and floor lamp" },
+      { src: "/images/mansfield/2.webp", alt: "Mansfield room with bay windows, mini-fridge and microwave" },
+      { src: "/images/mansfield/3.webp", alt: "Mansfield guest room with wall-mounted TV and bathroom" },
+      { src: "/images/mansfield/4.webp", alt: "Mansfield wood-paneled lounge with fireplace and TV" },
+      { src: "/images/mansfield/5.webp", alt: "Mansfield shared kitchen and dining area" },
+      { src: "/images/mansfield/6.webp", alt: "Mansfield lobby with ornate ceiling and front desk" },
+      { src: "/images/mansfield/7.webp", alt: "The Mansfield facade on West 44th Street" },
+    ],
+    cover: "/images/mansfield/7.webp",
+    coverAlt: "The Mansfield facade on West 44th Street",
+  },
 };
 
-export const BUILDING_LIST = [BUILDINGS.seton, BUILDINGS.stratford];
+export const BUILDING_LIST = [BUILDINGS.seton, BUILDINGS.stratford, BUILDINGS.mansfield];

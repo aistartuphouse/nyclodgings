@@ -64,7 +64,7 @@ export function SuccessContent() {
     return <p className="font-mono text-[13px] text-ink/50">Checking your booking…</p>;
   }
 
-  const building = BUILDINGS[booking.building_id as "seton" | "stratford"];
+  const building = BUILDINGS[booking.building_id as keyof typeof BUILDINGS];
   const confirmed = booking.status === "confirmed";
   const processing = booking.status === "processing" || booking.status === "pending_payment";
 

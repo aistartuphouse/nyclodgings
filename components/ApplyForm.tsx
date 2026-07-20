@@ -69,6 +69,7 @@ export function ApplyForm({ source }: { source?: string | null }) {
           <option value="">No preference yet</option>
           <option value="seton">Seton (private, $650/week)</option>
           <option value="stratford">Stratford (dorm-style, $450/week)</option>
+          <option value="mansfield">Mansfield (semi-private, $650/week)</option>
         </select>
       </div>
       <div className="grid grid-cols-2 gap-3">

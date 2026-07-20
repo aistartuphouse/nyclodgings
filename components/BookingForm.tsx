@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createBooking, fetchQuote, type PaymentMethod, type Quote } from "@/lib/api";
-import { BUILDINGS, type BuildingContent } from "@/lib/buildings";
+import { BUILDINGS, type BuildingContent, type BuildingSlug } from "@/lib/buildings";
 import { addDays, MOVE_IN_DEADLINE, todayNY } from "@/lib/format";
 import { QuoteReceipt } from "./QuoteReceipt";
 
-type Slug = "seton" | "stratford";
+type Slug = BuildingSlug;
 
 export function BookingForm({
   initialBuilding,
@@ -107,8 +107,8 @@ export function BookingForm({
         {!lockBuilding && (
           <fieldset>
             <legend className={labelCls}>Building</legend>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              {(["seton", "stratford"] as const).map((s) => (
+            <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {(["seton", "stratford", "mansfield"] as const).map((s) => (
                 <button
                   key={s}
                   type="button"

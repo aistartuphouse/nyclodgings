@@ -4,18 +4,18 @@ import { Reveal } from "@/components/Reveal";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BookingForm } from "@/components/BookingForm";
-import { BUILDINGS } from "@/lib/buildings";
+import { BUILDING_LIST, BUILDINGS, type BuildingSlug } from "@/lib/buildings";
 import { formatMoney } from "@/lib/format";
 
 export function BuildingPage({
   slug,
   source,
 }: {
-  slug: "seton" | "stratford";
+  slug: BuildingSlug;
   source?: string | null;
 }) {
   const b = BUILDINGS[slug];
-  const other = BUILDINGS[slug === "seton" ? "stratford" : "seton"];
+  const others = BUILDING_LIST.filter((x) => x.slug !== slug);
   const [lead, second, ...rest] = b.photos;
 
   return (
@@ -40,7 +40,7 @@ export function BuildingPage({
             <div className="mx-auto max-w-6xl px-5 sm:px-10 pb-10 flex flex-wrap items-end justify-between gap-6">
               <div>
                 <p className="font-mono text-[12px] tracking-[0.26em] uppercase text-teal">
-                  {slug === "seton" ? "Studio-style rooms" : "Dorm-style rooms"}
+                  {b.roomsLabel}
                 </p>
                 <h1 className="mt-3 font-display text-[clamp(2.6rem,6vw,4.5rem)] leading-none">{b.name}</h1>
                 <p className="mt-3 font-mono text-[13px] text-ink/70">
@@ -64,11 +64,11 @@ export function BuildingPage({
           <dl className="mt-8 grid grid-cols-3 gap-6 border-t border-line pt-6 font-mono text-[13px] max-w-xl">
             <div>
               <dt className="text-ink/45 uppercase tracking-[0.18em] text-[11px]">Room type</dt>
-              <dd className="mt-1.5">{slug === "seton" ? "Studio-style" : "Dorm-style"}</dd>
+              <dd className="mt-1.5">{b.roomTypeShort}</dd>
             </div>
             <div>
               <dt className="text-ink/45 uppercase tracking-[0.18em] text-[11px]">Bathroom</dt>
-              <dd className="mt-1.5">{slug === "seton" ? "En-suite bathroom" : "Shared"}</dd>
+              <dd className="mt-1.5">{b.bathroomShort}</dd>
             </div>
             <div>
               <dt className="text-ink/45 uppercase tracking-[0.18em] text-[11px]">Commute</dt>
@@ -135,18 +135,21 @@ export function BuildingPage({
       </section>
 
       {/* Cross-link + upgrade */}
-      <section className="mx-auto max-w-6xl px-5 sm:px-10 py-14 grid gap-4 sm:grid-cols-2">
-        <Link
-          href={`/${other.slug}`}
-          className="group border border-line bg-sand p-6 transition-colors hover:border-pine"
-        >
-          <p className="font-mono text-[11px] tracking-[0.22em] uppercase text-ink/45">Also available</p>
-          <p className="mt-2 font-display text-2xl">
-            {other.name}
-            <span className="text-ink/40 text-lg"> · {formatMoney(other.weeklyRateCents)}/week</span>
-          </p>
-          <p className="mt-1 text-[14px] text-ink/60">{other.tagline}</p>
-        </Link>
+      <section className="mx-auto max-w-6xl px-5 sm:px-10 py-14 grid gap-4 sm:grid-cols-3">
+        {others.map((other) => (
+          <Link
+            key={other.slug}
+            href={`/${other.slug}`}
+            className="group border border-line bg-sand p-6 transition-colors hover:border-pine"
+          >
+            <p className="font-mono text-[11px] tracking-[0.22em] uppercase text-ink/45">Also available</p>
+            <p className="mt-2 font-display text-2xl">
+              {other.name}
+              <span className="text-ink/40 text-lg"> · {formatMoney(other.weeklyRateCents)}/week</span>
+            </p>
+            <p className="mt-1 text-[14px] text-ink/60">{other.tagline}</p>
+          </Link>
+        ))}
         <Link
           href="/apply"
           className="group border border-line bg-sand p-6 transition-colors hover:border-pine"
@@ -154,7 +157,7 @@ export function BuildingPage({
           <p className="font-mono text-[11px] tracking-[0.22em] uppercase text-ink/45">Larger rooms</p>
           <p className="mt-2 font-display text-2xl">Suites and apartments</p>
           <p className="mt-1 text-[14px] text-ink/60">
-            Limited numbers at both buildings, requested separately.
+            Limited numbers at all three buildings, requested separately.
           </p>
         </Link>
       </section>
