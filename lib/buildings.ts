@@ -34,7 +34,7 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     neighborhood: "Murray Hill, Manhattan",
     weeklyRateCents: 52500,
     tagline: "Hotel-style room, program on site",
-    style: "Private hotel-style room (studio layout)",
+    style: "Hotel-style room (studio layout)",
     bathroom: "Private en-suite bathroom, inside the room",
     roomsLabel: "Hotel-style rooms",
     roomTypeShort: "Hotel-style studio",
@@ -45,7 +45,7 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     description:
       "Each guest has a private, hotel-style room, similar to a small studio apartment, with a private en-suite bathroom inside the room. The residency's activities and presentations take place at Seton and Mansfield.",
     included: [
-      "Private hotel-style room (studio layout)",
+      "Hotel-style room (studio layout)",
       "Private en-suite bathroom inside the room",
       "All utilities",
       "Furniture and furnishings",

@@ -186,7 +186,7 @@ export default function HomePage() {
                   {[
                     ["Weekly rate", "From $575", "From $525", "From $400"],
                     ["Room types", "5, semi-private to Studio King", "3, Deluxe to King Studio", "2, private or Jack and Jill"],
-                    ["Style", "Hotel-style, single or shared", "Hotel-style, private studio", "Dorm-style room"],
+                    ["Style", "Hotel-style, single or shared", "Hotel-style studio room", "Dorm-style room"],
                     ["Bathroom", "Varies by room", "Private en-suite bathroom", "Shared bathrooms"],
                     ["Minimum stay", "Short stays on request", "One month", "One month"],
                     ["Furniture and furnishings", "Included", "Included", "Included"],
