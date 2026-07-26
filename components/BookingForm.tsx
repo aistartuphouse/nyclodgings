@@ -1,7 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { createBooking, fetchQuote, type PaymentMethod, type Quote } from "@/lib/api";
+import {
+  createBooking,
+  fetchQuote,
+  type PaymentMethod,
+  type Quote,
+  type QuoteAvailability,
+} from "@/lib/api";
 import {
   BUILDINGS,
   DEFAULT_ROOM,
@@ -9,7 +15,7 @@ import {
   roomTypesFor,
   type BuildingSlug,
 } from "@/lib/buildings";
-import { addDays, formatMoney, MOVE_IN_DEADLINE, todayNY } from "@/lib/format";
+import { addDays, formatDate, formatMoney, MOVE_IN_DEADLINE, todayNY } from "@/lib/format";
 import { QuoteReceipt } from "./QuoteReceipt";
 
 type Slug = BuildingSlug;
@@ -38,6 +44,7 @@ export function BookingForm({
   const [moveOut, setMoveOut] = useState("");
   const [quote, setQuote] = useState<Quote | null>(null);
   const [quoteError, setQuoteError] = useState<string | null>(null);
+  const [availability, setAvailability] = useState<QuoteAvailability | null>(null);
   const [pending, setPending] = useState(false);
 
   const [name, setName] = useState("");
@@ -71,9 +78,11 @@ export function BookingForm({
       setPending(false);
       if ("error" in result) {
         setQuote(null);
+        setAvailability(null);
         setQuoteError(result.error.message ?? "That stay is not bookable.");
       } else {
         setQuote(result.quote);
+        setAvailability(result.availability);
         setQuoteError(null);
       }
     },
@@ -85,9 +94,13 @@ export function BookingForm({
     return () => clearTimeout(t);
   }, [room.slug, moveIn, moveOut, refreshQuote]);
 
+  // The backend answers "not available" for unknown, stale or sold-out
+  // inventory alike; either way the guest goes to the apply form, not checkout.
+  const unavailable = availability !== null && !availability.ok;
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!quote) return;
+    if (!quote || unavailable) return;
     setSubmitting(true);
     setSubmitError(null);
     const result = await createBooking({
@@ -103,6 +116,15 @@ export function BookingForm({
     }).catch(() => ({ error: { error: "network" } }));
     if ("error" in result) {
       setSubmitting(false);
+      if (result.error.error === "room_unavailable") {
+        // Someone took the last room between the quote and the submit, or the
+        // lobbyboard import moved underneath us.
+        setSubmitError(
+          "That room was just taken for those dates. Pick different dates or another room type, or send us a request and we will find you a room.",
+        );
+        setAvailability({ ok: false, reason: "taken", earliestFrom: null });
+        return;
+      }
       setSubmitError(
         result.error.error === "payment_unavailable"
           ? "Payment is temporarily unavailable. Nothing was charged; please try again in a few minutes."
@@ -299,6 +321,22 @@ export function BookingForm({
           pending={pending}
           paymentMethod={paymentMethod}
         />
+        {unavailable && (
+          <div className="border border-pine/30 bg-pine/5 px-4 py-3 text-[14px] text-pine space-y-2" role="alert">
+            <p>
+              {availability?.earliestFrom
+                ? `No ${room.name} is free on that date. The next one opens up on ${formatDate(availability.earliestFrom)}.`
+                : `No ${room.name} is free for those dates right now.`}
+            </p>
+            <p>
+              Try different dates or another room type, or{" "}
+              <a href={`/apply?building=${slug}`} className="underline underline-offset-2">
+                send us a request
+              </a>{" "}
+              and the housing team will find you a room.
+            </p>
+          </div>
+        )}
         {submitError && (
           <p className="border border-pine/30 bg-pine/5 px-4 py-3 text-[14px] text-pine" role="alert">
             {submitError}
@@ -306,7 +344,7 @@ export function BookingForm({
         )}
         <button
           type="submit"
-          disabled={!quote || submitting || pending}
+          disabled={!quote || submitting || pending || unavailable}
           className="w-full bg-pine text-paper font-mono text-[13px] tracking-[0.18em] uppercase py-4 transition-colors hover:bg-pine-deep disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {submitting ? "Opening secure checkout" : "Pay and book"}

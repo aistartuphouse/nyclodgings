@@ -22,11 +22,20 @@ export interface QuoteErrorBody {
   message?: string;
 }
 
+// Whether the requested room is actually free for those dates. `ok` is true
+// when the backend has no inventory data yet, so pricing keeps working exactly
+// as before until the first lobbyboard import lands.
+export interface QuoteAvailability {
+  ok: boolean;
+  reason: string | null;
+  earliestFrom: string | null;
+}
+
 export async function fetchQuote(
   building: string,
   moveIn: string,
   moveOut: string,
-): Promise<{ quote: Quote } | { error: QuoteErrorBody }> {
+): Promise<{ quote: Quote; availability: QuoteAvailability | null } | { error: QuoteErrorBody }> {
   const res = await fetch(`${BACKEND_URL}/v1/public/quote`, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -34,7 +43,10 @@ export async function fetchQuote(
   });
   const body = await res.json();
   if (!res.ok) return { error: body as QuoteErrorBody };
-  return { quote: body.quote as Quote };
+  return {
+    quote: body.quote as Quote,
+    availability: (body.availability as QuoteAvailability | undefined) ?? null,
+  };
 }
 
 export type PaymentMethod = "card" | "ach";
@@ -108,4 +120,33 @@ export async function fetchBookingStatus(
   if (!res.ok) return null;
   const body = await res.json();
   return body.booking as BookingStatus;
+}
+
+// ---- Availability ----
+
+export interface RoomAvailability {
+  bookable: boolean;
+  stale: boolean;
+  unitsFreeNow: number;
+  earliestFrom: string | null; // date-only, YYYY-MM-DD
+}
+
+// Availability comes from the landlord's lobbyboard, imported into the
+// backend. `null` means the backend has no inventory data yet, in which case
+// the site behaves exactly as it did before: everything is bookable.
+export async function fetchAvailability(): Promise<Record<string, RoomAvailability> | null> {
+  try {
+    const res = await fetch(`${BACKEND_URL}/v1/public/buildings`, { cache: "no-store" });
+    if (!res.ok) return null;
+    const body = (await res.json()) as {
+      buildings: { id: string; availability: RoomAvailability | null }[];
+    };
+    const out: Record<string, RoomAvailability> = {};
+    for (const b of body.buildings) if (b.availability) out[b.id] = b.availability;
+    return Object.keys(out).length ? out : null;
+  } catch {
+    // The site must not go dark because the backend blinked; the booking
+    // endpoint still enforces availability server-side.
+    return null;
+  }
 }

@@ -11,9 +11,23 @@ import {
   roomTypesFor,
   type BuildingSlug,
 } from "@/lib/buildings";
-import { formatMoney } from "@/lib/format";
+import { fetchAvailability, type RoomAvailability } from "@/lib/api";
+import { formatDate, formatMoney } from "@/lib/format";
 
-export function BuildingPage({
+// Availability copy for a room card. `null` = the backend has no lobbyboard
+// data yet, so the card looks exactly as it did before this feature.
+function availabilityLabel(a: RoomAvailability | null): { text: string; tone: "open" | "later" | "closed" } | null {
+  if (!a) return null;
+  if (a.bookable) {
+    return a.unitsFreeNow <= 3
+      ? { text: `Only ${a.unitsFreeNow} left`, tone: "open" }
+      : { text: "Available now", tone: "open" };
+  }
+  if (a.earliestFrom) return { text: `Available from ${formatDate(a.earliestFrom)}`, tone: "later" };
+  return { text: "Fully booked", tone: "closed" };
+}
+
+export async function BuildingPage({
   slug,
   source,
   room,
@@ -25,6 +39,7 @@ export function BuildingPage({
   const b = BUILDINGS[slug];
   const rooms = roomTypesFor(slug);
   const others = BUILDING_LIST.filter((x) => x.slug !== slug);
+  const availability = await fetchAvailability();
   const [lead, second, ...rest] = b.photos;
 
   return (
@@ -123,7 +138,10 @@ export function BuildingPage({
           )}
         </Reveal>
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {rooms.map((r, i) => (
+          {rooms.map((r, i) => {
+            const avail = availability?.[r.slug] ?? null;
+            const label = availabilityLabel(avail);
+            return (
             <Reveal key={r.slug} delay={(i % 3) * 0.08}>
               <article className="group border border-line bg-sand flex flex-col h-full">
                 <div className="relative aspect-[3/2] overflow-hidden">
@@ -135,6 +153,19 @@ export function BuildingPage({
                     className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     style={r.photos[0]!.pos ? { objectPosition: r.photos[0]!.pos } : undefined}
                   />
+                  {label && (
+                    <span
+                      className={`absolute top-3 left-3 font-mono text-[11px] tracking-[0.14em] uppercase px-2.5 py-1 ${
+                        label.tone === "open"
+                          ? "bg-pine text-paper"
+                          : label.tone === "later"
+                            ? "bg-paper/85 text-ink"
+                            : "bg-ink/75 text-paper"
+                      }`}
+                    >
+                      {label.text}
+                    </span>
+                  )}
                 </div>
                 <div className="p-6 flex flex-col gap-4 grow">
                   <div className="flex items-baseline justify-between gap-4">
@@ -148,16 +179,26 @@ export function BuildingPage({
                     {r.bed} · {r.bathroom}
                   </p>
                   <p className="text-[14px] leading-relaxed text-ink/70">{r.summary}</p>
-                  <Link
-                    href={`/${slug}?room=${r.slug}#book`}
-                    className="mt-auto bg-pine text-paper text-center font-mono text-[12px] tracking-[0.18em] uppercase px-5 py-3 transition-colors hover:bg-pine-deep"
-                  >
-                    Book this room
-                  </Link>
+                  {avail && !avail.bookable ? (
+                    <Link
+                      href={`/apply?building=${slug}`}
+                      className="mt-auto border border-ink/25 text-center font-mono text-[12px] tracking-[0.18em] uppercase px-5 py-3 transition-colors hover:border-pine hover:text-pine"
+                    >
+                      Ask about this room
+                    </Link>
+                  ) : (
+                    <Link
+                      href={`/${slug}?room=${r.slug}#book`}
+                      className="mt-auto bg-pine text-paper text-center font-mono text-[12px] tracking-[0.18em] uppercase px-5 py-3 transition-colors hover:bg-pine-deep"
+                    >
+                      Book this room
+                    </Link>
+                  )}
                 </div>
               </article>
             </Reveal>
-          ))}
+            );
+          })}
         </div>
       </section>
 
