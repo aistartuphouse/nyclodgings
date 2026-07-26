@@ -15,7 +15,15 @@ import {
   roomTypesFor,
   type BuildingSlug,
 } from "@/lib/buildings";
-import { addDays, formatDate, formatMoney, MOVE_IN_DEADLINE, todayNY } from "@/lib/format";
+import {
+  addDays,
+  allowedMoveOutsNear,
+  formatDate,
+  formatMoney,
+  isRestrictedMoveOut,
+  MOVE_IN_DEADLINE,
+  todayNY,
+} from "@/lib/format";
 import { QuoteReceipt } from "./QuoteReceipt";
 
 type Slug = BuildingSlug;
@@ -94,13 +102,18 @@ export function BookingForm({
     return () => clearTimeout(t);
   }, [room.slug, moveIn, moveOut, refreshQuote]);
 
+  const restrictedMoveOut = isRestrictedMoveOut(moveOut);
+  const moveOutAlternatives = restrictedMoveOut
+    ? allowedMoveOutsNear(moveOut, addDays(moveIn || today, 30))
+    : [];
+
   // The backend answers "not available" for unknown, stale or sold-out
   // inventory alike; either way the guest goes to the apply form, not checkout.
   const unavailable = availability !== null && !availability.ok;
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!quote || unavailable) return;
+    if (!quote || unavailable || restrictedMoveOut) return;
     setSubmitting(true);
     setSubmitError(null);
     const result = await createBooking({
@@ -242,10 +255,33 @@ export function BookingForm({
             />
           </div>
         </div>
+        {restrictedMoveOut && (
+          <div className="border border-pine/30 bg-pine/5 px-4 py-3 -mt-2 text-[14px] text-pine space-y-2">
+            <p>
+              Move-out in October, November and December is only possible on the
+              1st or the 15th of the month.
+            </p>
+            {moveOutAlternatives.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {moveOutAlternatives.map((d) => (
+                  <button
+                    key={d}
+                    type="button"
+                    onClick={() => setMoveOut(d)}
+                    className="font-mono text-[12px] tracking-wide border border-pine/40 px-3 py-1.5 transition-colors hover:bg-pine hover:text-paper"
+                  >
+                    {formatDate(d)}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
         <p className="font-mono text-[11px] tracking-wide text-ink/50 -mt-4">
           Online bookings have a one-month (30-night) minimum stay; shorter
           stays at Mansfield are available on request. Last possible move-in is
-          September 10, 2026. Move-out is up to you.
+          September 10, 2026. Move-out in October, November and December must be
+          the 1st or the 15th; any other month is up to you.
         </p>
         {quoteError && (
           <p className="border border-pine/30 bg-pine/5 px-4 py-3 text-[14px] text-pine" role="alert">
@@ -344,7 +380,7 @@ export function BookingForm({
         )}
         <button
           type="submit"
-          disabled={!quote || submitting || pending || unavailable}
+          disabled={!quote || submitting || pending || unavailable || restrictedMoveOut}
           className="w-full bg-pine text-paper font-mono text-[13px] tracking-[0.18em] uppercase py-4 transition-colors hover:bg-pine-deep disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {submitting ? "Opening secure checkout" : "Pay and book"}
