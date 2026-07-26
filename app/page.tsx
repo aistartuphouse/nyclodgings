@@ -10,7 +10,7 @@ import { formatMoney } from "@/lib/format";
 export const metadata: Metadata = {
   title: "AI Startup House Lodging | New York",
   description:
-    "Three Manhattan buildings for Entrepreneur AI Startup House participants: Mansfield (hotel living, Midtown), Seton (studio-style rooms, program on site) and Stratford (dorm-style). Several room types per building, weekly rates, one upfront payment.",
+    "Three Manhattan buildings for Entrepreneur AI Startup House participants: Mansfield (hotel-style rooms, Midtown), Seton (hotel-style rooms, program on site) and Stratford (dorm-style). Several room types per building, weekly rates, one upfront payment.",
 };
 
 export default function HomePage() {
@@ -71,7 +71,7 @@ export default function HomePage() {
               Three buildings, one decision
             </p>
             <h2 className="mt-4 font-display text-[clamp(1.9rem,4vw,3rem)] leading-tight max-w-2xl">
-              Hotel living at Mansfield, studio-style at Seton, or dorm-style at Stratford.
+              Hotel-style rooms at Mansfield and Seton, or dorm-style at Stratford.
             </h2>
           </Reveal>
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -186,7 +186,7 @@ export default function HomePage() {
                   {[
                     ["Weekly rate", "From $575", "From $525", "From $400"],
                     ["Room types", "5, semi-private to Studio King", "3, Deluxe to King Studio", "2, private or Jack and Jill"],
-                    ["Style", "Hotel living, single or shared", "Studio-style hotel room", "Dorm-style room"],
+                    ["Style", "Hotel-style, single or shared", "Hotel-style, private studio", "Dorm-style room"],
                     ["Bathroom", "Varies by room", "Private en-suite bathroom", "Shared bathrooms"],
                     ["Minimum stay", "Short stays on request", "One month", "One month"],
                     ["Furniture and furnishings", "Included", "Included", "Included"],
