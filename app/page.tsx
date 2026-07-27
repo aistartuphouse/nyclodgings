@@ -284,19 +284,39 @@ export default function HomePage() {
             {[
               [
                 "What is included in the weekly rate?",
-                "Furniture, all utilities, and high-speed Wi-Fi at all three buildings. Each building has several room types at different weekly rates: Mansfield from a Shared Suite up to a Double Suite that takes both rooms of one pair, Seton from a Deluxe room to a King Studio, and Stratford dorm-style rooms with shared or semi-private bathrooms. Mansfield rates depend on stay length: listed prices apply from 6 months, with 1-3 month stays 25% higher and 3-6 months 15% higher.",
+                "Furniture, all utilities and high-speed Wi-Fi at all three buildings. Nothing is billed separately once you have paid. Each building has several room types at different weekly rates, so the price you see on a card is the price for that room, not a starting point that grows later.",
+              ],
+              [
+                "What does \u201cShared Suite\u201d mean at Mansfield, and what am I sharing?",
+                "The room is yours alone. It has a queen bed, a study desk and a nightstand, and it locks like any hotel room. The only thing you share is the bathroom, and only with the one room next door. Mansfield\u2019s rooms are arranged in pairs, so there is exactly one other guest on the other side of that bathroom, never a floor or a corridor. The Deluxe Shared Suite is the same arrangement with more floor space. If you would rather not share anything, the Studio rooms at Mansfield and every room at Seton have a private bathroom inside the room.",
+              ],
+              [
+                "Can I book both rooms of a pair?",
+                "Yes, that is the Double Suite. You take both bedrooms of one pair, each with its own queen bed, and the bathroom between them becomes yours alone. It suits two people travelling together who want their own rooms, and it works just as well for one person who wants the extra space. It costs the two rooms added together. It is only bookable when both halves of the same pair happen to be free, so it appears and disappears as rooms turn over.",
+              ],
+              [
+                "How do Mansfield prices work?",
+                "Mansfield rates are the six-month-and-longer prices. Shorter stays cost more: one to three months is 25% above the listed rate and three to six months is 15% above it. The booking summary always shows the exact weekly rate for the dates you picked before you pay anything. Seton and Stratford rates do not change with stay length.",
               ],
               [
                 "How does payment work?",
-                "You pay the full stay upfront in one Stripe payment: rent plus any applicable NYC accommodation tax. You choose card or US bank transfer (ACH) when booking. Card payments add a processing fee; ACH has no fee but needs a US bank account and takes a few business days to settle.",
+                "You pay for the whole stay upfront in one Stripe payment: rent plus any NYC accommodation tax that applies. You choose card or US bank transfer (ACH) at checkout. Card adds a processing fee, ACH has none but needs a US bank account and takes a few business days to settle.",
               ],
               [
                 "Can I choose any dates?",
-                "Move-in can be any day up to and including September 10, 2026, and the minimum stay is one week (7 nights). Move-out is open except in October, November and December, where it must be the 1st or the 15th. Stays that are not whole weeks are prorated by the day.",
+                "Move-in can be any day up to and including September 10, 2026. The minimum stay is one week, seven nights. Move-out is open in every month except October, November and December, which have their own rule below. Stays that are not whole weeks are prorated by the day, so a ten-night stay costs one week plus three days.",
+              ],
+              [
+                "Why can I only move out on the 1st or the 15th in October, November and December?",
+                "The housing team keeps departures in those three months to two fixed dates so the turnovers stay manageable. If your stay ends in October, November or December, pick the 1st or the 15th of the month and the booking will go through normally. Every other month of the year is completely open, you can leave on any day. If neither date works for your plans, send a request through the application form and we will look at it individually.",
+              ],
+              [
+                "Why can I not book the room I want?",
+                "Room availability comes straight from the buildings, and a room is only offered once we can see the date it actually frees up. If a room type shows a date instead of a booking button, that is the first day it opens up, and you can book from that date onwards. If it shows nothing at all, we cannot confirm it is free, so we would rather not sell it to you. Send a request in that case and the housing team will find you something.",
               ],
               [
                 "I want a larger room or a suite.",
-                "All three buildings have a limited number of larger rooms, suites, and apartments. Send an application with your dates and we will come back to you with options.",
+                "All three buildings have a limited number of larger rooms, suites and apartments that are not listed here. Send an application with your dates and we will come back to you with what is open.",
               ],
               [
                 "Who runs this?",
