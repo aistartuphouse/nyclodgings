@@ -164,31 +164,31 @@ export const ROOM_TYPES: RoomType[] = [
   {
     slug: "mansfield-semi-basic",
     building: "mansfield",
-    name: "Semi Private Basic",
+    name: "Shared Suite",
     weeklyRateCents: 57500,
     bed: "Queen bed",
     bathroom: "Shared with one adjacent room",
     summary:
-      "Budget-friendly with a private-room feel: queen bed, study desk and nightstand; the bathroom is shared with one adjacent room.",
+      "Your own room at the lowest Mansfield rate: queen bed, study desk and nightstand. Only the bathroom is shared, with the one room next door.",
     photos: [
-      { src: "/images/mansfield/1.webp", alt: "Mansfield semi-private room with queen bed, desk and floor lamp" },
-      { src: "/images/mansfield/2.webp", alt: "Mansfield semi-private room with bay windows, mini-fridge and microwave" },
-      { src: "/images/mansfield/3.webp", alt: "Mansfield semi-private room with wall-mounted TV" },
+      { src: "/images/mansfield/1.webp", alt: "Mansfield Shared Suite with queen bed, desk and floor lamp" },
+      { src: "/images/mansfield/2.webp", alt: "Mansfield Shared Suite with bay windows, mini-fridge and microwave" },
+      { src: "/images/mansfield/3.webp", alt: "Mansfield Shared Suite with wall-mounted TV" },
     ],
   },
   {
     slug: "mansfield-semi-plus",
     building: "mansfield",
-    name: "Semi Private Plus",
+    name: "Deluxe Shared Suite",
     weeklyRateCents: 59500,
     bed: "Queen bed",
     bathroom: "Shared with one adjacent room",
     summary:
-      "A more spacious semi-private room: queen bed, study desk and extra floor space, with the bathroom shared with one adjacent room.",
+      "The same idea with more room to work in: queen bed, study desk and extra floor space, bathroom shared with the one room next door.",
     photos: [
-      { src: "/images/mansfield/semi-plus-1.webp", alt: "Mansfield Semi Private Plus room with queen bed and desk" },
-      { src: "/images/mansfield/semi-plus-2.webp", alt: "Mansfield Semi Private Plus room, seating corner" },
-      { src: "/images/mansfield/semi-plus-3.webp", alt: "Mansfield Semi Private Plus room with window view" },
+      { src: "/images/mansfield/semi-plus-1.webp", alt: "Mansfield Deluxe Shared Suite with queen bed and desk" },
+      { src: "/images/mansfield/semi-plus-2.webp", alt: "Mansfield Deluxe Shared Suite, seating corner" },
+      { src: "/images/mansfield/semi-plus-3.webp", alt: "Mansfield Deluxe Shared Suite with window view" },
     ],
   },
   {
@@ -234,6 +234,22 @@ export const ROOM_TYPES: RoomType[] = [
       { src: "/images/mansfield/studio-king-1.webp", alt: "Mansfield Studio King room with king bed" },
       { src: "/images/mansfield/studio-king-2.webp", alt: "Mansfield Studio King room, lounge corner" },
       { src: "/images/mansfield/studio-king-3.webp", alt: "Mansfield Studio King room with desk and TV" },
+    ],
+  },
+  {
+    slug: "mansfield-double-suite",
+    building: "mansfield",
+    name: "Double Suite",
+    // Both halves of one apartment, so the rate is the two rooms added up.
+    weeklyRateCents: 117000,
+    bed: "Two bedrooms, a queen bed in each",
+    bathroom: "Private between the two rooms",
+    summary:
+      "Both rooms of one Mansfield pair, taken together: two separate bedrooms with a queen bed each, connected by a bathroom nobody else uses. Room to share with someone without sharing a room.",
+    photos: [
+      { src: "/images/mansfield/semi-plus-1.webp", alt: "Mansfield Double Suite, first bedroom with queen bed and desk" },
+      { src: "/images/mansfield/1.webp", alt: "Mansfield Double Suite, second bedroom with queen bed and floor lamp" },
+      { src: "/images/mansfield/semi-plus-2.webp", alt: "Mansfield Double Suite, seating corner" },
     ],
   },
   {

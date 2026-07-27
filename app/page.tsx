@@ -185,7 +185,7 @@ export default function HomePage() {
                 <tbody>
                   {[
                     ["Weekly rate", "From $575", "From $525", "From $400"],
-                    ["Room types", "5, semi-private to Studio King", "3, Deluxe to King Studio", "2, private or Jack and Jill"],
+                    ["Room types", "6, Shared Suite to Double Suite", "3, Deluxe to King Studio", "2, private or Jack and Jill"],
                     ["Style", "Hotel-style, single or shared", "Hotel-style studio room", "Dorm-style room"],
                     ["Bathroom", "Varies by room", "Private en-suite bathroom", "Shared bathrooms"],
                     ["Minimum stay", "One week", "One week", "One week"],
@@ -284,7 +284,7 @@ export default function HomePage() {
             {[
               [
                 "What is included in the weekly rate?",
-                "Furniture, all utilities, and high-speed Wi-Fi at all three buildings. Each building has several room types at different weekly rates: Mansfield from semi-private rooms to a Studio King, Seton from a Deluxe room to a King Studio, and Stratford dorm-style rooms with shared or semi-private bathrooms. Mansfield rates depend on stay length: listed prices apply from 6 months, with 1-3 month stays 25% higher and 3-6 months 15% higher.",
+                "Furniture, all utilities, and high-speed Wi-Fi at all three buildings. Each building has several room types at different weekly rates: Mansfield from a Shared Suite up to a Double Suite that takes both rooms of one pair, Seton from a Deluxe room to a King Studio, and Stratford dorm-style rooms with shared or semi-private bathrooms. Mansfield rates depend on stay length: listed prices apply from 6 months, with 1-3 month stays 25% higher and 3-6 months 15% higher.",
               ],
               [
                 "How does payment work?",
