@@ -246,10 +246,14 @@ export const ROOM_TYPES: RoomType[] = [
     bathroom: "Private between the two rooms",
     summary:
       "Both rooms of one Mansfield pair, taken together: two separate bedrooms with a queen bed each, connected by a bathroom nobody else uses. Room to share with someone without sharing a room.",
+    // The lead is a diptych of the pair's two bedrooms, built from the two
+    // rooms' own photos (assets/roomtypes/double-suite.md records how). Only
+    // exposure and white balance were matched between the halves; the bedding
+    // really is orange in one room and teal in the other.
     photos: [
-      { src: "/images/mansfield/semi-plus-1.webp", alt: "Mansfield Double Suite, first bedroom with queen bed and desk" },
-      { src: "/images/mansfield/1.webp", alt: "Mansfield Double Suite, second bedroom with queen bed and floor lamp" },
-      { src: "/images/mansfield/semi-plus-2.webp", alt: "Mansfield Double Suite, seating corner" },
+      { src: "/images/mansfield/double-suite-1.webp", alt: "The two bedrooms of a Mansfield Double Suite, side by side" },
+      { src: "/images/mansfield/2.webp", alt: "Mansfield Double Suite with the connecting doors open to the second room" },
+      { src: "/images/mansfield/3.webp", alt: "The bathroom between the two Mansfield Double Suite bedrooms" },
     ],
   },
   {
