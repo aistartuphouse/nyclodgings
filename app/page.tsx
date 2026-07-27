@@ -157,7 +157,7 @@ export default function HomePage() {
               </div>
               <div>
                 <dt className="text-ink/50 uppercase tracking-[0.18em] text-[11px]">Minimum stay</dt>
-                <dd className="mt-1">30 nights, priced weekly with daily proration</dd>
+                <dd className="mt-1">7 nights, priced weekly with daily proration</dd>
               </div>
             </dl>
           </Reveal>
@@ -188,7 +188,7 @@ export default function HomePage() {
                     ["Room types", "5, semi-private to Studio King", "3, Deluxe to King Studio", "2, private or Jack and Jill"],
                     ["Style", "Hotel-style, single or shared", "Hotel-style studio room", "Dorm-style room"],
                     ["Bathroom", "Varies by room", "Private en-suite bathroom", "Shared bathrooms"],
-                    ["Minimum stay", "Short stays on request", "One month", "One month"],
+                    ["Minimum stay", "One week", "One week", "One week"],
                     ["Furniture and furnishings", "Included", "Included", "Included"],
                     ["Utilities", "Included", "Included", "Included"],
                     ["Wi-Fi", "Included", "Included", "Included"],
@@ -257,7 +257,7 @@ export default function HomePage() {
                 NYC accommodation tax by stay length
               </div>
               {[
-                ["30 to 89 nights", "14.75% of rent", "plus $1.50 per night"],
+                ["7 to 89 nights", "14.75% of rent", "plus $1.50 per night"],
                 ["90 to 179 nights", "10.375% of rent", "no nightly fee"],
                 ["180 nights or more", "0%", "tax exempt"],
               ].map(([len, rate, extra]) => (
@@ -292,7 +292,7 @@ export default function HomePage() {
               ],
               [
                 "Can I choose any dates?",
-                "Move-out is open. Move-in can be any day up to and including September 10, 2026. Online bookings have a one-month (30-night) minimum stay; shorter stays at Mansfield are available on request via the application form. Stays that are not whole weeks are prorated by the day.",
+                "Move-in can be any day up to and including September 10, 2026, and the minimum stay is one week (7 nights). Move-out is open except in October, November and December, where it must be the 1st or the 15th. Stays that are not whole weeks are prorated by the day.",
               ],
               [
                 "I want a larger room or a suite.",

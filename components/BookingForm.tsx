@@ -21,6 +21,7 @@ import {
   formatDate,
   formatMoney,
   isRestrictedMoveOut,
+  MIN_NIGHTS,
   MOVE_IN_DEADLINE,
   todayNY,
 } from "@/lib/format";
@@ -104,7 +105,7 @@ export function BookingForm({
 
   const restrictedMoveOut = isRestrictedMoveOut(moveOut);
   const moveOutAlternatives = restrictedMoveOut
-    ? allowedMoveOutsNear(moveOut, addDays(moveIn || today, 30))
+    ? allowedMoveOutsNear(moveOut, addDays(moveIn || today, MIN_NIGHTS))
     : [];
 
   // The backend answers "not available" for unknown, stale or sold-out
@@ -233,7 +234,7 @@ export function BookingForm({
               value={moveIn}
               onChange={(e) => {
                 setMoveIn(e.target.value);
-                if (moveOut && e.target.value && moveOut < addDays(e.target.value, 30)) {
+                if (moveOut && e.target.value && moveOut < addDays(e.target.value, MIN_NIGHTS)) {
                   setMoveOut("");
                 }
               }}
@@ -248,7 +249,7 @@ export function BookingForm({
               id="move-out"
               type="date"
               required
-              min={moveIn ? addDays(moveIn, 30) : addDays(today, 30)}
+              min={moveIn ? addDays(moveIn, MIN_NIGHTS) : addDays(today, MIN_NIGHTS)}
               value={moveOut}
               onChange={(e) => setMoveOut(e.target.value)}
               className={`${inputCls} mt-2`}
@@ -278,8 +279,7 @@ export function BookingForm({
           </div>
         )}
         <p className="font-mono text-[11px] tracking-wide text-ink/50 -mt-4">
-          Online bookings have a one-month (30-night) minimum stay; shorter
-          stays at Mansfield are available on request. Last possible move-in is
+          Minimum stay is one week (7 nights). Last possible move-in is
           September 10, 2026. Move-out in October, November and December must be
           the 1st or the 15th; any other month is up to you.
         </p>

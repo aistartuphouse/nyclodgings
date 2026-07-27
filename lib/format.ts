@@ -43,6 +43,10 @@ export function addDays(dateOnly: string, days: number): string {
 
 export const MOVE_IN_DEADLINE = "2026-09-10";
 
+// Lowered from 30 on 2026-07-27: short stays were already handled by hand
+// through the application form, so they may as well book online.
+export const MIN_NIGHTS = 7;
+
 // Move-outs in October, November and December are restricted to the 1st and
 // the 15th (team request 2026-07-26); the backend enforces it, this mirrors
 // the rule so the form can warn before the guest submits.

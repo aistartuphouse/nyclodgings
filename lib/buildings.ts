@@ -39,7 +39,7 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     roomsLabel: "Hotel-style rooms",
     roomTypeShort: "Hotel-style studio",
     bathroomShort: "En-suite bathroom",
-    minStay: "One-month minimum stay",
+    minStay: "One-week minimum stay",
     commute: "Programming takes place at both Seton and Mansfield. Sessions at Seton happen in your building; Mansfield is about a 15-minute walk.",
     commuteShort: "On site",
     description:
@@ -76,7 +76,7 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     roomsLabel: "Dorm-style rooms",
     roomTypeShort: "Dorm-style",
     bathroomShort: "Shared",
-    minStay: "One-month minimum stay",
+    minStay: "One-week minimum stay",
     commute: "Activities and presentations are held at Seton and Mansfield, both in Midtown. From Stratford that is roughly 20 minutes by subway.",
     commuteShort: "~20 min by subway",
     description:
@@ -113,14 +113,14 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     roomsLabel: "Hotel-style rooms",
     roomTypeShort: "Hotel-style, single or shared",
     bathroomShort: "Varies by room",
-    minStay: "Short-term stays on request",
+    minStay: "One-week minimum stay",
     commute: "Programming takes place at both Seton and Mansfield, so many sessions happen right in the building. Seton is under a mile away, about a 15-minute walk.",
     commuteShort: "On site",
     description:
-      "The Mansfield is a historic boutique hotel building on West 44th Street offering hotel-style rooms with both single and shared room options, including short-term stays on request. Rooms come furnished with a queen bed, study desk, Smart TV, and a mini-fridge and microwave. Programming takes place at both Seton and Mansfield, and Times Square and Grand Central are a five-minute walk.",
+      "The Mansfield is a historic boutique hotel building on West 44th Street offering hotel-style rooms with both single and shared room options, from one-week stays upwards. Rooms come furnished with a queen bed, study desk, Smart TV, and a mini-fridge and microwave. Programming takes place at both Seton and Mansfield, and Times Square and Grand Central are a five-minute walk.",
     included: [
       "Single and shared room options",
-      "Short-term stays on request",
+      "Stays from one week",
       "All utilities",
       "Furniture and furnishings",
       "High-speed Wi-Fi",

@@ -97,7 +97,7 @@ export async function BuildingPage({
             </div>
             <div>
               <dt className="text-ink/45 uppercase tracking-[0.18em] text-[11px]">Minimum stay</dt>
-              <dd className="mt-1.5">{b.slug === "mansfield" ? "Short stays on request" : "One month"}</dd>
+              <dd className="mt-1.5">One week</dd>
             </div>
             <div>
               <dt className="text-ink/45 uppercase tracking-[0.18em] text-[11px]">Commute</dt>
