@@ -10,7 +10,7 @@ import { formatMoney } from "@/lib/format";
 export const metadata: Metadata = {
   title: "AI Startup House Lodging | New York",
   description:
-    "Three Manhattan buildings for Entrepreneur AI Startup House participants: Mansfield (hotel-style rooms, Midtown), Seton (hotel-style rooms, program on site) and Stratford (dorm-style). Several room types per building, weekly rates, one upfront payment.",
+    "Three Manhattan buildings for Entrepreneur AI Startup House participants: Mansfield (short-term lodging, Midtown), Seton and Stratford (multi-month stays of 3 months or longer). Several room types per building, weekly rates, one upfront payment.",
 };
 
 export default function HomePage() {
@@ -73,6 +73,12 @@ export default function HomePage() {
             <h2 className="mt-4 font-display text-[clamp(1.9rem,4vw,3rem)] leading-tight max-w-2xl">
               Hotel-style rooms at Mansfield and Seton, or dorm-style at Stratford.
             </h2>
+            <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-ink/70">
+              Mansfield is the short-term building, with stays from one week.
+              Seton and Stratford are multi-month lodging and only take stays
+              of three months or longer. Staying under three months? Mansfield
+              is your building.
+            </p>
           </Reveal>
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {BUILDING_LIST.map((b, i) => (
@@ -157,7 +163,7 @@ export default function HomePage() {
               </div>
               <div>
                 <dt className="text-ink/50 uppercase tracking-[0.18em] text-[11px]">Minimum stay</dt>
-                <dd className="mt-1">7 nights, priced weekly with daily proration</dd>
+                <dd className="mt-1">Mansfield 7 nights; Seton and Stratford 3 months</dd>
               </div>
             </dl>
           </Reveal>
@@ -184,11 +190,11 @@ export default function HomePage() {
                 </thead>
                 <tbody>
                   {[
-                    ["Weekly rate", "From $575", "From $525", "From $400"],
+                    ["Weekly rate", "From $718.75", "From $525", "From $400"],
                     ["Room types", "6, Shared Suite to Double Suite", "3, Deluxe to King Studio", "2, private or Jack and Jill"],
                     ["Style", "Hotel-style, single or shared", "Hotel-style studio room", "Dorm-style room"],
                     ["Bathroom", "Varies by room", "Private en-suite bathroom", "Shared bathrooms"],
-                    ["Minimum stay", "One week", "One week", "One week"],
+                    ["Stay length", "Short-term, from one week", "3 months or longer", "3 months or longer"],
                     ["Furniture and furnishings", "Included", "Included", "Included"],
                     ["Utilities", "Included", "Included", "Included"],
                     ["Wi-Fi", "Included", "Included", "Included"],
@@ -206,10 +212,11 @@ export default function HomePage() {
               </table>
             </div>
             <p className="mt-3 font-mono text-[12px] tracking-wide text-ink/50">
-              Mansfield rates are for stays of 6 months or longer; 1 to 3 month
-              stays are priced 25% higher and 3 to 6 months 15% higher. Every
-              rate above is a starting price; each building has several room
-              types.
+              Every rate above is the actual weekly rate you pay for that room
+              (taxes itemized at checkout) and a starting price; each building
+              has several room types. Mansfield rates are the short-term
+              prices; Mansfield stays of 3 to 6 months get 8% off and 6 months
+              or longer 20% off.
             </p>
           </Reveal>
           <Reveal delay={0.15}>
@@ -295,8 +302,12 @@ export default function HomePage() {
                 "Yes, that is the Double Suite. You take both bedrooms of one pair, each with its own queen bed, and the bathroom between them becomes yours alone. It suits two people travelling together who want their own rooms, and it works just as well for one person who wants the extra space. It costs the two rooms added together. It is only bookable when both halves of the same pair happen to be free, so it appears and disappears as rooms turn over.",
               ],
               [
-                "How do Mansfield prices work?",
-                "Mansfield rates are the six-month-and-longer prices. Shorter stays cost more: one to three months is 25% above the listed rate and three to six months is 15% above it. The booking summary always shows the exact weekly rate for the dates you picked before you pay anything. Seton and Stratford rates do not change with stay length.",
+                "Which building takes short stays?",
+                "Mansfield. It is the short-term building, with stays from one week upwards. Seton and Stratford are multi-month lodging and only take bookings of three months (90 nights) or longer; the booking form will not accept a shorter stay there. If you need a short stay, book Mansfield, and if your dates genuinely do not fit anywhere, send a request through the application form and the housing team will look at it individually.",
+              ],
+              [
+                "Is the listed price really what I pay?",
+                "Yes. The weekly rate on a room card is the exact weekly rate charged for that room when you book it, at every building. The only additions are itemized at checkout before you pay: NYC accommodation tax where it applies, and a card processing fee if you pay by card instead of ACH. Mansfield card rates are the short-term prices; if you stay 3 months or longer at Mansfield, the rate goes down, 8% off from three months and 20% off from six.",
               ],
               [
                 "How does payment work?",
@@ -304,7 +315,7 @@ export default function HomePage() {
               ],
               [
                 "Can I choose any dates?",
-                "Move-in can be any day up to and including September 10, 2026. The minimum stay is one week, seven nights. Move-out is open in every month except October, November and December, which have their own rule below. Stays that are not whole weeks are prorated by the day, so a ten-night stay costs one week plus three days.",
+                "Move-in can be any day up to and including September 10, 2026. The minimum stay is one week (seven nights) at Mansfield, and three months (90 nights) at Seton and Stratford. Move-out is open in every month except October, November and December, which have their own rule below. Stays that are not whole weeks are prorated by the day, so a ten-night stay at Mansfield costs one week plus three days.",
               ],
               [
                 "Why can I only move out on the 1st or the 15th in October, November and December?",

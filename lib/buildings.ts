@@ -1,8 +1,22 @@
 // Static building content (mirrors the backend seed and the accommodation
 // guide PDF). Rates are display copy here; the backend quote is the source
 // of truth for money.
+//
+// Stay policy (CEO request 2026-08-27): Mansfield is the short-term building
+// (stays from one week); Seton and Stratford are multi-month lodging and only
+// take stays of three months (90 nights) or longer online. The backend
+// enforces the same floors on the public quote/booking endpoints.
+
+import { MIN_NIGHTS } from "./format";
 
 export type BuildingSlug = "seton" | "stratford" | "mansfield";
+
+// Mirrors the backend's LONG_STAY_MIN_NIGHTS; keep the two in sync.
+export const LONG_STAY_MIN_NIGHTS = 90;
+
+export function minNightsFor(building: BuildingSlug): number {
+  return building === "mansfield" ? MIN_NIGHTS : LONG_STAY_MIN_NIGHTS;
+}
 
 export interface BuildingContent {
   slug: BuildingSlug;
@@ -39,11 +53,11 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     roomsLabel: "Hotel-style rooms",
     roomTypeShort: "Hotel-style studio",
     bathroomShort: "En-suite bathroom",
-    minStay: "One-week minimum stay",
+    minStay: "Multi-month stays only (3 months or longer)",
     commute: "Programming takes place at both Seton and Mansfield. Sessions at Seton happen in your building; Mansfield is about a 15-minute walk.",
     commuteShort: "On site",
     description:
-      "Each guest has a private, hotel-style room, similar to a small studio apartment, with a private en-suite bathroom inside the room. The residency's activities and presentations take place at Seton and Mansfield.",
+      "Each guest has a private, hotel-style room, similar to a small studio apartment, with a private en-suite bathroom inside the room. The residency's activities and presentations take place at Seton and Mansfield. Seton is multi-month lodging: bookings start at three months. For a shorter stay, book the Mansfield.",
     included: [
       "Hotel-style room (studio layout)",
       "Private en-suite bathroom inside the room",
@@ -76,11 +90,11 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     roomsLabel: "Dorm-style rooms",
     roomTypeShort: "Dorm-style",
     bathroomShort: "Shared",
-    minStay: "One-week minimum stay",
+    minStay: "Multi-month stays only (3 months or longer)",
     commute: "Activities and presentations are held at Seton and Mansfield, both in Midtown. From Stratford that is roughly 20 minutes by subway.",
     commuteShort: "~20 min by subway",
     description:
-      "Stratford is the lower-cost option. Rooms are basic and dorm-style, with shared bathrooms, shared common spaces, and a courtyard on the Upper West Side.",
+      "Stratford is the lower-cost option. Rooms are basic and dorm-style, with shared bathrooms, shared common spaces, and a courtyard on the Upper West Side. Stratford is multi-month lodging: bookings start at three months. For a shorter stay, book the Mansfield.",
     included: [
       "Basic, dorm-style room",
       "Shared bathrooms",
@@ -106,21 +120,21 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     name: "Mansfield",
     address: "12 West 44th Street",
     neighborhood: "Midtown Manhattan",
-    weeklyRateCents: 57500,
-    tagline: "Hotel-style rooms, heart of Midtown",
+    weeklyRateCents: 71875,
+    tagline: "Short-term lodging, heart of Midtown",
     style: "Hotel-style rooms, single or shared",
     bathroom: "Private and shared bathroom options, varies by room",
-    roomsLabel: "Hotel-style rooms",
+    roomsLabel: "Short-term lodging",
     roomTypeShort: "Hotel-style, single or shared",
     bathroomShort: "Varies by room",
-    minStay: "One-week minimum stay",
+    minStay: "Short-term stays, from one week",
     commute: "Programming takes place at both Seton and Mansfield, so many sessions happen right in the building. Seton is under a mile away, about a 15-minute walk.",
     commuteShort: "On site",
     description:
-      "The Mansfield is a historic boutique hotel building on West 44th Street offering hotel-style rooms with both single and shared room options, from one-week stays upwards. Rooms come furnished with a queen bed, study desk, Smart TV, and a mini-fridge and microwave. Programming takes place at both Seton and Mansfield, and Times Square and Grand Central are a five-minute walk.",
+      "The Mansfield is the short-term building: a historic boutique hotel on West 44th Street offering hotel-style rooms with both single and shared room options, for stays from one week upwards. Rooms come furnished with a queen bed, study desk, Smart TV, and a mini-fridge and microwave. Programming takes place at both Seton and Mansfield, and Times Square and Grand Central are a five-minute walk.",
     included: [
       "Single and shared room options",
-      "Stays from one week",
+      "Short-term stays, from one week",
       "All utilities",
       "Furniture and furnishings",
       "High-speed Wi-Fi",
@@ -145,9 +159,13 @@ export const BUILDING_LIST = [BUILDINGS.mansfield, BUILDINGS.seton, BUILDINGS.st
 
 // ---- Room types (sub-listings) ----
 // Each bookable room type has its own backend listing; the slug here IS the
-// backend building id the quote/booking API expects. Weekly rates mirror the
-// backend and are display copy only; Mansfield rates are the 6+ month base
-// prices (1-3 months +25%, 3-6 months +15%, applied by the backend quote).
+// backend building id the quote/booking API expects. Weekly rates are display
+// copy only. Mansfield rates listed here are the SHORT-TERM prices (backend
+// base x 1.25), so the card price is exactly what a short-term guest pays per
+// week (CEO request 2026-08-27: posted price = actual price). The backend
+// still stores the 6+ month base rate; its quote comes out at the listed
+// price for stays under 3 months, 8% below it for 3-6 months, and 20% below
+// it for 6 months or longer.
 
 export interface RoomType {
   slug: string; // backend listing id, e.g. "mansfield-studio-king"
@@ -165,7 +183,7 @@ export const ROOM_TYPES: RoomType[] = [
     slug: "mansfield-semi-basic",
     building: "mansfield",
     name: "Shared Suite",
-    weeklyRateCents: 57500,
+    weeklyRateCents: 71875,
     bed: "Queen bed",
     bathroom: "Shared with one adjacent room",
     summary:
@@ -180,7 +198,7 @@ export const ROOM_TYPES: RoomType[] = [
     slug: "mansfield-semi-plus",
     building: "mansfield",
     name: "Deluxe Shared Suite",
-    weeklyRateCents: 59500,
+    weeklyRateCents: 74375,
     bed: "Queen bed",
     bathroom: "Shared with one adjacent room",
     summary:
@@ -195,7 +213,7 @@ export const ROOM_TYPES: RoomType[] = [
     slug: "mansfield-studio-basic",
     building: "mansfield",
     name: "Studio Basic",
-    weeklyRateCents: 69500,
+    weeklyRateCents: 86875,
     bed: "Queen bed",
     bathroom: "Private en-suite",
     summary:
@@ -210,7 +228,7 @@ export const ROOM_TYPES: RoomType[] = [
     slug: "mansfield-studio-plus",
     building: "mansfield",
     name: "Studio Plus",
-    weeklyRateCents: 72500,
+    weeklyRateCents: 90625,
     bed: "Queen bed",
     bathroom: "Private en-suite",
     summary:
@@ -225,7 +243,7 @@ export const ROOM_TYPES: RoomType[] = [
     slug: "mansfield-studio-king",
     building: "mansfield",
     name: "Studio King",
-    weeklyRateCents: 74500,
+    weeklyRateCents: 93125,
     bed: "King bed",
     bathroom: "Private en-suite",
     summary:
@@ -241,7 +259,7 @@ export const ROOM_TYPES: RoomType[] = [
     building: "mansfield",
     name: "Double Suite",
     // Both halves of one apartment, so the rate is the two rooms added up.
-    weeklyRateCents: 117000,
+    weeklyRateCents: 146250,
     bed: "Two bedrooms, a queen bed in each",
     bathroom: "Private between the two rooms",
     summary:

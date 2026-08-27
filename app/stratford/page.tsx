@@ -4,7 +4,7 @@ import { BuildingPage } from "@/components/BuildingPage";
 export const metadata: Metadata = {
   title: "Stratford | AI Startup House Lodging",
   description:
-    "Dorm-style rooms with shared bathrooms at 117 W 70th St, Upper West Side. From $400/week, utilities and Wi-Fi included. About 20 minutes by subway to the program venues.",
+    "Dorm-style rooms with shared bathrooms at 117 W 70th St, Upper West Side. Multi-month stays of 3 months or longer, from $400/week, utilities and Wi-Fi included. About 20 minutes by subway to the program venues.",
 };
 
 export default async function StratfordPage({

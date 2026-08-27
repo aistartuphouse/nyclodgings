@@ -97,7 +97,7 @@ export async function BuildingPage({
             </div>
             <div>
               <dt className="text-ink/45 uppercase tracking-[0.18em] text-[11px]">Minimum stay</dt>
-              <dd className="mt-1.5">One week</dd>
+              <dd className="mt-1.5">{slug === "mansfield" ? "One week" : "Three months"}</dd>
             </div>
             <div>
               <dt className="text-ink/45 uppercase tracking-[0.18em] text-[11px]">Commute</dt>
@@ -129,11 +129,24 @@ export async function BuildingPage({
           <h2 className="mt-3 font-display text-[clamp(1.7rem,3.5vw,2.4rem)]">
             {rooms.length} room type{rooms.length === 1 ? "" : "s"} at {b.name}
           </h2>
-          {hasStayPremium(slug) && (
+          {hasStayPremium(slug) ? (
             <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-ink/60">
-              Rates shown are for stays of 6 months or longer. Stays of 1 to 3
-              months are priced 25% higher and 3 to 6 months 15% higher; the
-              booking summary always shows the exact rate for your dates.
+              The rate on each card is exactly what you pay per week for a
+              short-term stay (under 3 months); taxes are itemized at checkout
+              before you pay. Longer stays cost less: 8% off the listed rate
+              from 3 months, 20% off from 6 months. The booking summary always
+              shows the exact rate for your dates.
+            </p>
+          ) : (
+            <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-ink/60">
+              {b.name} takes multi-month stays only: bookings start at three
+              months (90 nights). The rate on each card is exactly what you pay
+              per week; taxes are itemized at checkout before you pay. For a
+              shorter stay, book the{" "}
+              <Link href="/mansfield" className="underline underline-offset-2">
+                Mansfield
+              </Link>
+              .
             </p>
           )}
         </Reveal>

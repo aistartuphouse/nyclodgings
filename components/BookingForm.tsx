@@ -12,6 +12,7 @@ import {
   BUILDINGS,
   DEFAULT_ROOM,
   hasStayPremium,
+  minNightsFor,
   roomTypesFor,
   type BuildingSlug,
 } from "@/lib/buildings";
@@ -21,7 +22,6 @@ import {
   formatDate,
   formatMoney,
   isRestrictedMoveOut,
-  MIN_NIGHTS,
   MOVE_IN_DEADLINE,
   todayNY,
 } from "@/lib/format";
@@ -66,9 +66,19 @@ export function BookingForm({
 
   const requestSeq = useRef(0);
 
+  // Mansfield takes short stays (7 nights); Seton and Stratford are
+  // multi-month only (90 nights). The backend enforces the same floors.
+  const minNights = minNightsFor(slug);
+
   function pickBuilding(next: Slug) {
     setSlug(next);
     setRoomSlug(DEFAULT_ROOM[next]);
+    // A move-out that satisfied Mansfield's one-week floor can be far under
+    // the multi-month floor of the new building; clear it instead of letting
+    // the quote error explain.
+    if (moveOut && moveIn && moveOut < addDays(moveIn, minNightsFor(next))) {
+      setMoveOut("");
+    }
   }
 
   const refreshQuote = useCallback(
@@ -105,7 +115,7 @@ export function BookingForm({
 
   const restrictedMoveOut = isRestrictedMoveOut(moveOut);
   const moveOutAlternatives = restrictedMoveOut
-    ? allowedMoveOutsNear(moveOut, addDays(moveIn || today, MIN_NIGHTS))
+    ? allowedMoveOutsNear(moveOut, addDays(moveIn || today, minNights))
     : [];
 
   // The backend answers "not available" for unknown, stale or sold-out
@@ -213,9 +223,10 @@ export function BookingForm({
           </div>
           {hasStayPremium(slug) && (
             <p className="mt-2 font-mono text-[11px] tracking-wide text-ink/50">
-              Mansfield rates shown are for stays of 6 months or longer. Stays
-              of 1 to 3 months are priced 25% higher, and 3 to 6 months 15%
-              higher; the summary shows the exact rate for your dates.
+              The rate on the card is exactly what you pay per week for a
+              short-term stay (under 3 months). Longer Mansfield stays cost
+              less: 8% off the listed rate from 3 months, 20% off from 6
+              months. The summary shows the exact rate for your dates.
             </p>
           )}
         </fieldset>
@@ -234,7 +245,7 @@ export function BookingForm({
               value={moveIn}
               onChange={(e) => {
                 setMoveIn(e.target.value);
-                if (moveOut && e.target.value && moveOut < addDays(e.target.value, MIN_NIGHTS)) {
+                if (moveOut && e.target.value && moveOut < addDays(e.target.value, minNights)) {
                   setMoveOut("");
                 }
               }}
@@ -249,7 +260,7 @@ export function BookingForm({
               id="move-out"
               type="date"
               required
-              min={moveIn ? addDays(moveIn, MIN_NIGHTS) : addDays(today, MIN_NIGHTS)}
+              min={moveIn ? addDays(moveIn, minNights) : addDays(today, minNights)}
               value={moveOut}
               onChange={(e) => setMoveOut(e.target.value)}
               className={`${inputCls} mt-2`}
@@ -279,9 +290,12 @@ export function BookingForm({
           </div>
         )}
         <p className="font-mono text-[11px] tracking-wide text-ink/50 -mt-4">
-          Minimum stay is one week (7 nights). Last possible move-in is
-          September 10, 2026. Move-out in October, November and December must be
-          the 1st or the 15th; any other month is up to you.
+          {slug === "mansfield"
+            ? "Mansfield is the short-term building: minimum stay one week (7 nights)."
+            : `${building.name} takes multi-month stays only: minimum three months (90 nights). For a shorter stay, pick Mansfield.`}{" "}
+          Last possible move-in is September 10, 2026. Move-out in October,
+          November and December must be the 1st or the 15th; any other month is
+          up to you.
         </p>
         {quoteError && (
           <p className="border border-pine/30 bg-pine/5 px-4 py-3 text-[14px] text-pine" role="alert">

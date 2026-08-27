@@ -46,7 +46,10 @@ export function SiteFooter() {
           <div className="text-[12px] leading-relaxed text-ink/45">
             <div className="font-mono text-ink/40 uppercase tracking-[0.18em] text-[11px] mb-3">Notes</div>
             <p>
-              Accommodation rates are weekly. Stays of less than six months may
+              Mansfield hosts short-term stays from one week. Seton and
+              Stratford host multi-month stays of three months (90 nights) or
+              longer. Accommodation rates are weekly and the listed rate is the
+              rate charged for that room at booking. Stays of less than six months may
               be subject to applicable New York accommodation tax; stays of 180
               days or longer are not subject to New York accommodation tax. Tax
               treatment depends on individual circumstances and is subject to
