@@ -8,9 +8,9 @@ import { BUILDING_LIST } from "@/lib/buildings";
 import { formatMoney } from "@/lib/format";
 
 export const metadata: Metadata = {
-  title: "AI Startup House Lodging | New York",
+  title: "AI Startup House Lodging | New York and Austin",
   description:
-    "Three Manhattan buildings for Entrepreneur AI Startup House participants: Mansfield (short-term lodging, Midtown), Seton and Stratford (multi-month stays of 3 months or longer). Several room types per building, weekly rates, one upfront payment.",
+    "Three buildings for Entrepreneur AI Startup House participants: Mansfield (short-term, Midtown Manhattan, from $150/night), Seton (Murray Hill, 4 months or longer) and Capitol (Downtown Austin, 3 months or longer). Furnished rooms, utilities and Wi-Fi included, one upfront payment once the team confirms your room.",
 };
 
 export default function HomePage() {
@@ -28,8 +28,6 @@ export default function HomePage() {
           playsInline
           aria-hidden
         />
-        {/* Text-protection scrim over the copy column only; the orbit scene
-            on the right stays fully visible. */}
         <div
           className="pointer-events-none absolute inset-0 bg-[linear-gradient(100deg,rgba(14,30,58,0.94)_0%,rgba(14,30,58,0.6)_38%,rgba(14,30,58,0)_62%)]"
           aria-hidden
@@ -37,7 +35,7 @@ export default function HomePage() {
         <SiteHeader />
         <div className="pointer-events-none relative z-10 mx-auto max-w-6xl w-full px-5 sm:px-10 mt-auto mb-auto pt-36 pb-28">
           <p className="font-mono text-[12px] tracking-[0.26em] uppercase text-pine">
-            Entrepreneur AI Startup House · New York City
+            Entrepreneur AI Startup House · New York City · Austin
           </p>
           <h1 className="mt-6 font-display text-[clamp(2.6rem,7vw,5.4rem)] leading-[1.02] max-w-3xl">
             Stay where the
@@ -45,9 +43,9 @@ export default function HomePage() {
             program happens.
           </h1>
           <p className="mt-7 max-w-xl text-lg leading-relaxed text-ink/70">
-            Housing for residency participants at three Manhattan buildings.
-            Weekly rates with utilities and Wi-Fi included. Pick your dates,
-            pay once, done.
+            Housing for residency participants: two buildings in Manhattan and
+            one in Downtown Austin. Furnished rooms with utilities and Wi-Fi
+            included. Send your dates, we confirm the room, you pay once.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <a
@@ -57,7 +55,7 @@ export default function HomePage() {
               Choose your building
             </a>
             <span className="font-mono text-[12px] tracking-wide text-ink/55">
-              From $400/week · book until Sep 10, 2026 move-in
+              From $150/night in New York · from $650/week in Austin
             </span>
           </div>
         </div>
@@ -68,16 +66,17 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-5 sm:px-10 py-20 sm:py-28">
           <Reveal>
             <p className="font-mono text-[12px] tracking-[0.26em] uppercase text-pine">
-              Three buildings, one decision
+              Three buildings, two cities
             </p>
             <h2 className="mt-4 font-display text-[clamp(1.9rem,4vw,3rem)] leading-tight max-w-2xl">
-              Hotel-style rooms at Mansfield and Seton, or dorm-style at Stratford.
+              Short stays at Mansfield, multi-month at Seton, and Austin at Capitol.
             </h2>
             <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-ink/70">
-              Mansfield is the short-term building, with stays from one week.
-              Seton and Stratford are multi-month lodging and only take stays
-              of three months or longer. Staying under three months? Mansfield
-              is your building.
+              Mansfield is the short-term building in New York, with stays from
+              one week. Seton is multi-month lodging in New York and takes stays
+              of four months or longer. Capitol is the Austin house, with stays
+              of three months or longer. Staying in New York under four months?
+              Mansfield is your building.
             </p>
           </Reveal>
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -93,7 +92,7 @@ export default function HomePage() {
                       className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                     />
                     <span className="absolute top-4 left-4 bg-paper/80 text-ink font-mono text-[11px] tracking-[0.18em] uppercase px-3 py-1.5">
-                      {b.roomsLabel}
+                      {b.city}
                     </span>
                   </Link>
                   <div className="p-6 sm:p-8 flex flex-col gap-5 grow">
@@ -101,8 +100,8 @@ export default function HomePage() {
                       <h3 className="font-display text-3xl">{b.name}</h3>
                       <p className="font-mono text-[15px] whitespace-nowrap">
                         <span className="text-ink/45 text-[12px]">from </span>
-                        {formatMoney(b.weeklyRateCents)}
-                        <span className="text-ink/45 text-[12px]"> /week</span>
+                        {formatMoney(b.fromAmountCents)}
+                        <span className="text-ink/45 text-[12px]"> /{b.fromUnit}</span>
                       </p>
                     </div>
                     <p className="font-mono text-[12px] tracking-wide text-ink/50 -mt-3">
@@ -112,20 +111,20 @@ export default function HomePage() {
                       <li>{b.style}</li>
                       <li>{b.bathroom}</li>
                       <li>{b.minStay}</li>
-                      <li>Program venue: {b.commuteShort}</li>
+                      <li>{b.city === "Austin" ? "Location" : "Program venue"}: {b.commuteShort}</li>
                     </ul>
                     <div className="mt-auto flex gap-3 pt-2">
                       <Link
-                        href={`/book?building=${b.slug}`}
+                        href={`/${b.slug}`}
                         className="grow bg-pine text-paper text-center font-mono text-[12px] tracking-[0.18em] uppercase px-5 py-3.5 transition-colors hover:bg-pine-deep"
                       >
-                        Book now
+                        View rooms
                       </Link>
                       <Link
-                        href={`/${b.slug}`}
+                        href={`/apply?building=${b.slug}`}
                         className="border border-ink/25 text-center font-mono text-[12px] tracking-[0.18em] uppercase px-5 py-3.5 transition-colors hover:border-pine hover:text-pine"
                       >
-                        View rooms
+                        Request
                       </Link>
                     </div>
                   </div>
@@ -136,26 +135,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ---- Why this exists ---- */}
+      {/* ---- How it works ---- */}
       <section className="bg-paper-dim border-y border-line text-ink">
         <div className="mx-auto max-w-6xl px-5 sm:px-10 py-16 sm:py-20 grid gap-10 md:grid-cols-[1.2fr_1fr] items-center">
           <Reveal>
             <h2 className="font-display text-[clamp(1.6rem,3vw,2.4rem)] leading-snug">
-              The program takes place at both Seton and Mansfield.
+              In New York the program takes place at both Seton and Mansfield.
+              In Austin, Capitol is the house.
             </h2>
             <p className="mt-5 text-ink/75 leading-relaxed max-w-xl">
-              Activities and presentations are held at Seton in Murray Hill
-              and Mansfield in Midtown, so participants staying at either
-              building live where the sessions happen. From Stratford it is
-              roughly 20 minutes by subway. All three buildings are furnished,
-              with utilities and Wi-Fi included in the weekly rate.
+              Activities and presentations in New York are held at Seton in
+              Murray Hill and Mansfield in Midtown, so participants staying at
+              either building live where the sessions happen. Capitol puts the
+              Austin cohort two blocks from the Texas State Capitol. Every room
+              is furnished, with utilities and Wi-Fi included.
             </p>
           </Reveal>
           <Reveal delay={0.15}>
             <dl className="font-mono text-[13px] space-y-4 border-l border-pine/40 pl-6">
               <div>
-                <dt className="text-ink/50 uppercase tracking-[0.18em] text-[11px]">Booking window</dt>
-                <dd className="mt-1">Move-in any day until Sep 10, 2026</dd>
+                <dt className="text-ink/50 uppercase tracking-[0.18em] text-[11px]">How to book</dt>
+                <dd className="mt-1">Send your dates, the team confirms the room and emails a payment link</dd>
               </div>
               <div>
                 <dt className="text-ink/50 uppercase tracking-[0.18em] text-[11px]">Payment</dt>
@@ -163,7 +163,7 @@ export default function HomePage() {
               </div>
               <div>
                 <dt className="text-ink/50 uppercase tracking-[0.18em] text-[11px]">Minimum stay</dt>
-                <dd className="mt-1">Mansfield 7 nights; Seton and Stratford 3 months</dd>
+                <dd className="mt-1">Mansfield 7 nights; Seton 4 months; Capitol 3 months</dd>
               </div>
             </dl>
           </Reveal>
@@ -185,38 +185,36 @@ export default function HomePage() {
                     <th className="text-left font-medium px-5 py-3.5 w-[25%]"> </th>
                     <th className="text-left font-medium px-5 py-3.5">Mansfield</th>
                     <th className="text-left font-medium px-5 py-3.5">Seton</th>
-                    <th className="text-left font-medium px-5 py-3.5">Stratford</th>
+                    <th className="text-left font-medium px-5 py-3.5">Capitol</th>
                   </tr>
                 </thead>
                 <tbody>
                   {[
-                    ["Weekly rate", "From $718.75", "From $525", "From $400"],
-                    ["Room types", "6, Shared Suite to Double Suite", "3, Deluxe to King Studio", "2, private or Jack and Jill"],
-                    ["Style", "Hotel-style, single or shared", "Hotel-style studio room", "Dorm-style room"],
-                    ["Bathroom", "Varies by room", "Private en-suite bathroom", "Shared bathrooms"],
-                    ["Stay length", "Short-term, from one week", "3 months or longer", "3 months or longer"],
-                    ["Furniture and furnishings", "Included", "Included", "Included"],
-                    ["Utilities", "Included", "Included", "Included"],
-                    ["Wi-Fi", "Included", "Included", "Included"],
-                    ["Program venue", "On site, same building", "On site, same building", "~20 min by subway"],
-                    ["Neighborhood", "Midtown", "Murray Hill", "Upper West Side"],
-                  ].map(([k, mansfield, seton, stratford], i) => (
+                    ["City", "New York, Midtown", "New York, Murray Hill", "Austin, Downtown"],
+                    ["Rate", "$150/night under a month; $3,600/month from 30 nights", "From $525/week", "From $650/week"],
+                    ["Longer stays", "$3,200/month from 3 months, $2,800 from 5", "Same weekly rate", "Same weekly rate"],
+                    ["Room types", "1, Shared Suite", "3, Deluxe to King Studio", "2, Sunroom and Loft"],
+                    ["Style", "Private hotel room", "Hotel-style studio room", "Private bedroom in a shared apartment"],
+                    ["Bathroom", "Shared with one adjacent room", "Private en-suite bathroom", "Two full bathrooms per apartment"],
+                    ["Stay length", "From one week", "4 months or longer", "3 months or longer"],
+                    ["Furniture, utilities, Wi-Fi", "Included", "Included", "Included (electricity billed separately)"],
+                    ["Tax", "NYC accommodation tax by stay length", "NYC accommodation tax by stay length", "Texas and Austin hotel occupancy tax, 17%"],
+                    ["Program", "On site", "On site", "The Austin house"],
+                  ].map(([k, mansfield, seton, capitol], i) => (
                     <tr key={k} className={i % 2 ? "bg-paper-dim/60" : "bg-sand/45"}>
                       <th className="text-left font-medium px-5 py-3 border-b border-line">{k}</th>
                       <td className="px-5 py-3 border-b border-line">{mansfield}</td>
                       <td className="px-5 py-3 border-b border-line">{seton}</td>
-                      <td className="px-5 py-3 border-b border-line">{stratford}</td>
+                      <td className="px-5 py-3 border-b border-line">{capitol}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
             <p className="mt-3 font-mono text-[12px] tracking-wide text-ink/50">
-              Every rate above is the actual weekly rate you pay for that room
-              (taxes itemized at checkout) and a starting price; each building
-              has several room types. Mansfield rates are the short-term
-              prices; Mansfield stays of 3 to 6 months get 8% off and 6 months
-              or longer 20% off.
+              Every rate above is the rate charged for that room, before tax.
+              Seton and Capitol have several room types, so their rate is a
+              starting price; Mansfield has one.
             </p>
           </Reveal>
           <Reveal delay={0.15}>
@@ -224,9 +222,8 @@ export default function HomePage() {
               <div>
                 <h3 className="font-display text-xl text-ink">Upgraded rooms</h3>
                 <p className="mt-2 text-[14px] leading-relaxed max-w-xl">
-                  All three properties also have larger rooms, suites, and
-                  apartments in limited numbers. These are requested
-                  separately, not booked online.
+                  Larger rooms, suites and apartments exist in limited numbers.
+                  Ask for them in the same request form.
                 </p>
               </div>
               <Link
@@ -246,29 +243,27 @@ export default function HomePage() {
           <Reveal>
             <p className="font-mono text-[12px] tracking-[0.26em] uppercase text-pine">Taxes, upfront and exact</p>
             <h2 className="mt-4 font-display text-[clamp(1.9rem,4vw,2.8rem)] leading-tight">
-              The longer you stay, the less tax you pay.
+              Tax is itemized before you pay.
             </h2>
             <p className="mt-5 text-ink/70 leading-relaxed">
-              New York taxes furnished stays by length. We apply the correct
-              rate for your whole stay at checkout, so the total you see is
-              the total you pay. No adjustments later, no refund paperwork.
-            </p>
-            <p className="mt-3 text-ink/70 leading-relaxed">
-              Stay six months or longer and there is no accommodation tax at
-              all.
+              New York taxes furnished stays by length: the longer you stay,
+              the less tax you pay, and from six months there is none. Austin
+              applies the Texas and City of Austin hotel occupancy tax. Either
+              way the payment link shows rent and tax as separate lines, so
+              the total you see is the total you pay. No adjustments later.
             </p>
           </Reveal>
           <Reveal delay={0.12}>
             <div className="bg-sand border border-line text-[15px]">
               <div className="px-6 py-4 border-b border-line font-display text-lg">
-                NYC accommodation tax by stay length
+                New York (Mansfield, Seton) by stay length
               </div>
               {[
                 ["7 to 89 nights", "14.75% of rent", "plus $1.50 per night"],
                 ["90 to 179 nights", "10.375% of rent", "no nightly fee"],
                 ["180 nights or more", "0%", "tax exempt"],
               ].map(([len, rate, extra]) => (
-                <div key={len} className="px-6 py-4 flex items-baseline justify-between gap-4 border-b border-line last:border-0">
+                <div key={len} className="px-6 py-4 flex items-baseline justify-between gap-4 border-b border-line">
                   <span className="text-ink/70">{len}</span>
                   <span className="text-right">
                     <span className="text-pine font-medium">{rate}</span>
@@ -276,6 +271,16 @@ export default function HomePage() {
                   </span>
                 </div>
               ))}
+              <div className="px-6 py-4 border-b border-line font-display text-lg">
+                Austin (Capitol)
+              </div>
+              <div className="px-6 py-4 flex items-baseline justify-between gap-4">
+                <span className="text-ink/70">Every stay</span>
+                <span className="text-right">
+                  <span className="text-pine font-medium">17% of rent</span>
+                  <span className="text-ink/45"> · Texas 6% + City of Austin 11%</span>
+                </span>
+              </div>
             </div>
           </Reveal>
         </div>
@@ -290,48 +295,56 @@ export default function HomePage() {
           <div className="mt-8 divide-y divide-line border-y border-line">
             {[
               [
-                "What is included in the weekly rate?",
-                "Furniture, all utilities and high-speed Wi-Fi at all three buildings. Nothing is billed separately once you have paid. Each building has several room types at different weekly rates, so the price you see on a card is the price for that room, not a starting point that grows later.",
+                "How do I book a room?",
+                "Send a request with your dates and the room you have in mind. The housing team checks that the room is free, confirms the exact price with tax, and emails you a payment link. You pay the whole stay in one payment, by card or US bank transfer, and the room is confirmed the moment the payment clears. Nothing is charged until then.",
               ],
               [
-                "What does \u201cShared Suite\u201d mean at Mansfield, and what am I sharing?",
-                "The room is yours alone. It has a queen bed, a study desk and a nightstand, and it locks like any hotel room. The only thing you share is the bathroom, and only with the one room next door. Mansfield\u2019s rooms are arranged in pairs, so there is exactly one other guest on the other side of that bathroom, never a floor or a corridor. The Deluxe Shared Suite is the same arrangement with more floor space. If you would rather not share anything, the Studio rooms at Mansfield and every room at Seton have a private bathroom inside the room.",
+                "What is included in the rate?",
+                "Furniture, utilities and high-speed Wi-Fi at all three buildings, and nothing is billed separately once you have paid. The one exception is Capitol in Austin, where electricity is metered and billed separately; internet, gas and water are included there. Each building has one or more room types, and the price on a card is the price for that room.",
               ],
               [
-                "Can I book both rooms of a pair?",
-                "Yes, that is the Double Suite. You take both bedrooms of one pair, each with its own queen bed, and the bathroom between them becomes yours alone. It suits two people travelling together who want their own rooms, and it works just as well for one person who wants the extra space. It costs the two rooms added together. It is only bookable when both halves of the same pair happen to be free, so it appears and disappears as rooms turn over.",
+                "How is the Mansfield priced?",
+                "By length of stay. Under a month you pay $150 per night. From 30 nights you pay per month: $3,600 a month for one to two months, $3,200 a month from three months, and $2,800 a month from five months. A month is 30 nights, the whole stay is priced at the rate its total length earns, and extra days on a monthly stay are prorated at the monthly rate divided by 30. NYC accommodation tax comes on top.",
+              ],
+              [
+                "What does “Shared Suite” mean at Mansfield, and what am I sharing?",
+                "The room is yours alone. It has a queen bed, a study desk and a nightstand, and it locks like any hotel room. The only thing you share is the bathroom, and only with the one room next door. Mansfield’s rooms are arranged in pairs, so there is exactly one other guest on the other side of that bathroom, never a floor or a corridor.",
               ],
               [
                 "Which building takes short stays?",
-                "Mansfield. It is the short-term building, with stays from one week upwards. Seton and Stratford are multi-month lodging and only take bookings of three months (90 nights) or longer; the booking form will not accept a shorter stay there. If you need a short stay, book Mansfield, and if your dates genuinely do not fit anywhere, send a request through the application form and the housing team will look at it individually.",
+                "Mansfield, with stays from one week upwards. Seton is multi-month lodging and takes stays of four months (120 nights) or longer; Capitol in Austin takes three months (90 nights) or longer. If your dates genuinely do not fit anywhere, send the request anyway and the housing team will look at it individually.",
+              ],
+              [
+                "What is Capitol like?",
+                "A contemporary five-story building in Downtown Austin, two blocks west of the Texas State Capitol. Each apartment has four private bedrooms plus a sunroom around an open kitchen and living area, with two full bathrooms. You take one room, the Loft (the largest bedroom) or the Sunroom (the bright partitioned room), and share the kitchen and bathrooms with your apartment-mates. Fitness center, rooftop terrace and free laundry on every floor are in the building.",
               ],
               [
                 "Is the listed price really what I pay?",
-                "Yes. The weekly rate on a room card is the exact weekly rate charged for that room when you book it, at every building. The only additions are itemized at checkout before you pay: NYC accommodation tax where it applies, and a card processing fee if you pay by card instead of ACH. Mansfield card rates are the short-term prices; if you stay 3 months or longer at Mansfield, the rate goes down, 8% off from three months and 20% off from six.",
+                "Yes. The rate on a room card is the rate charged for that room, at every building. The only additions are itemized on your payment link before you pay: accommodation or hotel tax where it applies, and a card processing fee if you pay by card instead of bank transfer.",
               ],
               [
                 "How does payment work?",
-                "You pay for the whole stay upfront in one Stripe payment: rent plus any NYC accommodation tax that applies. You choose card or US bank transfer (ACH) at checkout. Card adds a processing fee, ACH has none but needs a US bank account and takes a few business days to settle.",
+                "Once the team confirms your room you receive a payment link that does not expire. You pay for the whole stay upfront in one Stripe payment: rent plus tax. You choose card or US bank transfer (ACH) on the payment page. Card adds a processing fee, ACH has none but needs a US bank account and takes a few business days to settle.",
               ],
               [
                 "Can I choose any dates?",
-                "Move-in can be any day up to and including September 10, 2026. The minimum stay is one week (seven nights) at Mansfield, and three months (90 nights) at Seton and Stratford. Move-out is open in every month except October, November and December, which have their own rule below. Stays that are not whole weeks are prorated by the day, so a ten-night stay at Mansfield costs one week plus three days.",
+                "Move-in can be any day from today. Move-out is open in every month except October, November and December, which have their own rule below. Stays that are not whole weeks or months are prorated by the day.",
               ],
               [
                 "Why can I only move out on the 1st or the 15th in October, November and December?",
-                "The housing team keeps departures in those three months to two fixed dates so the turnovers stay manageable. If your stay ends in October, November or December, pick the 1st or the 15th of the month and the booking will go through normally. Every other month of the year is completely open, you can leave on any day. If neither date works for your plans, send a request through the application form and we will look at it individually.",
+                "The housing team keeps departures in those three months to two fixed dates so the turnovers stay manageable. If your stay ends in October, November or December, plan for the 1st or the 15th of the month. Every other month of the year is completely open. If neither date works for your plans, say so in your request and we will look at it individually.",
               ],
               [
-                "Why can I not book the room I want?",
-                "Room availability comes straight from the buildings, and a room is only offered once we can see the date it actually frees up. If a room type shows a date instead of a booking button, that is the first day it opens up, and you can book from that date onwards. If it shows nothing at all, we cannot confirm it is free, so we would rather not sell it to you. Send a request in that case and the housing team will find you something.",
+                "What do the availability labels on the room cards mean?",
+                "For the New York buildings, room availability comes straight from the buildings and is refreshed through the day: the label shows whether a room type is free now or the first day it opens up. The team confirms the actual room when you request it. Capitol availability is confirmed by the team on request.",
               ],
               [
                 "I want a larger room or a suite.",
-                "All three buildings have a limited number of larger rooms, suites and apartments that are not listed here. Send an application with your dates and we will come back to you with what is open.",
+                "Larger rooms, suites and apartments exist in limited numbers and are not listed here. Send a request with your dates and tick the upgrade box; we will come back to you with what is open.",
               ],
               [
                 "Who runs this?",
-                "This site handles housing for the Entrepreneur AI Startup House, organized with the team behind Real AI Dynamics. The program itself takes place at both Seton and Mansfield.",
+                "This site handles housing for the Entrepreneur AI Startup House, organized with the team behind Real AI Dynamics. In New York the program takes place at both Seton and Mansfield; Capitol houses the Austin cohort.",
               ],
             ].map(([q, a]) => (
               <Reveal key={q}>
@@ -350,10 +363,10 @@ export default function HomePage() {
           <Reveal>
             <div className="mt-12 text-center">
               <Link
-                href="/book"
+                href="/apply"
                 className="inline-block bg-pine text-paper font-mono text-[13px] tracking-[0.18em] uppercase px-10 py-4 transition-colors hover:bg-pine-deep"
               >
-                Book your stay
+                Request a room
               </Link>
             </div>
           </Reveal>

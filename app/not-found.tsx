@@ -16,14 +16,14 @@ export default function NotFound() {
         </h1>
         <p className="mt-4 text-ink/70 leading-relaxed max-w-lg">
           The address may have changed. Everything on this site starts from
-          the two buildings.
+          the three buildings.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href="/" className="bg-pine text-paper font-mono text-[13px] tracking-[0.18em] uppercase px-8 py-4 transition-colors hover:bg-pine-deep">
             Home
           </Link>
-          <Link href="/book" className="border border-ink/25 font-mono text-[12px] tracking-[0.18em] uppercase px-6 py-4 hover:border-pine hover:text-pine transition-colors">
-            Book a room
+          <Link href="/apply" className="border border-ink/25 font-mono text-[12px] tracking-[0.18em] uppercase px-6 py-4 hover:border-pine hover:text-pine transition-colors">
+            Request a room
           </Link>
         </div>
       </div>

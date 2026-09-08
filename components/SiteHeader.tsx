@@ -50,10 +50,10 @@ export function SiteHeader() {
             Apply
           </a>
           <Link
-            href="/book"
+            href="/apply"
             className="font-mono text-[12px] tracking-[0.14em] uppercase px-4 py-2 bg-pine text-paper transition-colors hover:bg-pine-deep"
           >
-            Book now
+            Request a room
           </Link>
 
           {/* Mobile menu toggle */}

@@ -1,102 +1,31 @@
 export const BACKEND_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8090";
 
-export interface Quote {
-  nights: number;
-  weeks: number;
-  extraDays: number;
-  weeklyRateCents: number; // effective rate charged (includes any stay premium)
-  baseWeeklyRateCents: number;
-  stayPremiumRate: number; // Mansfield only: 0.25 / 0.15 / 0
-  rentCents: number;
-  taxBand: "short" | "medium" | "exempt";
-  taxRate: number;
-  taxCents: number;
-  unitFeeCents: number;
-  totalCents: number;
-  notes: string[];
-}
-
-export interface QuoteErrorBody {
+export interface ApiErrorBody {
   error: string;
   message?: string;
 }
 
-// Whether the requested room is actually free for those dates. `ok` is true
-// when the backend has no inventory data yet, so pricing keeps working exactly
-// as before until the first lobbyboard import lands.
-export interface QuoteAvailability {
-  ok: boolean;
-  reason: string | null;
-  earliestFrom: string | null;
-}
-
-export async function fetchQuote(
-  building: string,
-  moveIn: string,
-  moveOut: string,
-): Promise<{ quote: Quote; availability: QuoteAvailability | null } | { error: QuoteErrorBody }> {
-  const res = await fetch(`${BACKEND_URL}/v1/public/quote`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ building, moveIn, moveOut }),
-  });
-  const body = await res.json();
-  if (!res.ok) return { error: body as QuoteErrorBody };
-  return {
-    quote: body.quote as Quote,
-    availability: (body.availability as QuoteAvailability | undefined) ?? null,
-  };
-}
-
-export type PaymentMethod = "card" | "ach";
-
-// Client-side mirror of the backend gross-up, for display only; the server
-// recomputes the real fee when the session is created.
-export function estimateCardFeeCents(baseCents: number): number {
-  if (baseCents <= 0) return 0;
-  return Math.ceil((baseCents + 30) / (1 - 0.044)) - baseCents;
-}
-
-export async function createBooking(payload: {
-  building: string;
-  moveIn: string;
-  moveOut: string;
-  name: string;
-  email: string;
-  phone: string;
-  notes?: string;
-  source?: string | null;
-  paymentMethod: PaymentMethod;
-}): Promise<{ checkoutUrl: string; ref: string } | { error: QuoteErrorBody }> {
-  const res = await fetch(`${BACKEND_URL}/v1/public/bookings`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-  const body = await res.json();
-  if (!res.ok) return { error: body as QuoteErrorBody };
-  return body as { checkoutUrl: string; ref: string };
-}
-
+// Since 2026-09-08 the site takes applications only: the housing team creates
+// the booking and sends a payment link. Nothing here can mint a checkout.
 export async function createApplication(payload: {
   name: string;
   email: string;
   phone: string;
-  building?: string;
+  building?: string; // a building slug or a room-type slug, both accepted
   moveIn?: string;
   moveOut?: string;
   upgradeInterest: boolean;
   message: string;
   source?: string | null;
-}): Promise<{ ok: true } | { error: QuoteErrorBody }> {
+}): Promise<{ ok: true } | { error: ApiErrorBody }> {
   const res = await fetch(`${BACKEND_URL}/v1/public/applications`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(payload),
   });
   const body = await res.json();
-  if (!res.ok) return { error: body as QuoteErrorBody };
+  if (!res.ok) return { error: body as ApiErrorBody };
   return { ok: true };
 }
 
@@ -111,6 +40,7 @@ export interface BookingStatus {
   processing_fee_cents: number;
 }
 
+// Success page after a payment link: looks the booking up by Checkout session.
 export async function fetchBookingStatus(
   sessionId: string,
 ): Promise<BookingStatus | null> {
@@ -132,8 +62,9 @@ export interface RoomAvailability {
 }
 
 // Availability comes from the landlord's lobbyboard, imported into the
-// backend. `null` means the backend has no inventory data yet, in which case
-// the site behaves exactly as it did before: everything is bookable.
+// backend, and is shown as information on the room cards. `null` means the
+// backend has no inventory data yet. Listings without a lobbyboard (Capitol)
+// are left out so their cards show no availability pill at all.
 export async function fetchAvailability(): Promise<Record<string, RoomAvailability> | null> {
   try {
     const res = await fetch(`${BACKEND_URL}/v1/public/buildings`, { cache: "no-store" });
@@ -142,11 +73,12 @@ export async function fetchAvailability(): Promise<Record<string, RoomAvailabili
       buildings: { id: string; availability: RoomAvailability | null }[];
     };
     const out: Record<string, RoomAvailability> = {};
-    for (const b of body.buildings) if (b.availability) out[b.id] = b.availability;
+    for (const b of body.buildings) {
+      if (b.availability && !b.id.startsWith("capitol-")) out[b.id] = b.availability;
+    }
     return Object.keys(out).length ? out : null;
   } catch {
-    // The site must not go dark because the backend blinked; the booking
-    // endpoint still enforces availability server-side.
+    // The site must not go dark because the backend blinked.
     return null;
   }
 }

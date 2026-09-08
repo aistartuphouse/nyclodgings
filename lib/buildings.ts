@@ -1,29 +1,50 @@
-// Static building content (mirrors the backend seed and the accommodation
-// guide PDF). Rates are display copy here; the backend quote is the source
-// of truth for money.
+// Static building content (mirrors the backend seed). Rates are display copy
+// here; the backend quote is the source of truth for money, and every booking
+// is created by the housing team from an application (instant booking left
+// the site on 2026-09-08).
 //
-// Stay policy (CEO request 2026-08-27): Mansfield is the short-term building
-// (stays from one week); Seton and Stratford are multi-month lodging and only
-// take stays of three months (90 nights) or longer online. The backend
-// enforces the same floors on the public quote/booking endpoints.
+// Portfolio since 2026-09-08 (CEO request):
+//   Mansfield (NYC)  - short-term building, ONE room type (Shared Suite),
+//                      priced per night under a month and per month from 30
+//                      nights, with lower monthly rates from 3 and 5 months.
+//   Seton (NYC)      - multi-month only, 4 months (120 nights) or longer,
+//                      weekly rates unchanged.
+//   Capitol (Austin) - new, multi-month, 3 months (90 nights) or longer,
+//                      weekly rates, Texas + City of Austin hotel tax (17%)
+//                      instead of the NYC bands.
+//   Stratford        - retired.
 
-import { MIN_NIGHTS } from "./format";
+export type BuildingSlug = "mansfield" | "seton" | "capitol";
+export type City = "New York" | "Austin";
+export type TaxProfile = "nyc" | "austin";
 
-export type BuildingSlug = "seton" | "stratford" | "mansfield";
+// Mirrors buildings.public_min_nights in the backend; keep in sync.
+export const PUBLIC_MIN_NIGHTS: Record<BuildingSlug, number> = {
+  mansfield: 7,
+  seton: 120,
+  capitol: 90,
+};
 
-// Mirrors the backend's LONG_STAY_MIN_NIGHTS; keep the two in sync.
-export const LONG_STAY_MIN_NIGHTS = 90;
-
-export function minNightsFor(building: BuildingSlug): number {
-  return building === "mansfield" ? MIN_NIGHTS : LONG_STAY_MIN_NIGHTS;
-}
+// The Mansfield schedule, mirrors MONTHLY_PRICING in the backend's pricing.ts.
+export const MANSFIELD_PRICING = {
+  nightlyCents: 15000,
+  tiers: [
+    { minNights: 30, monthlyCents: 360000, label: "1 to 2 months" },
+    { minNights: 90, monthlyCents: 320000, label: "3 to 4 months" },
+    { minNights: 150, monthlyCents: 280000, label: "5 months or longer" },
+  ],
+} as const;
 
 export interface BuildingContent {
   slug: BuildingSlug;
   name: string;
+  city: City;
   address: string;
   neighborhood: string;
-  weeklyRateCents: number; // lowest room-type rate, shown as "from $X/week"
+  taxProfile: TaxProfile;
+  // "from $150" + "per night" / "from $525" + "per week"
+  fromAmountCents: number;
+  fromUnit: "night" | "week";
   tagline: string;
   style: string;
   bathroom: string;
@@ -31,6 +52,7 @@ export interface BuildingContent {
   roomTypeShort: string;
   bathroomShort: string;
   minStay: string;
+  minStayShort: string;
   commute: string;
   commuteShort: string;
   description: string;
@@ -41,23 +63,68 @@ export interface BuildingContent {
 }
 
 export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
+  mansfield: {
+    slug: "mansfield",
+    name: "Mansfield",
+    city: "New York",
+    address: "12 West 44th Street",
+    neighborhood: "Midtown Manhattan",
+    taxProfile: "nyc",
+    fromAmountCents: 15000,
+    fromUnit: "night",
+    tagline: "Short-term lodging, heart of Midtown",
+    style: "Private room, shared bathroom with one neighbour",
+    bathroom: "Bathroom shared with one adjacent room",
+    roomsLabel: "Short-term lodging",
+    roomTypeShort: "Private room",
+    bathroomShort: "Shared with one room",
+    minStay: "From one week; nightly under a month, monthly from 30 nights",
+    minStayShort: "One week",
+    commute: "Programming takes place at both Seton and Mansfield, so many sessions happen right in the building. Seton is under a mile away, about a 15-minute walk.",
+    commuteShort: "On site",
+    description:
+      "The Mansfield is the short-term building: a historic boutique hotel on West 44th Street with private rooms for stays from one week upwards. Every room has a queen bed, study desk and nightstand, and locks like any hotel room; the bathroom is shared with the one room next door. Under a month you pay per night; from 30 nights you pay per month, and the monthly rate drops from three and again from five months. Programming takes place at both Seton and Mansfield, and Times Square and Grand Central are a five-minute walk.",
+    included: [
+      "Private room, queen bed, study desk",
+      "Bathroom shared with one adjacent room",
+      "All utilities",
+      "Furniture and furnishings",
+      "High-speed Wi-Fi",
+      "Fitness center, lounge and shared kitchen",
+    ],
+    photos: [
+      { src: "/images/mansfield/1.webp", alt: "Mansfield guest room with queen bed, desk and floor lamp" },
+      { src: "/images/mansfield/2.webp", alt: "Mansfield room with bay windows, mini-fridge and microwave" },
+      { src: "/images/mansfield/3.webp", alt: "Mansfield guest room with wall-mounted TV and bathroom" },
+      { src: "/images/mansfield/4.webp", alt: "Mansfield wood-paneled lounge with fireplace and TV" },
+      { src: "/images/mansfield/5.webp", alt: "Mansfield shared kitchen and dining area" },
+      { src: "/images/mansfield/6.webp", alt: "Mansfield lobby with ornate ceiling and front desk" },
+      { src: "/images/mansfield/7.webp", alt: "The Mansfield facade on West 44th Street" },
+    ],
+    cover: "/images/mansfield/7.webp",
+    coverAlt: "The Mansfield facade on West 44th Street",
+  },
   seton: {
     slug: "seton",
     name: "Seton",
+    city: "New York",
     address: "144 East 40th Street",
     neighborhood: "Murray Hill, Manhattan",
-    weeklyRateCents: 52500,
+    taxProfile: "nyc",
+    fromAmountCents: 52500,
+    fromUnit: "week",
     tagline: "Hotel-style room, program on site",
     style: "Hotel-style room (studio layout)",
     bathroom: "Private en-suite bathroom, inside the room",
     roomsLabel: "Hotel-style rooms",
     roomTypeShort: "Hotel-style studio",
     bathroomShort: "En-suite bathroom",
-    minStay: "Multi-month stays only (3 months or longer)",
+    minStay: "Multi-month stays only (4 months or longer)",
+    minStayShort: "Four months",
     commute: "Programming takes place at both Seton and Mansfield. Sessions at Seton happen in your building; Mansfield is about a 15-minute walk.",
     commuteShort: "On site",
     description:
-      "Each guest has a private, hotel-style room, similar to a small studio apartment, with a private en-suite bathroom inside the room. The residency's activities and presentations take place at Seton and Mansfield. Seton is multi-month lodging: bookings start at three months. For a shorter stay, book the Mansfield.",
+      "Each guest has a private, hotel-style room, similar to a small studio apartment, with a private en-suite bathroom inside the room. The residency's activities and presentations take place at Seton and Mansfield. Seton is multi-month lodging: stays start at four months. For a shorter stay, ask about the Mansfield.",
     included: [
       "Hotel-style room (studio layout)",
       "Private en-suite bathroom inside the room",
@@ -78,100 +145,65 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     cover: "/images/seton/1.webp",
     coverAlt: "Seton Hotel entrance on East 40th Street",
   },
-  stratford: {
-    slug: "stratford",
-    name: "Stratford",
-    address: "117 West 70th Street",
-    neighborhood: "Upper West Side",
-    weeklyRateCents: 40000,
-    tagline: "Dorm-style, lower cost",
-    style: "Basic, dorm-style room",
-    bathroom: "Shared bathrooms",
-    roomsLabel: "Dorm-style rooms",
-    roomTypeShort: "Dorm-style",
-    bathroomShort: "Shared",
+  capitol: {
+    slug: "capitol",
+    name: "Capitol",
+    city: "Austin",
+    address: "1108 Nueces Street",
+    neighborhood: "Downtown Austin",
+    taxProfile: "austin",
+    fromAmountCents: 65000,
+    fromUnit: "week",
+    tagline: "Austin: private rooms in shared apartments, downtown",
+    style: "Private bedroom in a four-bedroom apartment",
+    bathroom: "Two full bathrooms shared within the apartment",
+    roomsLabel: "Austin residence",
+    roomTypeShort: "Private bedroom, shared apartment",
+    bathroomShort: "Two per apartment",
     minStay: "Multi-month stays only (3 months or longer)",
-    commute: "Activities and presentations are held at Seton and Mansfield, both in Midtown. From Stratford that is roughly 20 minutes by subway.",
-    commuteShort: "~20 min by subway",
+    minStayShort: "Three months",
+    commute: "Capitol is the house for the Austin program. It sits two blocks west of the Texas State Capitol, a 15-minute walk from UT Austin and three blocks from 6th Street.",
+    commuteShort: "Downtown Austin",
     description:
-      "Stratford is the lower-cost option. Rooms are basic and dorm-style, with shared bathrooms, shared common spaces, and a courtyard on the Upper West Side. Stratford is multi-month lodging: bookings start at three months. For a shorter stay, book the Mansfield.",
+      "Capitol is a contemporary five-story building in the heart of Downtown Austin. Each apartment has four private bedrooms plus a sunroom set around an open kitchen and living area, with two full bathrooms, quartz counters, stainless appliances and polished concrete floors. You take one private room and share the kitchen and bathrooms with your apartment-mates. The building has a fitness center, a designer lobby, secure gated entry, bike storage, a rooftop terrace and free laundry on every floor. Capitol is multi-month lodging: stays start at three months.",
     included: [
-      "Basic, dorm-style room",
-      "Shared bathrooms",
-      "All utilities",
+      "Private bedroom, full-size bed, study desk",
+      "Shared kitchen with dishwasher, two full bathrooms",
+      "Internet, Wi-Fi, gas and water",
       "Furniture and furnishings",
-      "High-speed Wi-Fi",
-      "Shared common spaces and courtyard",
+      "Fitness center and rooftop terrace",
+      "Free laundry on every floor",
     ],
     photos: [
-      { src: "/images/stratford/s7.jpeg", alt: "Stratford dorm room with bed, desk and rug" },
-      { src: "/images/stratford/s6.jpeg", alt: "Stratford dorm room with single bed, nightstand and window", pos: "center 72%" },
-      { src: "/images/stratford/s3.jpeg", alt: "Stratford lobby with blue walls and front desk" },
-      { src: "/images/stratford/s1.jpeg", alt: "Stratford game room with pool table and arcade machines" },
-      { src: "/images/stratford/s4.jpeg", alt: "Stratford courtyard deck with benches and tables" },
-      { src: "/images/stratford/s2.jpeg", alt: "Stratford shared laundry room" },
-      { src: "/images/stratford/facade.jpeg", alt: "The Stratford building on West 70th Street, full facade" },
+      { src: "/images/capitol/1.webp", alt: "Capitol building exterior on Nueces Street, Downtown Austin" },
+      { src: "/images/capitol/2.webp", alt: "Capitol resident lounge with sofas, dining table and city views" },
+      { src: "/images/capitol/3.webp", alt: "Capitol apartment kitchen with island, quartz counters and stainless appliances" },
+      { src: "/images/capitol/4.webp", alt: "Capitol fitness center with squat rack, free weights and cardio machines" },
+      { src: "/images/capitol/5.webp", alt: "Capitol lobby with botanical mural, wood-slat ceiling and mailboxes" },
+      { src: "/images/capitol/6.webp", alt: "Capitol rooftop terrace with dining table and downtown Austin skyline" },
+      { src: "/images/capitol/7.webp", alt: "Capitol study room with long wooden table and bookshelves" },
     ],
-    cover: "/images/stratford/facade.jpeg",
-    coverAlt: "The Stratford building on West 70th Street, full facade",
-  },
-  mansfield: {
-    slug: "mansfield",
-    name: "Mansfield",
-    address: "12 West 44th Street",
-    neighborhood: "Midtown Manhattan",
-    weeklyRateCents: 71875,
-    tagline: "Short-term lodging, heart of Midtown",
-    style: "Hotel-style rooms, single or shared",
-    bathroom: "Private and shared bathroom options, varies by room",
-    roomsLabel: "Short-term lodging",
-    roomTypeShort: "Hotel-style, single or shared",
-    bathroomShort: "Varies by room",
-    minStay: "Short-term stays, from one week",
-    commute: "Programming takes place at both Seton and Mansfield, so many sessions happen right in the building. Seton is under a mile away, about a 15-minute walk.",
-    commuteShort: "On site",
-    description:
-      "The Mansfield is the short-term building: a historic boutique hotel on West 44th Street offering hotel-style rooms with both single and shared room options, for stays from one week upwards. Rooms come furnished with a queen bed, study desk, Smart TV, and a mini-fridge and microwave. Programming takes place at both Seton and Mansfield, and Times Square and Grand Central are a five-minute walk.",
-    included: [
-      "Single and shared room options",
-      "Short-term stays, from one week",
-      "All utilities",
-      "Furniture and furnishings",
-      "High-speed Wi-Fi",
-      "Fitness center, lounge and shared kitchen",
-    ],
-    photos: [
-      { src: "/images/mansfield/1.webp", alt: "Mansfield guest room with queen bed, desk and floor lamp" },
-      { src: "/images/mansfield/2.webp", alt: "Mansfield room with bay windows, mini-fridge and microwave" },
-      { src: "/images/mansfield/3.webp", alt: "Mansfield guest room with wall-mounted TV and bathroom" },
-      { src: "/images/mansfield/4.webp", alt: "Mansfield wood-paneled lounge with fireplace and TV" },
-      { src: "/images/mansfield/5.webp", alt: "Mansfield shared kitchen and dining area" },
-      { src: "/images/mansfield/6.webp", alt: "Mansfield lobby with ornate ceiling and front desk" },
-      { src: "/images/mansfield/7.webp", alt: "The Mansfield facade on West 44th Street" },
-    ],
-    cover: "/images/mansfield/7.webp",
-    coverAlt: "The Mansfield facade on West 44th Street",
+    cover: "/images/capitol/1.webp",
+    coverAlt: "Capitol building exterior on Nueces Street, Downtown Austin",
   },
 };
 
-// Organizer request 2026-07-20: Mansfield first, then Seton, then Stratford.
-export const BUILDING_LIST = [BUILDINGS.mansfield, BUILDINGS.seton, BUILDINGS.stratford];
+// Site order: Mansfield, Seton, then Capitol.
+export const BUILDING_LIST = [BUILDINGS.mansfield, BUILDINGS.seton, BUILDINGS.capitol];
 
 // ---- Room types (sub-listings) ----
-// Each bookable room type has its own backend listing; the slug here IS the
-// backend building id the quote/booking API expects. Weekly rates are display
-// copy only. Mansfield rates listed here are the SHORT-TERM prices (backend
-// base x 1.25), so the card price is exactly what a short-term guest pays per
-// week (CEO request 2026-08-27: posted price = actual price). The backend
-// still stores the 6+ month base rate; its quote comes out at the listed
-// price for stays under 3 months, 8% below it for 3-6 months, and 20% below
-// it for 6 months or longer.
+// Each room type has its own backend listing; the slug here IS the backend
+// building id the application form sends as the preference.
+
+export type RoomRate =
+  | { kind: "weekly"; weeklyRateCents: number }
+  | { kind: "monthly"; nightlyCents: number; tiers: readonly { minNights: number; monthlyCents: number; label: string }[] };
 
 export interface RoomType {
-  slug: string; // backend listing id, e.g. "mansfield-studio-king"
+  slug: string; // backend listing id, e.g. "capitol-loft"
   building: BuildingSlug;
-  name: string; // short name shown on cards, e.g. "Studio King"
-  weeklyRateCents: number;
+  name: string; // short name shown on cards, e.g. "Loft"
+  rate: RoomRate;
   bed: string;
   bathroom: string;
   summary: string;
@@ -183,11 +215,11 @@ export const ROOM_TYPES: RoomType[] = [
     slug: "mansfield-semi-basic",
     building: "mansfield",
     name: "Shared Suite",
-    weeklyRateCents: 71875,
+    rate: { kind: "monthly", nightlyCents: MANSFIELD_PRICING.nightlyCents, tiers: MANSFIELD_PRICING.tiers },
     bed: "Queen bed",
     bathroom: "Shared with one adjacent room",
     summary:
-      "Your own room at the lowest Mansfield rate: queen bed, study desk and nightstand. Only the bathroom is shared, with the one room next door.",
+      "Your own room: queen bed, study desk and nightstand. Only the bathroom is shared, with the one room next door. Priced per night under a month, per month from 30 nights.",
     photos: [
       { src: "/images/mansfield/1.webp", alt: "Mansfield Shared Suite with queen bed, desk and floor lamp" },
       { src: "/images/mansfield/2.webp", alt: "Mansfield Shared Suite with bay windows, mini-fridge and microwave" },
@@ -195,90 +227,10 @@ export const ROOM_TYPES: RoomType[] = [
     ],
   },
   {
-    slug: "mansfield-semi-plus",
-    building: "mansfield",
-    name: "Deluxe Shared Suite",
-    weeklyRateCents: 74375,
-    bed: "Queen bed",
-    bathroom: "Shared with one adjacent room",
-    summary:
-      "The same idea with more room to work in: queen bed, study desk and extra floor space, bathroom shared with the one room next door.",
-    photos: [
-      { src: "/images/mansfield/semi-plus-1.webp", alt: "Mansfield Deluxe Shared Suite with queen bed and desk" },
-      { src: "/images/mansfield/semi-plus-2.webp", alt: "Mansfield Deluxe Shared Suite, seating corner" },
-      { src: "/images/mansfield/semi-plus-3.webp", alt: "Mansfield Deluxe Shared Suite with window view" },
-    ],
-  },
-  {
-    slug: "mansfield-studio-basic",
-    building: "mansfield",
-    name: "Studio Basic",
-    weeklyRateCents: 86875,
-    bed: "Queen bed",
-    bathroom: "Private en-suite",
-    summary:
-      "A studio-style room with its own entrance from the hallway. Nothing is shared: private bathroom, own study desk, queen bed.",
-    photos: [
-      { src: "/images/mansfield/studio-basic-1.webp", alt: "Mansfield Studio Basic room with queen bed" },
-      { src: "/images/mansfield/studio-basic-2.webp", alt: "Mansfield Studio Basic room, desk and TV" },
-      { src: "/images/mansfield/studio-basic-3.webp", alt: "Mansfield Studio Basic private bathroom" },
-    ],
-  },
-  {
-    slug: "mansfield-studio-plus",
-    building: "mansfield",
-    name: "Studio Plus",
-    weeklyRateCents: 90625,
-    bed: "Queen bed",
-    bathroom: "Private en-suite",
-    summary:
-      "A brighter, larger studio-style room with its own entrance from the hallway, private bathroom, study desk and queen bed.",
-    photos: [
-      { src: "/images/mansfield/studio-plus-1.webp", alt: "Mansfield Studio Plus room with queen bed and bright windows" },
-      { src: "/images/mansfield/studio-plus-2.webp", alt: "Mansfield Studio Plus room, work desk" },
-      { src: "/images/mansfield/studio-plus-3.webp", alt: "Mansfield Studio Plus room interior" },
-    ],
-  },
-  {
-    slug: "mansfield-studio-king",
-    building: "mansfield",
-    name: "Studio King",
-    weeklyRateCents: 93125,
-    bed: "King bed",
-    bathroom: "Private en-suite",
-    summary:
-      "The largest room at the Mansfield: king bed, private entrance from the hallway, private bathroom and the most living space.",
-    photos: [
-      { src: "/images/mansfield/studio-king-1.webp", alt: "Mansfield Studio King room with king bed" },
-      { src: "/images/mansfield/studio-king-2.webp", alt: "Mansfield Studio King room, lounge corner" },
-      { src: "/images/mansfield/studio-king-3.webp", alt: "Mansfield Studio King room with desk and TV" },
-    ],
-  },
-  {
-    slug: "mansfield-double-suite",
-    building: "mansfield",
-    name: "Double Suite",
-    // Both halves of one apartment, so the rate is the two rooms added up.
-    weeklyRateCents: 146250,
-    bed: "Two bedrooms, a queen bed in each",
-    bathroom: "Private between the two rooms",
-    summary:
-      "Both rooms of one Mansfield pair, taken together: two separate bedrooms with a queen bed each, connected by a bathroom nobody else uses. Room to share with someone without sharing a room.",
-    // The lead is a diptych of the pair's two bedrooms, built from the two
-    // rooms' own photos (assets/roomtypes/double-suite.md records how). Only
-    // exposure and white balance were matched between the halves; the bedding
-    // really is orange in one room and teal in the other.
-    photos: [
-      { src: "/images/mansfield/double-suite-1.webp", alt: "The two bedrooms of a Mansfield Double Suite, side by side" },
-      { src: "/images/mansfield/2.webp", alt: "Mansfield Double Suite with the connecting doors open to the second room" },
-      { src: "/images/mansfield/3.webp", alt: "The bathroom between the two Mansfield Double Suite bedrooms" },
-    ],
-  },
-  {
     slug: "seton-deluxe",
     building: "seton",
     name: "Deluxe Room",
-    weeklyRateCents: 52500,
+    rate: { kind: "weekly", weeklyRateCents: 52500 },
     bed: "Full-size bed",
     bathroom: "Private en-suite",
     summary:
@@ -293,7 +245,7 @@ export const ROOM_TYPES: RoomType[] = [
     slug: "seton-studio-basic",
     building: "seton",
     name: "Studio Basic",
-    weeklyRateCents: 65000,
+    rate: { kind: "weekly", weeklyRateCents: 65000 },
     bed: "Queen bed",
     bathroom: "Private en-suite",
     summary:
@@ -308,7 +260,7 @@ export const ROOM_TYPES: RoomType[] = [
     slug: "seton-king-studio",
     building: "seton",
     name: "King Studio",
-    weeklyRateCents: 74500,
+    rate: { kind: "weekly", weeklyRateCents: 74500 },
     bed: "King bed",
     bathroom: "Private en-suite",
     summary:
@@ -320,31 +272,33 @@ export const ROOM_TYPES: RoomType[] = [
     ],
   },
   {
-    slug: "stratford-private",
-    building: "stratford",
-    name: "Private Room",
-    weeklyRateCents: 40000,
-    bed: "Single bed",
-    bathroom: "Shared bathrooms on the floor",
+    slug: "capitol-loft",
+    building: "capitol",
+    name: "Loft",
+    rate: { kind: "weekly", weeklyRateCents: 90000 },
+    bed: "Full-size bed",
+    bathroom: "Two full bathrooms shared in the apartment",
     summary:
-      "A basic, dorm-style private room at the lower-cost Stratford, with shared bathrooms on the floor and shared common spaces.",
+      "The largest private bedroom in the apartment: full-size bed, study desk, nightstand and a Smart TV, with big windows and plenty of natural light. Kitchen and bathrooms are shared with your three apartment-mates.",
     photos: [
-      { src: "/images/stratford/s7.jpeg", alt: "Stratford dorm room with bed, desk and rug" },
-      { src: "/images/stratford/s6.jpeg", alt: "Stratford dorm room with single bed, nightstand and window", pos: "center 72%" },
+      { src: "/images/capitol/loft-1.webp", alt: "Capitol Loft bedroom with bed, desk and armchair" },
+      { src: "/images/capitol/loft-2.webp", alt: "Capitol Loft bedroom with two windows and clothes rack" },
+      { src: "/images/capitol/loft-3.webp", alt: "Capitol Loft bedroom with bed, nightstand and wall art" },
     ],
   },
   {
-    slug: "stratford-jack-jill",
-    building: "stratford",
-    name: "Jack and Jill",
-    weeklyRateCents: 45000,
-    bed: "Single bed",
-    bathroom: "Shared with one neighboring room",
+    slug: "capitol-sunroom",
+    building: "capitol",
+    name: "Sunroom",
+    rate: { kind: "weekly", weeklyRateCents: 65000 },
+    bed: "Full-size bed",
+    bathroom: "Two full bathrooms shared in the apartment",
     summary:
-      "A dorm-style room where the bathroom is shared with just one neighboring room instead of the whole floor.",
+      "The apartment's sunroom set up as a private bedroom: full-size bed, study desk, nightstand and a Smart TV behind a modular partition with an accordion door. Bright and the best value, with less sound isolation than the Loft.",
     photos: [
-      { src: "/images/stratford/s6.jpeg", alt: "Stratford dorm room with single bed, nightstand and window", pos: "center 72%" },
-      { src: "/images/stratford/s7.jpeg", alt: "Stratford dorm room with bed, desk and rug" },
+      { src: "/images/capitol/sunroom-1.webp", alt: "Capitol Sunroom bedroom with bed, desk and window" },
+      { src: "/images/capitol/sunroom-2.webp", alt: "Capitol Sunroom bedroom with desk, wall art and city view" },
+      { src: "/images/capitol/sunroom-3.webp", alt: "Capitol Sunroom with wall-mounted TV and desk" },
     ],
   },
 ];
@@ -357,20 +311,13 @@ export function roomTypeBySlug(slug: string | undefined | null): RoomType | null
   return ROOM_TYPES.find((r) => r.slug === slug) ?? null;
 }
 
-// Lowest active room-type rate, for "from $X/week" copy.
-export function fromRateCents(building: BuildingSlug): number {
-  return Math.min(...roomTypesFor(building).map((r) => r.weeklyRateCents));
+export function isBuildingSlug(value: string | undefined | null): value is BuildingSlug {
+  return value === "mansfield" || value === "seton" || value === "capitol";
 }
 
-// Where old parent-building deep links land: the room type whose price the
-// site advertised before sub-listings existed.
-export const DEFAULT_ROOM: Record<BuildingSlug, string> = {
-  mansfield: "mansfield-semi-basic",
-  seton: "seton-studio-basic",
-  stratford: "stratford-private",
-};
-
-// Only Mansfield rooms carry the stay-length premium (base = 6+ month rate).
-export function hasStayPremium(building: BuildingSlug): boolean {
-  return building === "mansfield";
+// The headline price on a room card: "$150" + "/night" or "$900" + "/week".
+export function rateHeadline(rate: RoomRate): { amountCents: number; unit: "night" | "week" } {
+  return rate.kind === "monthly"
+    ? { amountCents: rate.nightlyCents, unit: "night" }
+    : { amountCents: rate.weeklyRateCents, unit: "week" };
 }

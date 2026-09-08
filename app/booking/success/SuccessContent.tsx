@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { fetchBookingStatus, type BookingStatus } from "@/lib/api";
-import { BUILDINGS, roomTypeBySlug } from "@/lib/buildings";
+import { BUILDINGS, isBuildingSlug, roomTypeBySlug } from "@/lib/buildings";
 import { formatDate, formatMoney } from "@/lib/format";
 
 const POLL_MS = 2500;
@@ -50,11 +50,11 @@ export function SuccessContent() {
         <h1 className="font-display text-3xl">We could not find that booking</h1>
         <p className="mt-4 text-ink/70 leading-relaxed">
           The link may be incomplete. If you just paid, your booking is safe
-          and the confirmation will reach your email. You can also start
-          again below.
+          and the confirmation will reach your email. If something looks
+          wrong, tell the housing team below.
         </p>
-        <Link href="/book" className="mt-8 inline-block bg-pine text-paper font-mono text-[13px] tracking-[0.18em] uppercase px-8 py-4">
-          Back to booking
+        <Link href="/apply" className="mt-8 inline-block bg-pine text-paper font-mono text-[13px] tracking-[0.18em] uppercase px-8 py-4">
+          Contact the team
         </Link>
       </div>
     );
@@ -64,12 +64,15 @@ export function SuccessContent() {
     return <p className="font-mono text-[13px] text-ink/50">Checking your booking…</p>;
   }
 
-  // building_id is a room-type slug (e.g. "mansfield-studio-king"); older
-  // bookings may still carry a bare building slug.
+  // building_id is a room-type slug (e.g. "capitol-loft"); older bookings may
+  // carry a bare building slug or a retired listing (Stratford), which just
+  // falls back to the raw id.
   const room = roomTypeBySlug(booking.building_id);
   const building = room
     ? BUILDINGS[room.building]
-    : BUILDINGS[booking.building_id as keyof typeof BUILDINGS];
+    : isBuildingSlug(booking.building_id)
+      ? BUILDINGS[booking.building_id]
+      : null;
   const confirmed = booking.status === "confirmed";
   const processing = booking.status === "processing" || booking.status === "pending_payment";
 

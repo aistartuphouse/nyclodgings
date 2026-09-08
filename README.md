@@ -1,9 +1,11 @@
-# NYC Lodgings — AI Tech House Boot Camp housing site
+# AI Startup House Lodging site
 
-Marketing and booking front end for the boot camp housing at two Manhattan
-buildings (Seton, Murray Hill and Stratford, Upper West Side). This
-repository contains the front end only; the booking/payment backend is
-operated separately and is not part of this codebase.
+Marketing and request front end for the residency housing: Mansfield and
+Seton in Manhattan, Capitol in Downtown Austin. Since 2026-09-08 the site
+takes applications only (no instant booking); the housing team creates every
+booking and sends a payment link from its own console. This repository
+contains the front end only; the booking/payment backend is operated
+separately and is not part of this codebase.
 
 ## Stack
 

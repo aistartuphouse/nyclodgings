@@ -2,9 +2,18 @@
 
 import { useState } from "react";
 import { createApplication } from "@/lib/api";
-import { MOVE_IN_DEADLINE, todayNY } from "@/lib/format";
+import { BUILDING_LIST, roomTypesFor, rateHeadline, type BuildingSlug } from "@/lib/buildings";
+import { formatMoney, todayNY } from "@/lib/format";
 
-export function ApplyForm({ source }: { source?: string | null }) {
+// The preference is a building slug ("seton") or a room-type slug
+// ("capitol-loft"); the backend accepts both and the housing team reads it.
+export function ApplyForm({
+  source,
+  initialPreference,
+}: {
+  source?: string | null;
+  initialPreference?: string | null;
+}) {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,10 +45,11 @@ export function ApplyForm({ source }: { source?: string | null }) {
   if (done) {
     return (
       <div className="bg-pine text-paper p-8 sm:p-10">
-        <h2 className="font-display text-2xl">Application received</h2>
+        <h2 className="font-display text-2xl">Request received</h2>
         <p className="mt-3 text-paper/75 leading-relaxed max-w-lg">
-          The housing team will come back to you by email with options and
-          next steps. No payment or commitment is required at this stage.
+          The housing team will come back to you by email with the room, the
+          exact price including tax, and a payment link. No payment or
+          commitment is required at this stage.
         </p>
       </div>
     );
@@ -63,26 +73,41 @@ export function ApplyForm({ source }: { source?: string | null }) {
         <label htmlFor="a-phone" className={labelCls}>Phone</label>
         <input id="a-phone" name="phone" type="tel" className={`${inputCls} mt-2`} autoComplete="tel" />
       </div>
-      <div>
-        <label htmlFor="a-building" className={labelCls}>Preferred building</label>
-        <select id="a-building" name="building" className={`${inputCls} mt-2`} defaultValue="">
+      <div className="sm:col-span-2">
+        <label htmlFor="a-building" className={labelCls}>Preferred room</label>
+        <select
+          id="a-building"
+          name="building"
+          className={`${inputCls} mt-2`}
+          defaultValue={initialPreference ?? ""}
+        >
           <option value="">No preference yet</option>
-          <option value="mansfield">Mansfield (short-term, from $718.75/week)</option>
-          <option value="seton">Seton (multi-month, from $525/week)</option>
-          <option value="stratford">Stratford (multi-month, from $400/week)</option>
+          {BUILDING_LIST.map((b) => (
+            <optgroup key={b.slug} label={`${b.name}, ${b.city} (${b.minStay.toLowerCase()})`}>
+              <option value={b.slug}>Any room at {b.name}</option>
+              {roomTypesFor(b.slug as BuildingSlug).map((r) => {
+                const h = rateHeadline(r.rate);
+                return (
+                  <option key={r.slug} value={r.slug}>
+                    {b.name} {r.name} ({formatMoney(h.amountCents)}/{h.unit})
+                  </option>
+                );
+              })}
+            </optgroup>
+          ))}
         </select>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label htmlFor="a-movein" className={labelCls}>Move-in</label>
-          <input id="a-movein" name="moveIn" type="date" min={todayNY()} max={MOVE_IN_DEADLINE} className={`${inputCls} mt-2`} />
+          <input id="a-movein" name="moveIn" type="date" min={todayNY()} className={`${inputCls} mt-2`} />
         </div>
         <div>
           <label htmlFor="a-moveout" className={labelCls}>Move-out</label>
           <input id="a-moveout" name="moveOut" type="date" className={`${inputCls} mt-2`} />
         </div>
       </div>
-      <label className="sm:col-span-2 flex items-start gap-3 text-[15px] text-ink/75 cursor-pointer">
+      <label className="flex items-start gap-3 text-[15px] text-ink/75 cursor-pointer sm:pt-8">
         <input type="checkbox" name="upgradeInterest" className="mt-1 size-4 accent-teal-dim" />
         I am interested in a larger room, suite, or apartment
       </label>
@@ -108,7 +133,7 @@ export function ApplyForm({ source }: { source?: string | null }) {
           disabled={submitting}
           className="bg-pine text-paper font-mono text-[13px] tracking-[0.18em] uppercase px-10 py-4 transition-colors hover:bg-pine-deep disabled:opacity-40"
         >
-          {submitting ? "Sending" : "Send application"}
+          {submitting ? "Sending" : "Send request"}
         </button>
       </div>
     </form>

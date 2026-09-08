@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BUILDING_LIST } from "@/lib/buildings";
 
 export function SiteFooter() {
   return (
@@ -14,7 +15,8 @@ export function SiteFooter() {
             </div>
             <p className="mt-4 text-sm leading-relaxed text-ink/60">
               Housing for Entrepreneur AI Startup House participants in New York
-              City. Organized with the residency team at Real AI Dynamics.
+              City and Austin. Organized with the residency team at Real AI
+              Dynamics.
             </p>
             <a
               href="https://realaidynamics.com"
@@ -27,40 +29,35 @@ export function SiteFooter() {
           </div>
           <div className="font-mono text-[13px] leading-7 text-ink/70">
             <div className="text-ink/40 uppercase tracking-[0.18em] text-[11px] mb-3">Buildings</div>
-            <div>
-              <Link href="/seton" className="hover:text-teal transition-colors">Seton</Link>
-              <span className="text-ink/40"> · 144 E 40th St, Murray Hill</span>
-            </div>
-            <div>
-              <Link href="/stratford" className="hover:text-teal transition-colors">Stratford</Link>
-              <span className="text-ink/40"> · 117 W 70th St, Upper West Side</span>
-            </div>
-            <div>
-              <Link href="/mansfield" className="hover:text-teal transition-colors">Mansfield</Link>
-              <span className="text-ink/40"> · 12 W 44th St, Midtown</span>
-            </div>
+            {BUILDING_LIST.map((b) => (
+              <div key={b.slug}>
+                <Link href={`/${b.slug}`} className="hover:text-teal transition-colors">{b.name}</Link>
+                <span className="text-ink/40"> · {b.address}, {b.neighborhood}</span>
+              </div>
+            ))}
             <div className="mt-4 text-ink/40 uppercase tracking-[0.18em] text-[11px] mb-3">Booking</div>
-            <div><Link href="/book" className="hover:text-teal transition-colors">Book a room</Link></div>
-            <div><Link href="/apply" className="hover:text-teal transition-colors">Apply / upgrade requests</Link></div>
+            <div><Link href="/apply" className="hover:text-teal transition-colors">Request a room</Link></div>
           </div>
           <div className="text-[12px] leading-relaxed text-ink/45">
             <div className="font-mono text-ink/40 uppercase tracking-[0.18em] text-[11px] mb-3">Notes</div>
             <p>
-              Mansfield hosts short-term stays from one week. Seton and
-              Stratford host multi-month stays of three months (90 nights) or
-              longer. Accommodation rates are weekly and the listed rate is the
-              rate charged for that room at booking. Stays of less than six months may
-              be subject to applicable New York accommodation tax; stays of 180
-              days or longer are not subject to New York accommodation tax. Tax
-              treatment depends on individual circumstances and is subject to
-              change. Room types, pricing and availability are subject to
-              confirmation at the time of booking. Images are representative
-              and actual rooms may vary.
+              Mansfield hosts short-term stays from one week, priced per night
+              under a month and per month from 30 nights. Seton hosts stays of
+              four months (120 nights) or longer and Capitol stays of three
+              months (90 nights) or longer, both at weekly rates. Every stay is
+              confirmed by the housing team and paid in one upfront payment.
+              New York stays of less than six months may be subject to New
+              York accommodation tax; stays of 180 days or longer are not.
+              Austin stays are subject to Texas and City of Austin hotel
+              occupancy tax. Tax treatment depends on individual circumstances
+              and is subject to change. Room types, pricing and availability
+              are subject to confirmation at the time of booking. Images are
+              representative and actual rooms may vary.
             </p>
           </div>
         </div>
         <div className="mt-12 border-t border-line-dark pt-6 flex flex-wrap items-center justify-between gap-3 font-mono text-[11px] tracking-[0.14em] uppercase text-ink/35">
-          <span>Entrepreneur AI Startup House · New York City</span>
+          <span>Entrepreneur AI Startup House · New York City · Austin</span>
           <span>Payments processed by Stripe</span>
         </div>
       </div>

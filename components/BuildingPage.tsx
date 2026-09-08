@@ -3,19 +3,19 @@ import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { BookingForm } from "@/components/BookingForm";
 import {
   BUILDING_LIST,
   BUILDINGS,
-  hasStayPremium,
+  MANSFIELD_PRICING,
+  rateHeadline,
   roomTypesFor,
   type BuildingSlug,
 } from "@/lib/buildings";
 import { fetchAvailability, type RoomAvailability } from "@/lib/api";
 import { formatDate, formatMoney } from "@/lib/format";
 
-// Availability copy for a room card. `null` = the backend has no lobbyboard
-// data yet, so the card looks exactly as it did before this feature.
+// Availability copy for a room card. `null` = no lobbyboard data for this
+// listing (or none at all yet), so the card shows no pill.
 function availabilityLabel(a: RoomAvailability | null): { text: string; tone: "open" | "later" | "closed" } | null {
   if (!a) return null;
   if (a.bookable) {
@@ -24,23 +24,58 @@ function availabilityLabel(a: RoomAvailability | null): { text: string; tone: "o
       : { text: "Available now", tone: "open" };
   }
   if (a.earliestFrom) return { text: `Available from ${formatDate(a.earliestFrom)}`, tone: "later" };
-  return { text: "Fully booked", tone: "closed" };
+  return { text: "Waitlist", tone: "closed" };
+}
+
+function RatesIntro({ slug }: { slug: BuildingSlug }) {
+  if (slug === "mansfield") {
+    return (
+      <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-ink/60">
+        Under a month you pay per night. From 30 nights you pay per month, and
+        the monthly rate steps down at three months and again at five. Extra
+        days on a monthly stay are prorated. NYC accommodation tax is added on
+        top, itemized on your payment link before you pay.
+      </p>
+    );
+  }
+  if (slug === "capitol") {
+    return (
+      <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-ink/60">
+        Capitol takes multi-month stays only: three months (90 nights) or
+        longer. The rate on each card is exactly what you pay per week; Texas
+        and City of Austin hotel occupancy tax (17%) is added on top and
+        itemized on your payment link before you pay.
+      </p>
+    );
+  }
+  return (
+    <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-ink/60">
+      Seton takes multi-month stays only: four months (120 nights) or longer.
+      The rate on each card is exactly what you pay per week; NYC accommodation
+      tax is added on top and itemized on your payment link before you pay.
+      For a shorter stay, ask about the{" "}
+      <Link href="/mansfield" className="underline underline-offset-2">
+        Mansfield
+      </Link>
+      .
+    </p>
+  );
 }
 
 export async function BuildingPage({
   slug,
   source,
-  room,
 }: {
   slug: BuildingSlug;
   source?: string | null;
-  room?: string | null;
 }) {
   const b = BUILDINGS[slug];
   const rooms = roomTypesFor(slug);
   const others = BUILDING_LIST.filter((x) => x.slug !== slug);
   const availability = await fetchAvailability();
   const [lead, second, ...rest] = b.photos;
+  const applyHref = (room?: string) =>
+    `/apply?${room ? `room=${room}` : `building=${slug}`}${source ? `&ref=${encodeURIComponent(source)}` : ""}`;
 
   return (
     <main className="bg-paper">
@@ -55,16 +90,13 @@ export async function BuildingPage({
             priority
             sizes="100vw"
             className="object-cover opacity-75"
-            // Portrait leads read best anchored below center: the furniture
-            // band stays in view instead of ceiling and wall.
-            style={{ objectPosition: slug === "stratford" ? "center 62%" : "center" }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-paper via-paper/20 to-paper/40" aria-hidden />
           <div className="absolute inset-x-0 bottom-0">
             <div className="mx-auto max-w-6xl px-5 sm:px-10 pb-10 flex flex-wrap items-end justify-between gap-6">
               <div>
                 <p className="font-mono text-[12px] tracking-[0.26em] uppercase text-teal">
-                  {b.roomsLabel}
+                  {b.roomsLabel} · {b.city}
                 </p>
                 <h1 className="mt-3 font-display text-[clamp(2.6rem,6vw,4.5rem)] leading-none">{b.name}</h1>
                 <p className="mt-3 font-mono text-[13px] text-ink/70">
@@ -73,8 +105,8 @@ export async function BuildingPage({
               </div>
               <p className="font-display text-4xl">
                 <span className="font-mono text-[13px] text-ink/60">from </span>
-                {formatMoney(b.weeklyRateCents)}
-                <span className="font-mono text-[13px] text-ink/60"> per week</span>
+                {formatMoney(b.fromAmountCents)}
+                <span className="font-mono text-[13px] text-ink/60"> per {b.fromUnit}</span>
               </p>
             </div>
           </div>
@@ -97,10 +129,12 @@ export async function BuildingPage({
             </div>
             <div>
               <dt className="text-ink/45 uppercase tracking-[0.18em] text-[11px]">Minimum stay</dt>
-              <dd className="mt-1.5">{slug === "mansfield" ? "One week" : "Three months"}</dd>
+              <dd className="mt-1.5">{b.minStayShort}</dd>
             </div>
             <div>
-              <dt className="text-ink/45 uppercase tracking-[0.18em] text-[11px]">Commute</dt>
+              <dt className="text-ink/45 uppercase tracking-[0.18em] text-[11px]">
+                {b.city === "Austin" ? "Location" : "Commute"}
+              </dt>
               <dd className="mt-1.5">{b.commuteShort}</dd>
             </div>
           </dl>
@@ -108,7 +142,7 @@ export async function BuildingPage({
         <Reveal delay={0.1}>
           <div className="bg-sand border border-pine/40 text-ink p-7 sm:p-8">
             <h2 className="font-mono text-[11px] tracking-[0.22em] uppercase text-teal">
-              {slug === "seton" ? "What's included" : "Included in the rate"}
+              Included in the rate
             </h2>
             <ul className="mt-4 space-y-2.5 text-[15px]">
               {b.included.map((item) => (
@@ -129,90 +163,82 @@ export async function BuildingPage({
           <h2 className="mt-3 font-display text-[clamp(1.7rem,3.5vw,2.4rem)]">
             {rooms.length} room type{rooms.length === 1 ? "" : "s"} at {b.name}
           </h2>
-          {hasStayPremium(slug) ? (
-            <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-ink/60">
-              The rate on each card is exactly what you pay per week for a
-              short-term stay (under 3 months); taxes are itemized at checkout
-              before you pay. Longer stays cost less: 8% off the listed rate
-              from 3 months, 20% off from 6 months. The booking summary always
-              shows the exact rate for your dates.
-            </p>
-          ) : (
-            <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-ink/60">
-              {b.name} takes multi-month stays only: bookings start at three
-              months (90 nights). The rate on each card is exactly what you pay
-              per week; taxes are itemized at checkout before you pay. For a
-              shorter stay, book the{" "}
-              <Link href="/mansfield" className="underline underline-offset-2">
-                Mansfield
-              </Link>
-              .
-            </p>
-          )}
+          <RatesIntro slug={slug} />
         </Reveal>
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {rooms.map((r, i) => {
             const avail = availability?.[r.slug] ?? null;
             const label = availabilityLabel(avail);
+            const headline = rateHeadline(r.rate);
             return (
-            <Reveal key={r.slug} delay={(i % 3) * 0.08}>
-              <article className="group border border-line bg-sand flex flex-col h-full">
-                <div className="relative aspect-[3/2] overflow-hidden">
-                  <Image
-                    src={r.photos[0]!.src}
-                    alt={r.photos[0]!.alt}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                    style={r.photos[0]!.pos ? { objectPosition: r.photos[0]!.pos } : undefined}
-                  />
-                  {label && (
-                    <span
-                      className={`absolute top-3 left-3 font-mono text-[11px] tracking-[0.14em] uppercase px-2.5 py-1 ${
-                        label.tone === "open"
-                          ? "bg-pine text-paper"
-                          : label.tone === "later"
-                            ? "bg-paper/85 text-ink"
-                            : "bg-ink/75 text-paper"
-                      }`}
-                    >
-                      {label.text}
-                    </span>
-                  )}
-                </div>
-                <div className="p-6 flex flex-col gap-4 grow">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <h3 className="font-display text-2xl">{r.name}</h3>
-                    <p className="font-mono text-[14px] whitespace-nowrap">
-                      {formatMoney(r.weeklyRateCents)}
-                      <span className="text-ink/45 text-[11px]"> /week</span>
-                    </p>
+              <Reveal key={r.slug} delay={(i % 3) * 0.08}>
+                <article className="group border border-line bg-sand flex flex-col h-full">
+                  <div className="relative aspect-[3/2] overflow-hidden">
+                    <Image
+                      src={r.photos[0]!.src}
+                      alt={r.photos[0]!.alt}
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                      style={r.photos[0]!.pos ? { objectPosition: r.photos[0]!.pos } : undefined}
+                    />
+                    {label && (
+                      <span
+                        className={`absolute top-3 left-3 font-mono text-[11px] tracking-[0.14em] uppercase px-2.5 py-1 ${
+                          label.tone === "open"
+                            ? "bg-pine text-paper"
+                            : label.tone === "later"
+                              ? "bg-paper/85 text-ink"
+                              : "bg-ink/75 text-paper"
+                        }`}
+                      >
+                        {label.text}
+                      </span>
+                    )}
                   </div>
-                  <p className="font-mono text-[12px] tracking-wide text-ink/50 -mt-2">
-                    {r.bed} · {r.bathroom}
-                  </p>
-                  <p className="text-[14px] leading-relaxed text-ink/70">{r.summary}</p>
-                  {avail && !avail.bookable ? (
+                  <div className="p-6 flex flex-col gap-4 grow">
+                    <div className="flex items-baseline justify-between gap-4">
+                      <h3 className="font-display text-2xl">{r.name}</h3>
+                      <p className="font-mono text-[14px] whitespace-nowrap">
+                        {formatMoney(headline.amountCents)}
+                        <span className="text-ink/45 text-[11px]"> /{headline.unit}</span>
+                      </p>
+                    </div>
+                    <p className="font-mono text-[12px] tracking-wide text-ink/50 -mt-2">
+                      {r.bed} · {r.bathroom}
+                    </p>
+                    <p className="text-[14px] leading-relaxed text-ink/70">{r.summary}</p>
+                    {r.rate.kind === "monthly" && (
+                      <dl className="border-t border-line pt-3 font-mono text-[12px] space-y-1.5">
+                        <div className="flex justify-between gap-4">
+                          <dt className="text-ink/55">Under 30 nights</dt>
+                          <dd>{formatMoney(r.rate.nightlyCents)} / night</dd>
+                        </div>
+                        {r.rate.tiers.map((t) => (
+                          <div key={t.minNights} className="flex justify-between gap-4">
+                            <dt className="text-ink/55">{t.label}</dt>
+                            <dd>{formatMoney(t.monthlyCents)} / month</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    )}
                     <Link
-                      href={`/apply?building=${slug}`}
-                      className="mt-auto border border-ink/25 text-center font-mono text-[12px] tracking-[0.18em] uppercase px-5 py-3 transition-colors hover:border-pine hover:text-pine"
-                    >
-                      Ask about this room
-                    </Link>
-                  ) : (
-                    <Link
-                      href={`/${slug}?room=${r.slug}#book`}
+                      href={applyHref(r.slug)}
                       className="mt-auto bg-pine text-paper text-center font-mono text-[12px] tracking-[0.18em] uppercase px-5 py-3 transition-colors hover:bg-pine-deep"
                     >
-                      Book this room
+                      Request this room
                     </Link>
-                  )}
-                </div>
-              </article>
-            </Reveal>
+                  </div>
+                </article>
+              </Reveal>
             );
           })}
         </div>
+        {slug === "mansfield" && (
+          <p className="mt-4 font-mono text-[12px] text-ink/50">
+            A month is {MANSFIELD_PRICING.tiers[0].minNights} nights. The rate for your whole stay follows its total length: a 100-night stay is priced entirely at the 3-to-4-month rate.
+          </p>
+        )}
       </section>
 
       {/* Gallery */}
@@ -241,26 +267,40 @@ export async function BuildingPage({
         </div>
       </section>
 
-      {/* Booking */}
+      {/* How booking works */}
       <section id="book" className="bg-paper-dim border-y border-line">
         <div className="mx-auto max-w-6xl px-5 sm:px-10 py-16 sm:py-20">
           <Reveal>
-            <p className="font-mono text-[12px] tracking-[0.26em] uppercase text-pine">Reserve your room</p>
+            <p className="font-mono text-[12px] tracking-[0.26em] uppercase text-pine">How booking works</p>
             <h2 className="mt-3 font-display text-[clamp(1.8rem,4vw,2.6rem)]">
-              Book {b.name} in one payment
+              Request a room at {b.name}, pay once when it is confirmed
             </h2>
           </Reveal>
-          <div className="mt-10">
-            <BookingForm
-              // Remount when a room card is clicked so the new selection
-              // takes over (soft navigation keeps the client state otherwise).
-              key={room ?? "default"}
-              initialBuilding={slug}
-              initialRoom={room}
-              source={source}
-              lockBuilding
-            />
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {[
+              ["1", "Send your request", `Pick a room type and tell us your dates. ${b.name} takes stays of ${b.minStayShort.toLowerCase()} or longer.`],
+              ["2", "We confirm the room", "The housing team checks availability, confirms the room and the exact price with tax, and emails you a payment link."],
+              ["3", "One payment, done", "Pay the whole stay in one go, by card or US bank transfer. The room is yours the moment the payment clears."],
+            ].map(([n, title, body], i) => (
+              <Reveal key={n} delay={i * 0.08}>
+                <div className="bg-sand border border-line p-6 h-full">
+                  <p className="font-mono text-[12px] tracking-[0.2em] text-teal">{n}</p>
+                  <h3 className="mt-2 font-display text-xl">{title}</h3>
+                  <p className="mt-2 text-[14px] leading-relaxed text-ink/70">{body}</p>
+                </div>
+              </Reveal>
+            ))}
           </div>
+          <Reveal>
+            <div className="mt-10">
+              <Link
+                href={applyHref()}
+                className="inline-block bg-pine text-paper font-mono text-[13px] tracking-[0.18em] uppercase px-10 py-4 transition-colors hover:bg-pine-deep"
+              >
+                Request a room at {b.name}
+              </Link>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -272,10 +312,10 @@ export async function BuildingPage({
             href={`/${other.slug}`}
             className="group border border-line bg-sand p-6 transition-colors hover:border-pine"
           >
-            <p className="font-mono text-[11px] tracking-[0.22em] uppercase text-ink/45">Also available</p>
+            <p className="font-mono text-[11px] tracking-[0.22em] uppercase text-ink/45">Also available · {other.city}</p>
             <p className="mt-2 font-display text-2xl">
               {other.name}
-              <span className="text-ink/40 text-lg"> · from {formatMoney(other.weeklyRateCents)}/week</span>
+              <span className="text-ink/40 text-lg"> · from {formatMoney(other.fromAmountCents)}/{other.fromUnit}</span>
             </p>
             <p className="mt-1 text-[14px] text-ink/60">{other.tagline}</p>
           </Link>
@@ -287,7 +327,7 @@ export async function BuildingPage({
           <p className="font-mono text-[11px] tracking-[0.22em] uppercase text-ink/45">Larger rooms</p>
           <p className="mt-2 font-display text-2xl">Suites and apartments</p>
           <p className="mt-1 text-[14px] text-ink/60">
-            Limited numbers at all three buildings, requested separately.
+            Limited numbers, requested separately.
           </p>
         </Link>
       </section>

@@ -20,22 +20,22 @@ export default function CancelledPage() {
           No charge was made
         </h1>
         <p className="mt-4 text-ink/70 leading-relaxed max-w-lg">
-          You left checkout before paying, so nothing was booked and nothing
-          was charged. Your dates are not held; when you are ready, start
-          again and the price will recalculate.
+          You left checkout before paying, so nothing was charged. Your
+          reservation is still waiting for you: the payment link in our email
+          does not expire, open it again whenever you are ready.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
-            href="/book"
+            href="/"
             className="bg-pine text-paper font-mono text-[13px] tracking-[0.18em] uppercase px-8 py-4 transition-colors hover:bg-pine-deep"
           >
-            Start again
+            Back to the site
           </Link>
           <Link
             href="/apply"
             className="border border-ink/25 font-mono text-[12px] tracking-[0.18em] uppercase px-6 py-4 hover:border-pine hover:text-pine transition-colors"
           >
-            Talk to the team instead
+            Talk to the team
           </Link>
         </div>
       </div>
