@@ -10,8 +10,10 @@
 //   Seton (NYC)      - multi-month only, 4 months (120 nights) or longer,
 //                      weekly rates unchanged.
 //   Capitol (Austin) - new, multi-month, 3 months (90 nights) or longer,
-//                      weekly rates, Texas + City of Austin hotel tax (17%)
-//                      instead of the NYC bands.
+//                      weekly all-inclusive rates, Texas + City of Austin
+//                      hotel tax (17%) instead of the NYC bands. Three room
+//                      types since 2026-09-10: Sunroom $180, Deluxe $210,
+//                      Loft $240 (the 09-08 $650/$900 figures were wrong).
 //   Stratford        - retired.
 
 export type BuildingSlug = "mansfield" | "seton" | "capitol";
@@ -152,24 +154,24 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     address: "1108 Nueces Street",
     neighborhood: "Downtown Austin",
     taxProfile: "austin",
-    fromAmountCents: 65000,
+    fromAmountCents: 18000,
     fromUnit: "week",
-    tagline: "Austin: private rooms in shared apartments, downtown",
-    style: "Private bedroom in a four-bedroom apartment",
-    bathroom: "Two full bathrooms shared within the apartment",
+    tagline: "Austin: private rooms and a loft suite, downtown",
+    style: "Private bedroom in a shared apartment, or an open-plan loft suite",
+    bathroom: "Two full bathrooms shared within the apartment; the Loft has its own",
     roomsLabel: "Austin residence",
-    roomTypeShort: "Private bedroom, shared apartment",
+    roomTypeShort: "Bedroom or loft suite",
     bathroomShort: "Two per apartment",
     minStay: "Multi-month stays only (3 months or longer)",
     minStayShort: "Three months",
     commute: "Capitol is the house for the Austin program. It sits two blocks west of the Texas State Capitol, a 15-minute walk from UT Austin and three blocks from 6th Street.",
     commuteShort: "Downtown Austin",
     description:
-      "Capitol is a contemporary five-story building in the heart of Downtown Austin. Each apartment has four private bedrooms plus a sunroom set around an open kitchen and living area, with two full bathrooms, quartz counters, stainless appliances and polished concrete floors. You take one private room and share the kitchen and bathrooms with your apartment-mates. The building has a fitness center, a designer lobby, secure gated entry, bike storage, a rooftop terrace and free laundry on every floor. Capitol is multi-month lodging: stays start at three months.",
+      "Capitol is a contemporary five-story building in the heart of Downtown Austin. Each apartment has four private bedrooms plus a sunroom set around an open kitchen and living area, with two full bathrooms, quartz counters, stainless appliances and polished concrete floors. You take one private room, the Sunroom or the Deluxe, and share the kitchen and bathrooms with your apartment-mates; the Loft is an open-plan suite with its own kitchen and bathroom. Every rate is all-inclusive. The building has a fitness center, a designer lobby, secure gated entry, bike storage, a rooftop terrace and free laundry on every floor. Capitol is multi-month lodging: stays start at three months.",
     included: [
-      "Private bedroom, full-size bed, study desk",
-      "Shared kitchen with dishwasher, two full bathrooms",
-      "Internet, Wi-Fi, gas and water",
+      "Private bedroom or loft suite, study desk",
+      "Shared kitchen with dishwasher, two full bathrooms (the Loft has its own)",
+      "All utilities, internet and Wi-Fi",
       "Furniture and furnishings",
       "Fitness center and rooftop terrace",
       "Free laundry on every floor",
@@ -275,30 +277,45 @@ export const ROOM_TYPES: RoomType[] = [
     slug: "capitol-loft",
     building: "capitol",
     name: "Loft",
-    rate: { kind: "weekly", weeklyRateCents: 90000 },
+    rate: { kind: "weekly", weeklyRateCents: 24000 },
+    bed: "Two queen sofa beds",
+    bathroom: "Private bathroom inside the loft",
+    summary:
+      "An open-plan loft suite rather than a bedroom: your own full kitchen and bathroom, two queen sofa beds, a big Smart TV, a dining table for eight and a dedicated workspace, with floor-to-ceiling windows over downtown and access to the terrace. Everything included.",
+    photos: [
+      { src: "/images/capitol/loft-1.webp", alt: "Capitol Loft suite: open-plan living area with kitchen, dining table and sofas" },
+      { src: "/images/capitol/loft-2.webp", alt: "Capitol Loft suite: queen sofa beds with downtown Austin views" },
+      { src: "/images/capitol/loft-3.webp", alt: "Capitol Loft suite: dining table for eight beside the kitchen and bed" },
+    ],
+  },
+  {
+    slug: "capitol-deluxe",
+    building: "capitol",
+    name: "Deluxe",
+    rate: { kind: "weekly", weeklyRateCents: 21000 },
     bed: "Full-size bed",
     bathroom: "Two full bathrooms shared in the apartment",
     summary:
-      "The largest private bedroom in the apartment: full-size bed, study desk, nightstand and a Smart TV, with big windows and plenty of natural light. Kitchen and bathrooms are shared with your three apartment-mates.",
+      "The signature private room: full-size bed, study desk, nightstand and a 55-inch Smart TV, with big windows and plenty of natural light. Kitchen and the two bathrooms are shared with your apartment-mates. Everything included.",
     photos: [
-      { src: "/images/capitol/loft-1.webp", alt: "Capitol Loft bedroom with bed, desk and armchair" },
-      { src: "/images/capitol/loft-2.webp", alt: "Capitol Loft bedroom with two windows and clothes rack" },
-      { src: "/images/capitol/loft-3.webp", alt: "Capitol Loft bedroom with bed, nightstand and wall art" },
+      { src: "/images/capitol/deluxe-1.webp", alt: "Capitol Deluxe bedroom with bed, desk and armchair" },
+      { src: "/images/capitol/deluxe-2.webp", alt: "Capitol Deluxe bedroom with two windows and clothes rack" },
+      { src: "/images/capitol/deluxe-3.webp", alt: "Capitol Deluxe bedroom with bed, nightstand and wall art" },
     ],
   },
   {
     slug: "capitol-sunroom",
     building: "capitol",
     name: "Sunroom",
-    rate: { kind: "weekly", weeklyRateCents: 65000 },
-    bed: "Full-size bed",
+    rate: { kind: "weekly", weeklyRateCents: 18000 },
+    bed: "Twin bed",
     bathroom: "Two full bathrooms shared in the apartment",
     summary:
-      "The apartment's sunroom set up as a private bedroom: full-size bed, study desk, nightstand and a Smart TV behind a modular partition with an accordion door. Bright and the best value, with less sound isolation than the Loft.",
+      "The most budget-friendly room: the apartment's sunroom set up as a private bedroom with a twin bed, study desk, nightstand and a Smart TV behind a curtain partition. Bright, with less sound isolation than the Deluxe. Everything included.",
     photos: [
-      { src: "/images/capitol/sunroom-1.webp", alt: "Capitol Sunroom bedroom with bed, desk and window" },
-      { src: "/images/capitol/sunroom-2.webp", alt: "Capitol Sunroom bedroom with desk, wall art and city view" },
-      { src: "/images/capitol/sunroom-3.webp", alt: "Capitol Sunroom with wall-mounted TV and desk" },
+      { src: "/images/capitol/sunroom-1.webp", alt: "Capitol Sunroom bedroom with desk, gallery wall and city view" },
+      { src: "/images/capitol/sunroom-2.webp", alt: "Capitol Sunroom with curtain partition, wall-mounted TV and desk", pos: "50% 60%" },
+      { src: "/images/capitol/sunroom-3.webp", alt: "Capitol Sunroom bedroom with bed, wall-mounted TV and clothes rack", pos: "50% 60%" },
     ],
   },
 ];

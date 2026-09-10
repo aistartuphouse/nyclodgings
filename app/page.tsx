@@ -191,13 +191,13 @@ export default function HomePage() {
                 <tbody>
                   {[
                     ["City", "New York, Midtown", "New York, Murray Hill", "Austin, Downtown"],
-                    ["Rate", "$150/night under a month; $3,600/month from 30 nights", "From $525/week", "From $650/week"],
+                    ["Rate", "$150/night under a month; $3,600/month from 30 nights", "From $525/week", "From $180/week"],
                     ["Longer stays", "$3,200/month from 3 months, $2,800 from 5", "Same weekly rate", "Same weekly rate"],
-                    ["Room types", "1, Shared Suite", "3, Deluxe to King Studio", "2, Sunroom and Loft"],
-                    ["Style", "Private hotel room", "Hotel-style studio room", "Private bedroom in a shared apartment"],
-                    ["Bathroom", "Shared with one adjacent room", "Private en-suite bathroom", "Two full bathrooms per apartment"],
+                    ["Room types", "1, Shared Suite", "3, Deluxe to King Studio", "3, Sunroom, Deluxe and Loft"],
+                    ["Style", "Private hotel room", "Hotel-style studio room", "Private bedroom in a shared apartment, or a loft suite"],
+                    ["Bathroom", "Shared with one adjacent room", "Private en-suite bathroom", "Two full bathrooms per apartment; private in the Loft"],
                     ["Stay length", "From one week", "4 months or longer", "3 months or longer"],
-                    ["Furniture, utilities, Wi-Fi", "Included", "Included", "Included (electricity billed separately)"],
+                    ["Furniture, utilities, Wi-Fi", "Included", "Included", "Included"],
                     ["Tax", "NYC accommodation tax by stay length", "NYC accommodation tax by stay length", "Texas and Austin hotel occupancy tax, 17%"],
                     ["Program", "On site", "On site", "The Austin house"],
                   ].map(([k, mansfield, seton, capitol], i) => (
@@ -316,7 +316,7 @@ export default function HomePage() {
               ],
               [
                 "What is Capitol like?",
-                "A contemporary five-story building in Downtown Austin, two blocks west of the Texas State Capitol. Each apartment has four private bedrooms plus a sunroom around an open kitchen and living area, with two full bathrooms. You take one room, the Loft (the largest bedroom) or the Sunroom (the bright partitioned room), and share the kitchen and bathrooms with your apartment-mates. Fitness center, rooftop terrace and free laundry on every floor are in the building.",
+                "A contemporary five-story building in Downtown Austin, two blocks west of the Texas State Capitol. Each apartment has four private bedrooms plus a sunroom around an open kitchen and living area, with two full bathrooms. You take one private room, the Sunroom (the bright partitioned room) or the Deluxe (a spacious bedroom with a full-size bed), and share the kitchen and bathrooms with your apartment-mates; the Loft is an open-plan suite with its own kitchen and bathroom and two queen sofa beds. Fitness center, rooftop terrace and free laundry on every floor are in the building.",
               ],
               [
                 "Is the listed price really what I pay?",
