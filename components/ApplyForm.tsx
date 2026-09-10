@@ -3,6 +3,21 @@
 import { useState } from "react";
 import { createApplication } from "@/lib/api";
 import { BUILDING_LIST, roomTypesFor, rateHeadline, type BuildingSlug } from "@/lib/buildings";
+
+// TEMPORARY (2026-09-10): capitol-deluxe exists on the site before migration
+// 0010 has run on prod, and the backend answers unknown_building for a slug
+// it has no row for. Until then send the parent slug and name the room in
+// the message. Delete both helpers once 0010 is live.
+const ROOMS_PENDING_ON_PROD: Record<string, { building: string; label: string }> = {
+  "capitol-deluxe": { building: "capitol", label: "Capitol Deluxe" },
+};
+function pendingRoomSlug(slug: string): string {
+  return ROOMS_PENDING_ON_PROD[slug]?.building ?? slug;
+}
+function pendingRoomNote(slug: string): string {
+  const p = ROOMS_PENDING_ON_PROD[slug];
+  return p ? `Room preference: ${p.label}.\n\n` : "";
+}
 import { formatMoney, todayNY } from "@/lib/format";
 
 // The preference is a building slug ("seton") or a room-type slug
@@ -27,11 +42,11 @@ export function ApplyForm({
       name: String(data.get("name") ?? ""),
       email: String(data.get("email") ?? ""),
       phone: String(data.get("phone") ?? ""),
-      building: String(data.get("building") ?? "") || undefined,
+      building: pendingRoomSlug(String(data.get("building") ?? "")) || undefined,
       moveIn: String(data.get("moveIn") ?? "") || undefined,
       moveOut: String(data.get("moveOut") ?? "") || undefined,
       upgradeInterest: data.get("upgradeInterest") === "on",
-      message: String(data.get("message") ?? ""),
+      message: pendingRoomNote(String(data.get("building") ?? "")) + String(data.get("message") ?? ""),
       source,
     }).catch(() => ({ error: { error: "network" } }));
     setSubmitting(false);
