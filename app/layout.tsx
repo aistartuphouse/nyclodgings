@@ -31,11 +31,11 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://lodgings.aistartuphouse.com",
   ),
   title: {
-    default: "AI Startup House Lodging | New York and Austin",
+    default: "AI Startup House Lodging | New York, Austin and Los Angeles",
     template: "%s | AI Startup House Lodging",
   },
   description:
-    "Housing for Entrepreneur AI Startup House participants: Mansfield and Seton in Manhattan, Capitol in Downtown Austin. Furnished rooms with utilities and Wi-Fi included, arranged by the housing team and paid in one upfront payment.",
+    "Lodging for Entrepreneur AI Startup House participants: Mansfield and Seton in Manhattan, Capitol in Austin, and StayHW condos in Hollywood, Los Angeles. Explore rooms and request your stay.",
   openGraph: {
     siteName: "AI Startup House Lodging",
     type: "website",

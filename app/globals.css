@@ -128,3 +128,59 @@ select,
 textarea {
   border-radius: 0.75rem;
 }
+
+/* ---------------------------------------------------------------------------
+   StayHW pages: skeleton loaders, image fade-in and date-picker motion.
+   --------------------------------------------------------------------------- */
+
+/* A light band sweeps across a dim block while content loads. */
+.sk {
+  position: relative;
+  overflow: hidden;
+  background: rgb(238 244 255 / 0.07);
+  border-radius: 0.75rem;
+}
+.sk::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgb(238 244 255 / 0.13), transparent);
+  animation: sk-sweep 1.4s ease-in-out infinite;
+}
+@keyframes sk-sweep {
+  to { transform: translateX(100%); }
+}
+
+/* Loaded content replaces its skeleton with a short fade. */
+.sk-in { animation: sk-in 0.35s ease-out both; }
+@keyframes sk-in {
+  from { opacity: 0; }
+}
+
+/* Date picker: the popup drops in, months slide in the direction of travel. */
+.dp-pop { animation: dp-pop 0.18s cubic-bezier(0.2, 0.8, 0.2, 1) both; transform-origin: top center; }
+@keyframes dp-pop {
+  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+}
+.dp-next { animation: dp-next 0.24s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.dp-prev { animation: dp-prev 0.24s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes dp-next {
+  from { opacity: 0; transform: translateX(28px); }
+}
+@keyframes dp-prev {
+  from { opacity: 0; transform: translateX(-28px); }
+}
+.dp-spin { animation: dp-spin 0.7s linear infinite; }
+@keyframes dp-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sk::after { animation: none; }
+  .sk { animation: sk-breathe 1.8s ease-in-out infinite; }
+  .sk-in, .dp-pop, .dp-next, .dp-prev { animation: none; }
+}
+@keyframes sk-breathe {
+  50% { opacity: 0.55; }
+}

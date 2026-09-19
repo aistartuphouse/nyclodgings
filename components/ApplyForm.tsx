@@ -4,19 +4,32 @@ import { useState } from "react";
 import { createApplication } from "@/lib/api";
 import { BUILDING_LIST, roomTypesFor, rateHeadline, type BuildingSlug } from "@/lib/buildings";
 import { formatMoney, todayNY } from "@/lib/format";
+import { todayLA } from "@/lib/stayhw-calendar";
+import type { StayHWUnit } from "@/lib/stayhw-types";
 
 // The preference is a building slug ("seton") or a room-type slug
 // ("capitol-loft"); the backend accepts both and the housing team reads it.
 export function ApplyForm({
   source,
   initialPreference,
+  stayhwUnits = [],
+  initialMoveIn = "",
+  initialMoveOut = "",
+  initialGuests = 1,
 }: {
   source?: string | null;
   initialPreference?: string | null;
+  stayhwUnits?: StayHWUnit[];
+  initialMoveIn?: string;
+  initialMoveOut?: string;
+  initialGuests?: number;
 }) {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [preference, setPreference] = useState(initialPreference ?? "");
+  const stayhw = preference === "stayhw" || /^stayhw-\d+$/.test(preference);
+  const selectedUnit = stayhwUnits.find((unit) => `stayhw-${unit.id}` === preference);
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -33,10 +46,11 @@ export function ApplyForm({
       upgradeInterest: data.get("upgradeInterest") === "on",
       message: String(data.get("message") ?? ""),
       source,
-    }).catch(() => ({ error: { error: "network" } }));
+      ...(stayhw ? { guests: Number(data.get("guests") ?? 1) } : {}),
+    }).catch(() => ({ error: { error: "network", message: "Your request could not be sent. Please try again later." } }));
     setSubmitting(false);
     if ("error" in result) {
-      setError("Something in the form needs attention. Check the fields and try again.");
+      setError(result.error.message || "Your request could not be sent. Check the fields and try again.");
       return;
     }
     setDone(true);
@@ -79,12 +93,14 @@ export function ApplyForm({
           id="a-building"
           name="building"
           className={`${inputCls} mt-2`}
-          defaultValue={initialPreference ?? ""}
+          value={preference}
+          onChange={(event) => setPreference(event.target.value)}
         >
           <option value="">No preference yet</option>
           {BUILDING_LIST.map((b) => (
             <optgroup key={b.slug} label={`${b.name}, ${b.city} (${b.minStay.toLowerCase()})`}>
               <option value={b.slug}>Any room at {b.name}</option>
+              {b.slug === "stayhw" && stayhwUnits.map((unit) => <option key={unit.id} value={`stayhw-${unit.id}`}>{unit.name} · up to {unit.guests} guests</option>)}
               {roomTypesFor(b.slug as BuildingSlug).map((r) => {
                 const h = rateHeadline(r.rate);
                 return (
@@ -100,13 +116,14 @@ export function ApplyForm({
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label htmlFor="a-movein" className={labelCls}>Move-in</label>
-          <input id="a-movein" name="moveIn" type="date" min={todayNY()} className={`${inputCls} mt-2`} />
+          <input id="a-movein" name="moveIn" type="date" min={stayhw ? todayLA() : todayNY()} required={!!selectedUnit} defaultValue={initialMoveIn} className={`${inputCls} mt-2`} />
         </div>
         <div>
           <label htmlFor="a-moveout" className={labelCls}>Move-out</label>
-          <input id="a-moveout" name="moveOut" type="date" className={`${inputCls} mt-2`} />
+          <input id="a-moveout" name="moveOut" type="date" required={!!selectedUnit} defaultValue={initialMoveOut} className={`${inputCls} mt-2`} />
         </div>
       </div>
+      {stayhw && <div><label htmlFor="a-guests" className={labelCls}>Guests</label><input key={preference} id="a-guests" name="guests" type="number" min={1} max={selectedUnit?.guests ?? 50} required defaultValue={Math.min(initialGuests, selectedUnit?.guests ?? 50)} className={`${inputCls} mt-2`} /></div>}
       <label className="flex items-start gap-3 text-[15px] text-ink/75 cursor-pointer sm:pt-8">
         <input type="checkbox" name="upgradeInterest" className="mt-1 size-4 accent-teal-dim" />
         I am interested in a larger room, suite, or apartment
