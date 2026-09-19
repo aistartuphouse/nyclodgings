@@ -3,6 +3,10 @@ import { ApplyForm } from "@/components/ApplyForm";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isBuildingSlug, roomTypeBySlug } from "@/lib/buildings";
+import { getStayHWUnits } from "@/lib/stayhw";
+import { isCalendarDate } from "@/lib/stayhw-calendar";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Request a room | AI Startup House Lodging",
@@ -13,13 +17,15 @@ export const metadata: Metadata = {
 export default async function ApplyPage({
   searchParams,
 }: {
-  searchParams: Promise<{ ref?: string; building?: string; room?: string }>;
+  searchParams: Promise<{ ref?: string; building?: string; room?: string; moveIn?: string; moveOut?: string; guests?: string }>;
 }) {
-  const { ref, building, room } = await searchParams;
+  const { ref, building, room, moveIn, moveOut, guests } = await searchParams;
+  const stayhwUnits = await getStayHWUnits().catch(() => []);
+  const stayhwUnit = stayhwUnits.find((unit) => `stayhw-${unit.id}` === room);
   // ?room= pins a room type; ?building= (the organizer's deep links) picks
   // "any room" at that building.
   const preference =
-    roomTypeBySlug(room)?.slug ?? (isBuildingSlug(building) ? building : null);
+    (stayhwUnit ? `stayhw-${stayhwUnit.id}` : null) ?? roomTypeBySlug(room)?.slug ?? (isBuildingSlug(building) ? building : null);
   return (
     <main className="bg-paper min-h-svh flex flex-col">
       <div className="relative bg-sand text-ink border-b border-line">
@@ -39,7 +45,7 @@ export default async function ApplyPage({
         </div>
       </div>
       <div className="mx-auto max-w-3xl w-full px-5 sm:px-10 py-12 sm:py-16 grow">
-        <ApplyForm source={ref ?? null} initialPreference={preference} />
+        <ApplyForm source={ref ?? null} initialPreference={preference} stayhwUnits={stayhwUnits} initialMoveIn={isCalendarDate(moveIn) ? moveIn : ""} initialMoveOut={isCalendarDate(moveOut) ? moveOut : ""} initialGuests={Number.isInteger(Number(guests)) && Number(guests) > 0 ? Number(guests) : 1} />
       </div>
       <SiteFooter />
     </main>

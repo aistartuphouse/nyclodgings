@@ -16,15 +16,16 @@
 //                      Loft $240 (the 09-08 $650/$900 figures were wrong).
 //   Stratford        - retired.
 
-export type BuildingSlug = "mansfield" | "seton" | "capitol";
-export type City = "New York" | "Austin";
-export type TaxProfile = "nyc" | "austin";
+export type BuildingSlug = "mansfield" | "seton" | "capitol" | "stayhw";
+export type City = "New York" | "Austin" | "Los Angeles";
+export type TaxProfile = "nyc" | "austin" | "stayhw";
 
 // Mirrors buildings.public_min_nights in the backend; keep in sync.
 export const PUBLIC_MIN_NIGHTS: Record<BuildingSlug, number> = {
   mansfield: 7,
   seton: 120,
   capitol: 90,
+  stayhw: 1, // The live unit calendar supplies the actual arrival-date rules.
 };
 
 // The Mansfield schedule, mirrors MONTHLY_PRICING in the backend's pricing.ts.
@@ -47,6 +48,7 @@ export interface BuildingContent {
   // "from $150" + "per night" / "from $525" + "per week"
   fromAmountCents: number;
   fromUnit: "night" | "week";
+  rateLabel?: string; // Dynamic properties must not advertise a fixed rate.
   tagline: string;
   style: string;
   bathroom: string;
@@ -65,6 +67,32 @@ export interface BuildingContent {
 }
 
 export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
+  stayhw: {
+    slug: "stayhw",
+    name: "StayHW",
+    city: "Los Angeles",
+    address: "1751 N Las Palmas Avenue",
+    neighborhood: "Hollywood",
+    taxProfile: "stayhw",
+    fromAmountCents: 0,
+    fromUnit: "night",
+    rateLabel: "Rates by date",
+    tagline: "Furnished condos in the heart of Hollywood",
+    style: "Entire condos, including combined units for larger groups",
+    bathroom: "Private bathrooms; layout varies by unit",
+    roomsLabel: "Hollywood condos",
+    roomTypeShort: "Entire condo",
+    bathroomShort: "Private bathrooms",
+    minStay: "Choose a unit and dates to see its stay requirements",
+    minStayShort: "Varies by unit",
+    commute: "Stay in Hollywood, close to the Walk of Fame, TCL Chinese Theatre and Hollywood Bowl. Program arrangements are confirmed separately by the housing team.",
+    commuteShort: "Hollywood, Los Angeles",
+    description: "StayHW offers furnished condos in central Hollywood with private living space, equipped kitchens, high-speed Wi-Fi and parking. Choose an individual condo or a combined listing for a larger group. Nightly prices and calendar information are supplied by StayHW; the housing team confirms the unit and final price before payment.",
+    included: ["Entire furnished condo", "Equipped kitchen", "High-speed Wi-Fi", "Linens and towels", "Parking included; check the selected unit"],
+    photos: [],
+    cover: "https://stayhw.com/wp-content/uploads/2026/05/bb10d9d2-9f1f-4daa-8b47-9a76afb53bbc-1170x800.jpeg",
+    coverAlt: "StayHW furnished condo in Hollywood",
+  },
   mansfield: {
     slug: "mansfield",
     name: "Mansfield",
@@ -190,8 +218,8 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
   },
 };
 
-// Site order: Mansfield, Seton, then Capitol.
-export const BUILDING_LIST = [BUILDINGS.mansfield, BUILDINGS.seton, BUILDINGS.capitol];
+// Site order: Mansfield, Seton, Capitol, then StayHW.
+export const BUILDING_LIST = [BUILDINGS.mansfield, BUILDINGS.seton, BUILDINGS.capitol, BUILDINGS.stayhw];
 
 // ---- Room types (sub-listings) ----
 // Each room type has its own backend listing; the slug here IS the backend
@@ -329,7 +357,7 @@ export function roomTypeBySlug(slug: string | undefined | null): RoomType | null
 }
 
 export function isBuildingSlug(value: string | undefined | null): value is BuildingSlug {
-  return value === "mansfield" || value === "seton" || value === "capitol";
+  return value === "mansfield" || value === "seton" || value === "capitol" || value === "stayhw";
 }
 
 // The headline price on a room card: "$150" + "/night" or "$900" + "/week".

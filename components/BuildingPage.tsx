@@ -315,7 +315,7 @@ export async function BuildingPage({
             <p className="font-mono text-[11px] tracking-[0.22em] uppercase text-ink/45">Also available · {other.city}</p>
             <p className="mt-2 font-display text-2xl">
               {other.name}
-              <span className="text-ink/40 text-lg"> · from {formatMoney(other.fromAmountCents)}/{other.fromUnit}</span>
+              <span className="text-ink/40 text-lg"> · {other.rateLabel ?? `from ${formatMoney(other.fromAmountCents)}/${other.fromUnit}`}</span>
             </p>
             <p className="mt-1 text-[14px] text-ink/60">{other.tagline}</p>
           </Link>

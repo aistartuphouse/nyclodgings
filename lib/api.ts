@@ -18,8 +18,10 @@ export async function createApplication(payload: {
   upgradeInterest: boolean;
   message: string;
   source?: string | null;
+  guests?: number;
 }): Promise<{ ok: true } | { error: ApiErrorBody }> {
-  const res = await fetch(`${BACKEND_URL}/v1/public/applications`, {
+  const stayhw = payload.building === "stayhw" || /^stayhw-\d+$/.test(payload.building ?? "");
+  const res = await fetch(stayhw ? "/api/stayhw/request" : `${BACKEND_URL}/v1/public/applications`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(payload),

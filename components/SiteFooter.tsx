@@ -15,7 +15,7 @@ export function SiteFooter() {
             </div>
             <p className="mt-4 text-sm leading-relaxed text-ink/60">
               Housing for Entrepreneur AI Startup House participants in New York
-              City and Austin. Organized with the residency team at Real AI
+              City, Austin and Los Angeles. Organized with the residency team at Real AI
               Dynamics.
             </p>
             <a
@@ -46,6 +46,8 @@ export function SiteFooter() {
               four months (120 nights) or longer and Capitol stays of three
               months (90 nights) or longer, both at weekly rates. Every stay is
               confirmed by the housing team and paid in one upfront payment.
+              StayHW offers Hollywood condos with unit-specific calendars and
+              nightly rates; its final price and stay rules are confirmed separately.
               New York stays of less than six months may be subject to New
               York accommodation tax; stays of 180 days or longer are not.
               Austin stays are subject to Texas and City of Austin hotel
@@ -57,7 +59,7 @@ export function SiteFooter() {
           </div>
         </div>
         <div className="mt-12 border-t border-line-dark pt-6 flex flex-wrap items-center justify-between gap-3 font-mono text-[11px] tracking-[0.14em] uppercase text-ink/35">
-          <span>Entrepreneur AI Startup House · New York City · Austin</span>
+          <span>Entrepreneur AI Startup House · New York City · Austin · Los Angeles</span>
           <span>Payments processed by Stripe</span>
         </div>
       </div>
