@@ -43,8 +43,9 @@ export function SiteFooter() {
             <p>
               Mansfield hosts short-term stays from one week, priced per night
               under a month and per month from 30 nights. Seton hosts stays of
-              four months (120 nights) or longer and Capitol stays of three
-              months (90 nights) or longer, both at weekly rates. Every stay is
+              four months (120 nights) or longer, The 46 stays of four weeks
+              (28 nights) or longer and Capitol stays of three months (90
+              nights) or longer, all at weekly rates. Every stay is
               confirmed by the housing team and paid in one upfront payment.
               StayHW offers Hollywood condos with unit-specific calendars and
               nightly rates; its final price and stay rules are confirmed separately.

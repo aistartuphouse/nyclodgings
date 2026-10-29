@@ -16,7 +16,7 @@ export default function NotFound() {
         </h1>
         <p className="mt-4 text-ink/70 leading-relaxed max-w-lg">
           The address may have changed. Everything on this site starts from
-          the three buildings.
+          the five properties.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href="/" className="bg-pine text-paper font-mono text-[13px] tracking-[0.18em] uppercase px-8 py-4 transition-colors hover:bg-pine-deep">

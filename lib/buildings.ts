@@ -15,8 +15,13 @@
 //                      types since 2026-09-10: Sunroom $180, Deluxe $210,
 //                      Loft $240 (the 09-08 $650/$900 figures were wrong).
 //   Stratford        - retired.
+//   The 46 (NYC)     - added 2026-10-29: 80 private-bath rooms at 129 W 46th
+//                      St, run by a sister operation with its own backend.
+//                      Room types here; the real rooms (number, floor, rate,
+//                      status, photos) come live from its explorer feed
+//                      (lib/the46.ts). Stays from 4 weeks.
 
-export type BuildingSlug = "mansfield" | "seton" | "capitol" | "stayhw";
+export type BuildingSlug = "mansfield" | "seton" | "the-46" | "capitol" | "stayhw";
 export type City = "New York" | "Austin" | "Los Angeles";
 export type TaxProfile = "nyc" | "austin" | "stayhw";
 
@@ -24,6 +29,7 @@ export type TaxProfile = "nyc" | "austin" | "stayhw";
 export const PUBLIC_MIN_NIGHTS: Record<BuildingSlug, number> = {
   mansfield: 7,
   seton: 120,
+  "the-46": 28,
   capitol: 90,
   stayhw: 1, // The live unit calendar supplies the actual arrival-date rules.
 };
@@ -175,6 +181,48 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
     cover: "/images/seton/1.webp",
     coverAlt: "Seton Hotel entrance on East 40th Street",
   },
+  "the-46": {
+    slug: "the-46",
+    name: "The 46",
+    city: "New York",
+    address: "129 West 46th Street",
+    neighborhood: "Midtown Manhattan",
+    taxProfile: "nyc",
+    fromAmountCents: 74500,
+    fromUnit: "week",
+    tagline: "80 private-bath rooms, one block from Times Square",
+    style: "Private furnished room, queen or king bed",
+    bathroom: "Private ensuite bathroom in every room",
+    roomsLabel: "Private-bath rooms",
+    roomTypeShort: "Private room",
+    bathroomShort: "Ensuite, every room",
+    minStay: "Stays of 4 weeks or longer",
+    minStayShort: "Four weeks",
+    commute: "The 46 is in the Theater District, one block from Times Square. Mansfield, where part of the programming takes place, is about an 8-minute walk; Seton is about 20 minutes on foot.",
+    commuteShort: "8 min to Mansfield",
+    description:
+      "The 46 is a 1902 Theater District building one block from Times Square, refit as a furnished residence: 80 rooms over nine floors, every one with its own ensuite bathroom. You pick the exact room. Five room types run from the compact Cozy Queen to the Grand King with a full sitting area, and every room has its own weekly rate: the room type sets the base, higher floors cost a little more. The building has a resident lounge with a coffee bar, a work and study room, a fitness room, an elevator and a luggage room. Stays start at four weeks.",
+    included: [
+      "Private room, queen or king bed, desk",
+      "Private ensuite bathroom with shower",
+      "All utilities and high-speed Wi-Fi",
+      "Furniture, linens and towels",
+      "On-site maintenance and cleaning team",
+      "Resident lounge, study room and fitness room",
+    ],
+    photos: [
+      { src: "/images/the-46/1.webp", alt: "The 46 entrance at 129 West 46th Street" },
+      { src: "/images/the-46/2.webp", alt: "Room at The 46 with bed, desk and kitchenette area (virtually staged)" },
+      { src: "/images/the-46/3.webp", alt: "The 46 resident lounge with long tables and banquettes" },
+      { src: "/images/the-46/4.webp", alt: "The 46 resident lounge with high tables and a coffee bar" },
+      { src: "/images/the-46/5.webp", alt: "The 46 lounge seating with white chairs and banquettes" },
+      { src: "/images/the-46/6.webp", alt: "The 46 lobby and front desk" },
+      { src: "/images/the-46/7.webp", alt: "The 46 facade on West 46th Street", pos: "50% 30%" },
+      { src: "/images/the-46/8.webp", alt: "Times Square, one block from The 46" },
+    ],
+    cover: "/images/the-46/1.webp",
+    coverAlt: "The 46 entrance at 129 West 46th Street",
+  },
   capitol: {
     slug: "capitol",
     name: "Capitol",
@@ -218,8 +266,8 @@ export const BUILDINGS: Record<BuildingSlug, BuildingContent> = {
   },
 };
 
-// Site order: Mansfield, Seton, Capitol, then StayHW.
-export const BUILDING_LIST = [BUILDINGS.mansfield, BUILDINGS.seton, BUILDINGS.capitol, BUILDINGS.stayhw];
+// Site order: the New York buildings (Mansfield, Seton, The 46), Capitol, then StayHW.
+export const BUILDING_LIST = [BUILDINGS.mansfield, BUILDINGS.seton, BUILDINGS["the-46"], BUILDINGS.capitol, BUILDINGS.stayhw];
 
 // ---- Room types (sub-listings) ----
 // Each room type has its own backend listing; the slug here IS the backend
@@ -237,6 +285,8 @@ export interface RoomType {
   bed: string;
   bathroom: string;
   summary: string;
+  // The rate is the cheapest room of the type; rooms differ (The 46).
+  rateFrom?: boolean;
   photos: { src: string; alt: string; pos?: string }[];
 }
 
@@ -302,6 +352,86 @@ export const ROOM_TYPES: RoomType[] = [
     ],
   },
   {
+    slug: "the-46-cozy-queen",
+    building: "the-46",
+    name: "Cozy Queen",
+    rate: { kind: "weekly", weeklyRateCents: 74500 },
+    rateFrom: true,
+    bed: "Queen bed",
+    bathroom: "Private ensuite",
+    summary:
+      "The entry room type: a compact furnished room with a queen bed, a desk and its own bathroom. Everything you need for a summer or a semester, one block from Times Square.",
+    photos: [
+      { src: "/images/the-46/cozy-queen-1.webp", alt: "The 46 Cozy Queen with bed, desk and kitchenette area (virtually staged)" },
+      { src: "/images/the-46/cozy-queen-2.webp", alt: "The 46 Cozy Queen, view from the bed toward the sofa and entry (virtually staged)" },
+      { src: "/images/the-46/cozy-queen-3.webp", alt: "The 46 Cozy Queen, empty, window side with the slatted accent wall" },
+    ],
+  },
+  {
+    slug: "the-46-classic-queen",
+    building: "the-46",
+    name: "Classic Queen",
+    rate: { kind: "weekly", weeklyRateCents: 74500 },
+    rateFrom: true,
+    bed: "Queen bed",
+    bathroom: "Private ensuite",
+    summary:
+      "A private furnished room with a queen bed, a proper desk and your own bathroom.",
+    photos: [
+      { src: "/images/the-46/classic-queen-1.webp", alt: "The 46 Classic Queen with bed, desk and kitchenette area (virtually staged)" },
+      { src: "/images/the-46/classic-queen-2.webp", alt: "The 46 Classic Queen, kitchenette area and desk by the window (virtually staged)" },
+      { src: "/images/the-46/classic-queen-3.webp", alt: "The 46 Classic Queen, bed and kitchenette area near the entry (virtually staged)" },
+    ],
+  },
+  {
+    slug: "the-46-deluxe-queen",
+    building: "the-46",
+    name: "Deluxe Queen",
+    rate: { kind: "weekly", weeklyRateCents: 77000 },
+    rateFrom: true,
+    bed: "Queen bed",
+    bathroom: "Private ensuite",
+    summary:
+      "A step up from the Classic, with a lounge chair and extra storage. The same private bathroom and desk, with room to host a friend for coffee.",
+    photos: [
+      { src: "/images/the-46/deluxe-queen-1.webp", alt: "The 46 Deluxe Queen, view from the bed toward the kitchenette and entry (virtually staged)" },
+      { src: "/images/the-46/deluxe-queen-2.webp", alt: "The 46 Deluxe Queen with bed, desk and window (virtually staged)" },
+      { src: "/images/the-46/deluxe-queen-3.webp", alt: "The 46 Deluxe Queen, empty, facing the window and slatted accent wall" },
+    ],
+  },
+  {
+    slug: "the-46-premier-king",
+    building: "the-46",
+    name: "Premier King",
+    rate: { kind: "weekly", weeklyRateCents: 84500 },
+    rateFrom: true,
+    bed: "King bed",
+    bathroom: "Private ensuite",
+    summary:
+      "A king bed and a separate sitting area, with the same private bathroom and desk. Suited to longer stays and to working from the room.",
+    photos: [
+      { src: "/images/the-46/premier-king-1.webp", alt: "The 46 Premier King with bed, desk and two windows (virtually staged)" },
+      { src: "/images/the-46/premier-king-2.webp", alt: "The 46 Premier King, bed and kitchenette area (virtually staged)" },
+      { src: "/images/the-46/premier-king-3.webp", alt: "The 46 Premier King, kitchenette area and desk by the accent wall (virtually staged)" },
+    ],
+  },
+  {
+    slug: "the-46-grand-king",
+    building: "the-46",
+    name: "Grand King",
+    rate: { kind: "weekly", weeklyRateCents: 87000 },
+    rateFrom: true,
+    bed: "King bed",
+    bathroom: "Private ensuite",
+    summary:
+      "The top room type, one per floor: a king bed, a full sitting area with a sofa and table, a double wardrobe and its own bathroom.",
+    photos: [
+      { src: "/images/the-46/grand-king-1.webp", alt: "The 46 Grand King with bed and kitchenette area (virtually staged)" },
+      { src: "/images/the-46/grand-king-2.webp", alt: "The 46 Grand King, empty, facing the window with the slatted accent wall" },
+      { src: "/images/the-46/grand-king-3.webp", alt: "The 46 Grand King, empty, looking toward the entry" },
+    ],
+  },
+  {
     slug: "capitol-loft",
     building: "capitol",
     name: "Loft",
@@ -357,7 +487,7 @@ export function roomTypeBySlug(slug: string | undefined | null): RoomType | null
 }
 
 export function isBuildingSlug(value: string | undefined | null): value is BuildingSlug {
-  return value === "mansfield" || value === "seton" || value === "capitol" || value === "stayhw";
+  return value === "mansfield" || value === "seton" || value === "the-46" || value === "capitol" || value === "stayhw";
 }
 
 // The headline price on a room card: "$150" + "/night" or "$900" + "/week".

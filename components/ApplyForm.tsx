@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createApplication } from "@/lib/api";
-import { BUILDING_LIST, roomTypesFor, rateHeadline, type BuildingSlug } from "@/lib/buildings";
+import { BUILDING_LIST, BUILDINGS, roomTypeBySlug, roomTypesFor, rateHeadline, type BuildingSlug } from "@/lib/buildings";
 import { formatMoney, todayNY } from "@/lib/format";
 import { todayLA } from "@/lib/stayhw-calendar";
 import type { StayHWUnit } from "@/lib/stayhw-types";
@@ -12,6 +12,7 @@ import type { StayHWUnit } from "@/lib/stayhw-types";
 export function ApplyForm({
   source,
   initialPreference,
+  initialUnit,
   stayhwUnits = [],
   initialMoveIn = "",
   initialMoveOut = "",
@@ -19,6 +20,7 @@ export function ApplyForm({
 }: {
   source?: string | null;
   initialPreference?: string | null;
+  initialUnit?: string | null;
   stayhwUnits?: StayHWUnit[];
   initialMoveIn?: string;
   initialMoveOut?: string;
@@ -36,7 +38,11 @@ export function ApplyForm({
     setSubmitting(true);
     setError(null);
     const data = new FormData(e.currentTarget);
-    const result = await createApplication({
+    // An exact room (The 46's live list) has no column of its own; it leads
+    // the message so the housing team sees it first.
+    const unit = String(data.get("unit") ?? "").trim();
+    const message = String(data.get("message") ?? "");
+    const payload = {
       name: String(data.get("name") ?? ""),
       email: String(data.get("email") ?? ""),
       phone: String(data.get("phone") ?? ""),
@@ -44,10 +50,24 @@ export function ApplyForm({
       moveIn: String(data.get("moveIn") ?? "") || undefined,
       moveOut: String(data.get("moveOut") ?? "") || undefined,
       upgradeInterest: data.get("upgradeInterest") === "on",
-      message: String(data.get("message") ?? ""),
+      message: unit ? `Requested room: ${unit}${message ? `\n\n${message}` : ""}` : message,
       source,
       ...(stayhw ? { guests: Number(data.get("guests") ?? 1) } : {}),
-    }).catch(() => ({ error: { error: "network", message: "Your request could not be sent. Please try again later." } }));
+    };
+    const networkError = { error: { error: "network", message: "Your request could not be sent. Please try again later." } };
+    let result = await createApplication(payload).catch(() => networkError);
+    // A listing the backend has no row for yet (The 46 before migration 0011
+    // reached prod) must not lose the lead: resend without the preference
+    // and name the room in the message instead.
+    if ("error" in result && result.error.error === "unknown_building" && payload.building) {
+      const room = roomTypeBySlug(payload.building);
+      const label = room ? `${BUILDINGS[room.building].name} ${room.name}` : payload.building;
+      result = await createApplication({
+        ...payload,
+        building: undefined,
+        message: `Room preference: ${label}.\n${payload.message}`,
+      }).catch(() => networkError);
+    }
     setSubmitting(false);
     if ("error" in result) {
       setError(result.error.message || "Your request could not be sent. Check the fields and try again.");
@@ -105,7 +125,7 @@ export function ApplyForm({
                 const h = rateHeadline(r.rate);
                 return (
                   <option key={r.slug} value={r.slug}>
-                    {b.name} {r.name} ({formatMoney(h.amountCents)}/{h.unit})
+                    {b.name} {r.name} ({r.rateFrom ? "from " : ""}{formatMoney(h.amountCents)}/{h.unit})
                   </option>
                 );
               })}
@@ -113,6 +133,17 @@ export function ApplyForm({
           ))}
         </select>
       </div>
+      {initialUnit && (
+        <div className="sm:col-span-2">
+          <label htmlFor="a-unit" className={labelCls}>Exact room</label>
+          <input
+            id="a-unit"
+            name="unit"
+            defaultValue={`Room ${initialUnit}`}
+            className={`${inputCls} mt-2`}
+          />
+        </div>
+      )}
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label htmlFor="a-movein" className={labelCls}>Move-in</label>

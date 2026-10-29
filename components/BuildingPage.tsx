@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
+import { The46Rooms } from "@/components/The46Rooms";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import {
@@ -12,6 +13,7 @@ import {
   type BuildingSlug,
 } from "@/lib/buildings";
 import { fetchAvailability, type RoomAvailability } from "@/lib/api";
+import { fetchThe46Rooms, the46Availability } from "@/lib/the46";
 import { formatDate, formatMoney } from "@/lib/format";
 
 // Availability copy for a room card. `null` = no lobbyboard data for this
@@ -35,6 +37,17 @@ function RatesIntro({ slug }: { slug: BuildingSlug }) {
         the monthly rate steps down at three months and again at five. Extra
         days on a monthly stay are prorated. NYC accommodation tax is added on
         top, itemized on your payment link before you pay.
+      </p>
+    );
+  }
+  if (slug === "the-46") {
+    return (
+      <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-ink/60">
+        The 46 takes stays of four weeks (28 nights) or longer. Every room has
+        its own weekly rate: the room type sets the base shown on each card,
+        and higher floors cost a little more. Pick a type here or the exact
+        room from the live list below. NYC accommodation tax is added on top,
+        itemized on your payment link before you pay.
       </p>
     );
   }
@@ -72,7 +85,9 @@ export async function BuildingPage({
   const b = BUILDINGS[slug];
   const rooms = roomTypesFor(slug);
   const others = BUILDING_LIST.filter((x) => x.slug !== slug);
-  const availability = await fetchAvailability();
+  const the46Rooms = slug === "the-46" ? await fetchThe46Rooms() : null;
+  // The 46 has no lobbyboard: its pills come from its own live rooms.
+  const availability = the46Rooms ? the46Availability(the46Rooms) : await fetchAvailability();
   const [lead, second, ...rest] = b.photos;
   const applyHref = (room?: string) =>
     `/apply?${room ? `room=${room}` : `building=${slug}`}${source ? `&ref=${encodeURIComponent(source)}` : ""}`;
@@ -200,6 +215,7 @@ export async function BuildingPage({
                     <div className="flex items-baseline justify-between gap-4">
                       <h3 className="font-display text-2xl">{r.name}</h3>
                       <p className="font-mono text-[14px] whitespace-nowrap">
+                        {r.rateFrom && <span className="text-ink/45 text-[11px]">from </span>}
                         {formatMoney(headline.amountCents)}
                         <span className="text-ink/45 text-[11px]"> /{headline.unit}</span>
                       </p>
@@ -240,6 +256,36 @@ export async function BuildingPage({
           </p>
         )}
       </section>
+
+      {/* The 46: every real room, live from the building's own system */}
+      {slug === "the-46" && (
+        <section id="rooms" className="mx-auto max-w-6xl px-5 sm:px-10 pb-16 sm:pb-20">
+          <Reveal>
+            <p className="font-mono text-[12px] tracking-[0.26em] uppercase text-pine">Live availability</p>
+            <h2 className="mt-3 font-display text-[clamp(1.7rem,3.5vw,2.4rem)]">Pick your exact room</h2>
+            <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-ink/60">
+              Every room below is a real room at The 46, with its own rate and
+              the date it is free, straight from the building and refreshed
+              every few minutes. The housing team confirms the room when you
+              request it. Room photos are virtually staged.
+            </p>
+          </Reveal>
+          <div className="mt-8">
+            {the46Rooms ? (
+              <The46Rooms
+                rooms={the46Rooms}
+                types={rooms.map((r) => ({ slug: r.slug, name: r.name }))}
+                source={source}
+              />
+            ) : (
+              <p className="border border-line bg-sand p-6 text-[15px] text-ink/70">
+                The live room list is not loading right now. Pick a room type
+                above and the housing team will offer you the best free room.
+              </p>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Gallery */}
       <section className="mx-auto max-w-6xl px-5 sm:px-10 pb-16 sm:pb-20">
@@ -305,7 +351,7 @@ export async function BuildingPage({
       </section>
 
       {/* Cross-link + upgrade */}
-      <section className="mx-auto max-w-6xl px-5 sm:px-10 py-14 grid gap-4 sm:grid-cols-3">
+      <section className="mx-auto max-w-6xl px-5 sm:px-10 py-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {others.map((other) => (
           <Link
             key={other.slug}

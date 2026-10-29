@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     template: "%s | AI Startup House Lodging",
   },
   description:
-    "Lodging for Entrepreneur AI Startup House participants: Mansfield and Seton in Manhattan, Capitol in Austin, and StayHW condos in Hollywood, Los Angeles. Explore rooms and request your stay.",
+    "Lodging for Entrepreneur AI Startup House participants: Mansfield, Seton and The 46 in Manhattan, Capitol in Austin, and StayHW condos in Hollywood, Los Angeles. Explore rooms and request your stay.",
   openGraph: {
     siteName: "AI Startup House Lodging",
     type: "website",

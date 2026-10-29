@@ -10,7 +10,7 @@ import { formatMoney } from "@/lib/format";
 export const metadata: Metadata = {
   title: "AI Startup House Lodging | New York, Austin and Los Angeles",
   description:
-    "Four properties for Entrepreneur AI Startup House participants: Mansfield (short-term, Midtown Manhattan, from $150/night), Seton (Murray Hill, 4 months or longer) Capitol (Downtown Austin, 3 months or longer), and StayHW condos in Hollywood, Los Angeles. Furnished rooms, utilities and Wi-Fi included, one upfront payment once the team confirms your room.",
+    "Five properties for Entrepreneur AI Startup House participants: Mansfield (short-term, Midtown Manhattan, from $150/night), Seton (Murray Hill, 4 months or longer), The 46 (private-bath rooms by Times Square, 4 weeks or longer), Capitol (Downtown Austin, 3 months or longer) and StayHW condos in Hollywood, Los Angeles. Furnished rooms, utilities and Wi-Fi included, one upfront payment once the team confirms your room.",
 };
 
 export default function HomePage() {
@@ -65,7 +65,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-5 sm:px-10 py-20 sm:py-28">
           <Reveal>
             <p className="font-mono text-[12px] tracking-[0.26em] uppercase text-pine">
-              Four properties, three cities
+              Five properties, three cities
             </p>
             <h2 className="mt-4 font-display text-[clamp(1.9rem,4vw,3rem)] leading-tight max-w-2xl">
               Find your stay in New York, Austin or Hollywood.
@@ -75,7 +75,9 @@ export default function HomePage() {
               one week. Seton is multi-month lodging in New York and takes stays
               of four months or longer. Capitol is the Austin house, with stays
               of three months or longer. Staying in New York under four months?
-              Mansfield is your building. StayHW adds entire Hollywood condos,
+              Mansfield is your building, or The 46 by Times Square: 80 rooms
+              with private bathrooms, stays from four weeks, and you pick the
+              exact room from its live list. StayHW adds entire Hollywood condos,
               including combined units for larger groups, with nightly rates by date.
             </p>
           </Reveal>
@@ -146,7 +148,8 @@ export default function HomePage() {
             <p className="mt-5 text-ink/75 leading-relaxed max-w-xl">
               Activities and presentations in New York are held at Seton in
               Murray Hill and Mansfield in Midtown, so participants staying at
-              either building live where the sessions happen. Capitol puts the
+              either building live where the sessions happen; The 46 is about
+              an 8-minute walk from Mansfield. Capitol puts the
               Austin cohort two blocks from the Texas State Capitol. StayHW adds furnished condos in Hollywood;
               program arrangements in Los Angeles are confirmed separately.
             </p>
@@ -163,7 +166,7 @@ export default function HomePage() {
               </div>
               <div>
                 <dt className="text-ink/50 uppercase tracking-[0.18em] text-[11px]">Minimum stay</dt>
-                <dd className="mt-1">Mansfield 7 nights; Seton 4 months; Capitol 3 months; StayHW varies by unit</dd>
+                <dd className="mt-1">Mansfield 7 nights; Seton 4 months; The 46 4 weeks; Capitol 3 months; StayHW varies by unit</dd>
               </div>
             </dl>
           </Reveal>
@@ -179,33 +182,35 @@ export default function HomePage() {
           </Reveal>
           <Reveal delay={0.1}>
             <div className="mt-10 overflow-x-auto">
-              <table className="w-full min-w-[560px] border-collapse text-[15px]">
+              <table className="w-full min-w-[880px] border-collapse text-[15px]">
                 <thead>
                   <tr className="bg-pine text-paper font-mono text-[11px] tracking-[0.18em] uppercase">
-                    <th className="text-left font-medium px-5 py-3.5 w-[25%]"> </th>
+                    <th className="text-left font-medium px-5 py-3.5 w-[16%]"> </th>
                     <th className="text-left font-medium px-5 py-3.5">Mansfield</th>
                     <th className="text-left font-medium px-5 py-3.5">Seton</th>
+                    <th className="text-left font-medium px-5 py-3.5">The 46</th>
                     <th className="text-left font-medium px-5 py-3.5">Capitol</th>
                     <th className="text-left font-medium px-5 py-3.5">StayHW</th>
                   </tr>
                 </thead>
                 <tbody>
                   {[
-                    ["City", "New York, Midtown", "New York, Murray Hill", "Austin, Downtown", "Los Angeles, Hollywood"],
-                    ["Rate", "$150/night under a month; $3,600/month from 30 nights", "From $525/week", "From $180/week", "Nightly rates by unit and date"],
-                    ["Longer stays", "$3,200/month from 3 months, $2,800 from 5", "Same weekly rate", "Same weekly rate", "Check your selected dates"],
-                    ["Room types", "1, Shared Suite", "3, Deluxe to King Studio", "3, Sunroom, Deluxe and Loft", "Individual and combined condo listings"],
-                    ["Style", "Private hotel room", "Hotel-style studio room", "Private bedroom in a shared apartment, or a loft suite", "Entire furnished condo"],
-                    ["Bathroom", "Shared with one adjacent room", "Private en-suite bathroom", "Two full bathrooms per apartment; private in the Loft", "Private bathrooms; varies by unit"],
-                    ["Stay length", "From one week", "4 months or longer", "3 months or longer", "Unit and arrival-date requirements"],
-                    ["Furniture, utilities, Wi-Fi", "Included", "Included", "Included", "Furnished, Wi-Fi and parking"],
-                    ["Tax", "NYC accommodation tax by stay length", "NYC accommodation tax by stay length", "Texas and Austin hotel occupancy tax, 17%", "Included in the date-based price calculation"],
-                    ["Program", "On site", "On site", "The Austin house", "Confirm with the housing team"],
-                  ].map(([k, mansfield, seton, capitol, stayhw], i) => (
+                    ["City", "New York, Midtown", "New York, Murray Hill", "New York, Times Square", "Austin, Downtown", "Los Angeles, Hollywood"],
+                    ["Rate", "$150/night under a month; $3,600/month from 30 nights", "From $525/week", "From $745/week, every room priced on its own", "From $180/week", "Nightly rates by unit and date"],
+                    ["Longer stays", "$3,200/month from 3 months, $2,800 from 5", "Same weekly rate", "Same weekly rate", "Same weekly rate", "Check your selected dates"],
+                    ["Room types", "1, Shared Suite", "3, Deluxe to King Studio", "5, Cozy Queen to Grand King", "3, Sunroom, Deluxe and Loft", "Individual and combined condo listings"],
+                    ["Style", "Private hotel room", "Hotel-style studio room", "Private furnished room", "Private bedroom in a shared apartment, or a loft suite", "Entire furnished condo"],
+                    ["Bathroom", "Shared with one adjacent room", "Private en-suite bathroom", "Private en-suite bathroom", "Two full bathrooms per apartment; private in the Loft", "Private bathrooms; varies by unit"],
+                    ["Stay length", "From one week", "4 months or longer", "4 weeks or longer", "3 months or longer", "Unit and arrival-date requirements"],
+                    ["Furniture, utilities, Wi-Fi", "Included", "Included", "Included", "Included", "Furnished, Wi-Fi and parking"],
+                    ["Tax", "NYC accommodation tax by stay length", "NYC accommodation tax by stay length", "NYC accommodation tax by stay length", "Texas and Austin hotel occupancy tax, 17%", "Included in the date-based price calculation"],
+                    ["Program", "On site", "On site", "8-minute walk to Mansfield", "The Austin house", "Confirm with the housing team"],
+                  ].map(([k, mansfield, seton, the46, capitol, stayhw], i) => (
                     <tr key={k} className={i % 2 ? "bg-paper-dim/60" : "bg-sand/45"}>
                       <th className="text-left font-medium px-5 py-3 border-b border-line">{k}</th>
                       <td className="px-5 py-3 border-b border-line">{mansfield}</td>
                       <td className="px-5 py-3 border-b border-line">{seton}</td>
+                      <td className="px-5 py-3 border-b border-line">{the46}</td>
                       <td className="px-5 py-3 border-b border-line">{capitol}</td>
                       <td className="px-5 py-3 border-b border-line">{stayhw}</td>
                     </tr>
@@ -215,8 +220,9 @@ export default function HomePage() {
             </div>
             <p className="mt-3 font-mono text-[12px] tracking-wide text-ink/50">
               Every rate above is the rate charged for that room, before tax.
-              Seton and Capitol have several room types, so their rate is a
-              starting price; Mansfield has one. StayHW rates vary by unit and date,
+              Seton, The 46 and Capitol have several room types, so their rate
+              is a starting price; Mansfield has one. At The 46 every room has
+              its own rate, shown in its live room list. StayHW rates vary by unit and date,
               with cleaning and tax shown in the selected-stay price.
             </p>
           </Reveal>
@@ -259,7 +265,7 @@ export default function HomePage() {
           <Reveal delay={0.12}>
             <div className="bg-sand border border-line text-[15px]">
               <div className="px-6 py-4 border-b border-line font-display text-lg">
-                New York (Mansfield, Seton) by stay length
+                New York (Mansfield, Seton, The 46) by stay length
               </div>
               {[
                 ["7 to 89 nights", "14.75% of rent", "plus $1.50 per night"],
@@ -315,11 +321,15 @@ export default function HomePage() {
               ],
               [
                 "Which building takes short stays?",
-                "Mansfield, with stays from one week upwards. Seton is multi-month lodging and takes stays of four months (120 nights) or longer; Capitol in Austin takes three months (90 nights) or longer. If your dates genuinely do not fit anywhere, send the request anyway and the housing team will look at it individually.",
+                "Mansfield, with stays from one week upwards. Seton is multi-month lodging and takes stays of four months (120 nights) or longer; The 46 takes four weeks (28 nights) or longer; Capitol in Austin takes three months (90 nights) or longer. If your dates genuinely do not fit anywhere, send the request anyway and the housing team will look at it individually.",
               ],
               [
                 "What is Capitol like?",
                 "A contemporary five-story building in Downtown Austin, two blocks west of the Texas State Capitol. Each apartment has four private bedrooms plus a sunroom around an open kitchen and living area, with two full bathrooms. You take one private room, the Sunroom (the bright partitioned room) or the Deluxe (a spacious bedroom with a full-size bed), and share the kitchen and bathrooms with your apartment-mates; the Loft is an open-plan suite with its own kitchen and bathroom and two queen sofa beds. Fitness center, rooftop terrace and free laundry on every floor are in the building.",
+              ],
+              [
+                "What is The 46 like?",
+                "A 1902 Theater District building at 129 West 46th Street, one block from Times Square, refit as a furnished residence: 80 rooms over nine floors, each with its own ensuite bathroom. Five room types run from the compact Cozy Queen to the Grand King with a full sitting area. Every room has its own weekly rate, a little higher on upper floors, and the building page lists every real room live with its rate and the date it is free, so you can request the exact one. Resident lounge, study room, fitness room and an elevator are in the building. Mansfield is about an 8-minute walk.",
               ],
               [
                 "Is the listed price really what I pay?",
@@ -339,7 +349,7 @@ export default function HomePage() {
               ],
               [
                 "What do the availability labels on the room cards mean?",
-                "For the New York buildings, room availability comes straight from the buildings and is refreshed through the day: the label shows whether a room type is free now or the first day it opens up. The team confirms the actual room when you request it. Capitol availability is confirmed by the team on request. StayHW calendars come from its WordPress site and are refreshed regularly; the team confirms final availability before payment.",
+                "For the New York buildings, room availability comes straight from the buildings and is refreshed through the day: the label shows whether a room type is free now or the first day it opens up. At The 46 you also see every individual room with its own status. The team confirms the actual room when you request it. Capitol availability is confirmed by the team on request. StayHW calendars come from its WordPress site and are refreshed regularly; the team confirms final availability before payment.",
               ],
               [
                 "I want a larger room or a suite.",
